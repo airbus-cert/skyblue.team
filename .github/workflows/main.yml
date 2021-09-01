@@ -26,13 +26,14 @@ jobs:
           
       - name: Store ssh key
         run: |
-          mkdir -p "$HOME/.ssh"
-          echo "$SSH_DEPLOY_KEY" > "$HOME/.ssh/id_rsa"
+          test -e "$HOME/.ssh/id_rsa" || (mkdir -p "$HOME/.ssh" echo "$SSH_DEPLOY_KEY" > "$HOME/.ssh/id_rsa")
         env:
           SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
           
       - name: Push to github.com
         run: |
-          git remote add github.com git@github.com:airbus-cert/skyblue.team
+          if ! git remote |grep -q github.com; then
+            git remote add github.com git@github.com:airbus-cert/skyblue.team
+          fi
           git push github.com main
         
