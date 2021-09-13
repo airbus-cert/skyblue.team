@@ -1,4 +1,10 @@
-baseURL = 'http://example.org/'
+baseURL = 'https://skyblue.team/'
 languageCode = 'en-us'
 title = 'Sky Blueteam'
 theme = "ananke"
+
+[social]
+github = "https://github.com/airbus-cert"
+
+[params]
+copyright = "&nbsp;"
