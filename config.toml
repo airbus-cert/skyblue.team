@@ -1,7 +1,7 @@
 baseURL = 'https://skyblue.team/'
 languageCode = 'en-us'
 title = 'Sky Blueteam'
-theme = "ananke"
+theme = "mini"
 
 [social]
 github = "https://github.com/airbus-cert"
