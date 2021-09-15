@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Check there is no mention of Airbus
-        run: "(! git grep  -P -r -i '(?<!github.com\/)airbus' content)"
+        run: "(! git grep  -P -r -i '(?<!github.com\\/)airbus' content)"
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
