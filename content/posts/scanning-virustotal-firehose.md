@@ -69,4 +69,4 @@ For Threat Hunting perspectives, we implement alerting for things like:
 - Non-standard values for some fields
 - Use of some options or specific malleable profile
 
-Regarding proactive Defense, there is currently no automatic pipeline to push the IOC into a WatchList/DenyList for one reason: it is not uncommon to see trolling BEACONs using legitimate and "assumed safe" domains. To mitigate that, we plan to have a kind of Slack bot that will make us approve each entry seamlessly.
+Regarding proactive Defense, there is currently no automatic pipeline to push the IOC into a WatchList/DenyList for one reason: it is not uncommon to see trolling BEACONs using legitimate and "assumed safe" domains. To mitigate that, we plan to have a kind of Slack/Mattermost bot that will make us approve each entry seamlessly.
