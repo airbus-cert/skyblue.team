@@ -4,7 +4,7 @@ date: 2021-09-21T09:22:42+02:00
 draft: false
 ---
 
-Let's say one of your adversaries is known for using a given malware family, custom or off-the shelf. Even if the coverage is biased and limited, samples on VirusTotal are the low-hanging fruits that keep on giving.
+Let's say one of your adversaries is known for using a given malware family, custom or off-the shelf. Even if the coverage is biased and limited, samples on VirusTotal (VT) are the low-hanging fruits that keep on giving.
 
 At $WORK, we are lucky to have access to the [Virus Total feeds/file API](https://developers.virustotal.com/reference#files-2). This API endpoint is the firehose of VirusTotal: it allows downloading each sample submitted to VT in pseudo-real-time. The feed is unfiltered (we are not talking about [VT's LiveHunt feature](https://support.virustotal.com/hc/en-us/articles/360001315437-Livehunt)) so the volume is HUGE.
 
@@ -23,21 +23,21 @@ Initially, we used our on-premises infrastructure with 2-3 servers. Quickly, the
 - Our [Celery](https://github.com/celery/celery/) cluster was regularly KO.
 - Everything had to be very carefully tuned (memory limits, batch size, timeout, retries), we were constantly juggling with the balance between completeness, stability, and speed.
 - Adding an under-performing Yara rule could break the platform.
-- It was also not a good use of our computing resources as VT's activity is not evenlys spread across the day: our servers were under-used most of the day while overloaded during the peaks.
+- It was also not a good use of our computing resources as VT's activity is not evenly spread across the day: our servers were under-used most of the day while overloaded during the peaks.
 
 ## Going Serverless
 
-Taking a step back, it jumped out at us that this was a textbook example for a Serverless architecture. It was easy to refactor our on-prem code into self-contained functions and glue them together with [Amazon SQS](https://aws.amazon.com/sqs/):
+Taking a step back, it jumped out at us that this was a textbook example for a Serverless architecture. It was easy to refactor our on-prem code into self-contained functions and *glue* them together with [Amazon SQS](https://aws.amazon.com/sqs/):
 
 ![AWS Serverless Architecture for scanning VirusTotal feed](/images/70118f2f83f206d1a258d162d766b5cfd165765c.png)
 
 The platform has been running smoothly for 18 months, and from an operational point of view, we love it:
 - The scalability of the platform allowed us to not mind anymore about the performance of each rule: we can add our Yara rules quite freely instead of cherry-picking and evaluating carefully each addition.
 - SQS handles the whole retry mechanism.
-- Adding a new dissector is as easy as plugging a new Lambda function to the SNS topic.
+- Adding a new dissector is as easy as plugging a new Lambda function to the [Amazon Simple Notification Service (SNS)](https://aws.amazon.com/sns/) topic.
 - Everything is decoupled, it is easy to update one part without touching the rest.
 - Each new release of libyara increases its performance and it is directly correlated to the execution duration's average.
-- Everything is instrumented, we learned to love the AWS Monitoring Console.
+- Everything is instrumented, we learned to love the [AWS Monitoring Console](https://aws.amazon.com/console/).
 
 ## Performance Stats
 
@@ -55,7 +55,7 @@ On average:
 
 ![Mailbox full of BEACONs](/images/817e356268d1e7620ee8746d77fa5aee336028bc.png)
 
-We are using [CobaltStrikeParser](https://github.com/Sentinel-One/CobaltStrikeParser) from Sentinel One to parse the beacons, then we are sending the JSON output to our Splunk instance.
+We are using [CobaltStrikeParser](https://github.com/Sentinel-One/CobaltStrikeParser) from [Sentinel One](https://www.sentinelone.com/) to parse the beacons, then we are sending the JSON output to our Splunk instance.
 
 There are two uses of this data:
 - Threat Hunting: tracking some Threat Actors
@@ -67,4 +67,4 @@ For Threat Hunting perspectives, we implement alerting for things like:
 - Non-standard values for some fields
 - Use of some options or specific malleable profile
 
-Regarding proactive Defense, there is currently no automatic pipeline to push the IOC into a WatchList/DenyList for one reason: it is not uncommon to see trolling BEACONs using legitimate and "assumed safe" domains. To mitigate that, we plan to have a kind of Slack bot that will make us approve each entry seamlessly.
+Regarding proactive Defense, there is currently no automatic pipeline to push the IOC into a WatchList/DenyList for one reason: it is not uncommon to see trolling BEACONs using legitimate and "assumed safe" domains. To mitigate that, we plan to have a kind of Slack/Mattermost bot that will make us approve each entry seamlessly.
