@@ -1,8 +1,9 @@
 ---
 title: "Scanning VirusTotal's firehose"
 date: 2021-09-21T09:22:42+02:00
-draft: false
+Summary: We set the crazy objective to extract and push IOC in real-time for a given malware family submitted to VirusTotal. For this blog post, as an example, we will focus on Cobalt Strike.
 ---
+
 
 Let's say one of your adversaries is known for using a given malware family, custom or off-the shelf. Even if the coverage is biased and limited, samples on VirusTotal (VT) are the low-hanging fruits that keep on giving.
 
