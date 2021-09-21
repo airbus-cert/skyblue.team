@@ -34,7 +34,7 @@ Taking a step back, it jumped out at us that this was a textbook example for a S
 The platform has been running smoothly for 18 months, and from an operational point of view, we love it:
 - The scalability of the platform allowed us to not mind anymore about the performance of each rule: we can add our Yara rules quite freely instead of cherry-picking and evaluating carefully each addition.
 - SQS handles the whole retry mechanism.
-- Adding a new dissector is as easy as plugging a new Lambda function to the SNS topic.
+- Adding a new dissector is as easy as plugging a new Lambda function to the [Amazon Simple Notification Service (SNS)](https://aws.amazon.com/sns/) topic.
 - Everything is decoupled, it is easy to update one part without touching the rest.
 - Each new release of libyara increases its performance and it is directly correlated to the execution duration's average.
 - Everything is instrumented, we learned to love the AWS Monitoring Console.
