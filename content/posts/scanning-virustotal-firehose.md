@@ -23,7 +23,7 @@ Initially, we used our on-premises infrastructure with 2-3 servers. Quickly, the
 - Our [Celery](https://github.com/celery/celery/) cluster was regularly KO.
 - Everything had to be very carefully tuned (memory limits, batch size, timeout, retries), we were constantly juggling with the balance between completeness, stability, and speed.
 - Adding an under-performing Yara rule could break the platform.
-- It was also not a good use of our computing resources as VT's activity is not evenlys spread across the day: our servers were under-used most of the day while overloaded during the peaks.
+- It was also not a good use of our computing resources as VT's activity is not evenly spread across the day: our servers were under-used most of the day while overloaded during the peaks.
 
 ## Going Serverless
 
