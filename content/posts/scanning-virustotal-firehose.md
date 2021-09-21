@@ -4,7 +4,7 @@ date: 2021-09-21T09:22:42+02:00
 draft: false
 ---
 
-Let's say one of your adversaries is known for using a given malware family, custom or off-the shelf. Even if the coverage is biased and limited, samples on VirusTotal are the low-hanging fruits that keep on giving.
+Let's say one of your adversaries is known for using a given malware family, custom or off-the shelf. Even if the coverage is biased and limited, samples on VirusTotal (VT) are the low-hanging fruits that keep on giving.
 
 At $WORK, we are lucky to have access to the [Virus Total feeds/file API](https://developers.virustotal.com/reference#files-2). This API endpoint is the firehose of VirusTotal: it allows downloading each sample submitted to VT in pseudo-real-time. The feed is unfiltered (we are not talking about [VT's LiveHunt feature](https://support.virustotal.com/hc/en-us/articles/360001315437-Livehunt)) so the volume is HUGE.
 
