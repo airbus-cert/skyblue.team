@@ -37,7 +37,7 @@ The platform has been running smoothly for 18 months, and from an operational po
 - Adding a new dissector is as easy as plugging a new Lambda function to the [Amazon Simple Notification Service (SNS)](https://aws.amazon.com/sns/) topic.
 - Everything is decoupled, it is easy to update one part without touching the rest.
 - Each new release of libyara increases its performance and it is directly correlated to the execution duration's average.
-- Everything is instrumented, we learned to love the AWS Monitoring Console.
+- Everything is instrumented, we learned to love the [AWS Monitoring Console](https://aws.amazon.com/console/).
 
 ## Performance Stats
 
