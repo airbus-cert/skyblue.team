@@ -51,6 +51,8 @@ On average:
 - 97% of the executions are successful
 - We send 150 samples per minute (before deduplication) to dissectors
 
+In term of budget, for a year of activity, it has cost less than 10k EUR, it is a given!
+
 # CobaltStrike
 
 ![Mailbox full of BEACONs](/images/817e356268d1e7620ee8746d77fa5aee336028bc.png)
