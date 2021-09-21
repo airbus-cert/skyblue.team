@@ -47,7 +47,7 @@ For those who like numbers, here is a screenshot for the activity of the last 6 
 
 In average:
 - A batch of samples is scanned in less than 30s
-- There is always 45 Lambda functions running at a given time
+- There are always 45 Lambda functions running at any given time
 - 97% of the executions are successful
 - We send 150 samples per minute (before deduplication) to dissectors 
 
@@ -55,11 +55,16 @@ In average:
 
 ![Mailbox full of BEACONs](/images/817e356268d1e7620ee8746d77fa5aee336028bc.png)
 
-We are using [CobaltStrikeParser](https://github.com/Sentinel-One/CobaltStrikeParser) from Sentinel One to parse the beacons. The JSON output is sent to our Splunk instance from a threat hunting perspective to implement alerting for things like:
-- Given Watermark identifiers
+We are using [CobaltStrikeParser](https://github.com/Sentinel-One/CobaltStrikeParser) from Sentinel One to parse the beacons and the JSON output is sent to our Splunk instance.
+
+There are two uses of this data:
+- Threat Hunting: we are tracking some Threat Actors
+- Proactive protection: Adding proactively the IOC to a watchlist in our perimeter
+
+For Threat Hunting perspectives, we implement alerting for things like:
+- Specific Watermark identifiers
 - Pattern in the C2 domain
 - Non-standard values for some fields
 - Use of some options or specific malleable profile
 
-Currently, there is no automatic pipeline to push the IOC into a DenyList as it is not uncommon to see trolling BEACONs using legitimate and "assumed safe" domains. To mitigate that, we plan to have a kind of Slack bot to make us approve manually each entry.
-
+Regarding the proactive Defense, currently, there is no automatic pipeline to push the IOC into a WatchList/DenyList for one reason: it is not uncommon to see trolling BEACONs using legitimate and "assumed safe" domains. To mitigate that, we plan to have a kind of Slack bot to make us approve manually each entry.
