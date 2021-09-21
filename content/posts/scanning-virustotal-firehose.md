@@ -27,7 +27,7 @@ Initially, we used our on-premises infrastructure with 2-3 servers. Quickly, the
 
 ## Going Serverless
 
-Taking a step back, it jumped out at us that this was a textbook example for a Serverless architecture. It was easy to refactor our on-prem code into self-contained functions and glue them together with [Amazon SQS](https://aws.amazon.com/sqs/):
+Taking a step back, it jumped out at us that this was a textbook example for a Serverless architecture. It was easy to refactor our on-prem code into self-contained functions and *glue* them together with [Amazon SQS](https://aws.amazon.com/sqs/):
 
 ![AWS Serverless Architecture for scanning VirusTotal feed](/images/70118f2f83f206d1a258d162d766b5cfd165765c.png)
 
