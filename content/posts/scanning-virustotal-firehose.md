@@ -57,7 +57,7 @@ In term of budget, for a year of activity, it has cost less than 10k EUR, it is 
 
 ![Mailbox full of BEACONs](/images/817e356268d1e7620ee8746d77fa5aee336028bc.png)
 
-We are using [CobaltStrikeParser](https://github.com/Sentinel-One/CobaltStrikeParser) from Sentinel One to parse the beacons, then we are sending the JSON output to our Splunk instance.
+We are using [CobaltStrikeParser](https://github.com/Sentinel-One/CobaltStrikeParser) from [Sentinel One](https://www.sentinelone.com/) to parse the beacons, then we are sending the JSON output to our Splunk instance.
 
 There are two uses of this data:
 - Threat Hunting: tracking some Threat Actors
