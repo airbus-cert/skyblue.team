@@ -6,7 +6,7 @@ draft: true
 
 # TL;DR
 
-Love IDA (Pro|Freeware) and want moe decompiled code?
+Love IDA (Pro|Freeware) and want more decompiled code?
 
 - Head over to https://github.com/airbus-cert/Yagi/releases
 - Download and install the plugin for your favourite architecture
