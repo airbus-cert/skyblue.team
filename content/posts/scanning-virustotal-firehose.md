@@ -1,6 +1,7 @@
 ---
 title: "Scanning VirusTotal's firehose"
 date: 2021-09-21T09:22:42+02:00
+draft: true
 Summary: We set the crazy objective to extract and push IOC in real-time for a given malware family submitted to VirusTotal. For this blog post, as an example, we will focus on Cobalt Strike.
 ---
 
