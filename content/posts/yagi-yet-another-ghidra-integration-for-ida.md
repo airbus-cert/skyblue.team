@@ -53,7 +53,7 @@ This kind of information can be found by looking at the import section of the bi
 In software programming, we refer to it as a library. As these functions are publicly available we can know the type of input parameters. 
 
 We can also build our type inference on symbols when they are present. 
-Symbols are meta informations that can be present in binary, and can inform us about the function name, type, source code, etc...
+Symbols are meta information that can be present in binary, and can inform us about the function name, type, source code, etc...
 
 Once we grab all this information we can start to analyze the code itself, by performing the translation from binary to assembly language. 
 Some assembly instructions, like call and branch, are related to the control flow, to build the associated control flow graph.
