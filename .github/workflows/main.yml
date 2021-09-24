@@ -38,4 +38,4 @@ jobs:
           git push github.com main
         
       - name: Don't keep any draft
-        run: git grep '^draft:\s[tT][rR][Uu][Ee]' content/
+        run: "(! git grep '^draft:\s[tT][rR][Uu][Ee]' content/)"
