@@ -9,8 +9,8 @@ draft: true
 Love IDA (Pro|Freeware) and want more decompiled code?
 
 - Head over to https://github.com/airbus-cert/Yagi/releases
-- Download and install the plugin for your favourite architecture
-- Run IDA, open a project and browse some assembly code
+- Download and install the plugin for your favorite architecture
+- Run IDA, open a project, and browse some assembly code
 - Press F3
 - Be amazed!
 
@@ -38,35 +38,35 @@ Furthermore, Yagi would probably not exist without prior projects that inspired 
 
 [blc](https://github.com/cseagle/blc) by Chris Eagle (someone who [knows their shit](https://nostarch.com/idapro2.htm))
 - Uses the C++ plugin interface compatible with both IDA Freeware and IDA Pro
-- Focuses on showing a decomplied view with no further integration
+- Focuses on showing a decompiled view with no further integration
 
 All decompilers have the same architecture, that can be split into two, the analysis part and the proper decompiler part.
 
 # What is included in the analysis part?
 
 To perform a good analysis, we need to merge information from every part of the binary. So we need a good binary file parser at the first step.
-From the binary file, we can extract the compiler type, which is deducted from the [RICH header](http://bytepointer.com/articles/the_microsoft_rich_header.htm) in case of Windows Binaries. 
+From the binary file, we can extract the compiler type, which is deducted from the [RICH header](http://bytepointer.com/articles/the_microsoft_rich_header.htm) in the case of Windows Binaries. 
 We can also find where the code, the data, etc… are. We can also detect the kind of assembly (x86, x86_64 …)
 
-One of the important parts of decompilation is the type inference, a step that will try to guess the type of local variable, by grabbing information from many place. 
+One of the important parts of decompilation is the type inference, a step that will try to guess the type of local variable, by grabbing information from many places. 
 This kind of information can be found by looking at the import section of the binary file. Import functions are all functions that are used in the binary but not included in it. 
 In software programming, we refer to it as a library. As these functions are publicly available we can know the type of input parameters. 
 
 We can also build our type inference on symbols when they are present. 
-Symbols are meta information that can be present in binary, and can inform us about the function name, type, source code, etc...
+Symbols are meta information that can be present in binary and can inform us about the function name, type, source code, etc...
 
 Once we grab all this information we can start to analyze the code itself, by performing the translation from binary to assembly language. 
 Some assembly instructions, like call and branch, are related to the control flow, to build the associated control flow graph.
 But compared with a C source the CFG is not easily readable, this is why modern decompiler software proposes a translation from CFG to C source code.
 
 Unfortunately, all this work can’t be made automatically, and the analyst, by its experience, has to add more context, by setting types, names, using static or dynamic analysis. 
-This is why all modern decompiler software offer a robust database service.
+This is why all modern decompiler software offers a robust database service.
 
 # What is included in the decompilation part?
 
 The main goal is to produce a comprehensive source code to facilitate the work of the analyst. 
 The first work is to detect code structure from the CFG. 
-With a mix of graph theory, we can easily match some code patterns, like if else block, for or while loop, etc… 
+With a mix of graph theory, we can easily match some code patterns, like if-else block, for or while loop, etc… 
 All these techniques come from the thesis [Reverse Compilation Techniques](https://yurichev.com/mirrors/DCC_decompilation_thesis.pdf) by Cristina Cifuntes.
 
 Once we get a macro view of our code, we have to find all local variables, including the function parameters.
@@ -104,12 +104,12 @@ For IDA developers int8 means 8 bits, but for Ghidra developers int8 means 8 byt
 
 In the end, this architecture helped during unit test writing.
 
-We need to deeply understand the code of Ghidra, and properly handle the IDA API. 
+We need to deeply understand the code of Ghidra and properly handle the IDA API. 
 Both of them are masterpieces of software engineering, so It was easy to find the perfect place.
 
 # All is about scope…
 
-In Ghidra, during decompilation, it use a Scope object to request the symbol database. 
+In Ghidra, during decompilation, it uses a Scope object to request the symbol database. 
 The first work in Yagi was to implement the Scope interface to request the IDA database. 
 We also did a mapping between the type definition between Ghidra and IDA. 
 It was pretty easy, but I needed to understand when to lock a type, put a read-only attribute on varnode, etc… 
@@ -128,12 +128,12 @@ We need to interact with the code, navigate, find cross-references, rename symbo
 As a final step of the decompilation, we used the internal of Ghidra to find the calling functions. 
 We used the internal variable tree (also known as Varnode in the Ghidra world) to find local and global variables. 
 We can also determine the address of the symbol, where the variable is defined (the use address which refers to an assembly address). 
-With all this information we can easily request the IDA database to jump, Xref or retype global symbols.
+With all this information we can easily request the IDA database to jump, Xref, or retype global symbols.
 
 # What about local variables?
 
 Local variables are the result of the decompilation and could be unknown by IDA database. 
-The stack variable could match between the two algorithms, actually, it’s true in most cases, so he work was easy, and we used a lot of *Action* system in Ghidra.
+The stack variable could match between the two algorithms, actually, it’s true in most cases, so the work was easy, and we used a lot of *Action* systems in Ghidra.
 
 Ghidra internally uses the "Entity Component System" (ECS) pattern. 
 This pattern has become more and more famous, in particular in the video game industry. 
