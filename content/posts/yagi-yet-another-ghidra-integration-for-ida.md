@@ -94,20 +94,15 @@ There have been some other attempts before, but not as seamless as we want.
 
 # How does it work?
 
-As Ghidra is built using Gradle, we chose to use CMake combined with the git submodule on the Ghidra repository, to control all our built systems. 
-As our plugin is written in C++, CMake appears to be the best choice. CMake also includes CPack, with the help of Wix, can generate an easy-to-use installer!
+As Ghidra is built using Gradle, we chose to use CMake combined with the git submodule on the Ghidra repository, to control  our built systems. CMake is the best choice for its C++ support and for CPack, which, can generate an easy-to-use installer with the help of Wix!
 
-From a software engineering perspective, It appears that we need to segregate between the code of IDA and Ghidra, due to type redefinition nightmare.
-For IDA developers int8 means 8 bits, but for Ghidra developers int8 means 8 bytes… 
+From a software engineering perspective, it was needed to segregate the code of IDA and Ghidra due to type redefinition nightmare (i.e. int8 means 8 bits for IDA while it means 8 bytes for Ghidra…)
 
 !(same but different)[https://media.giphy.com/media/UI7EYk96rzq24/giphy.gif]
 
-In the end, this architecture helped during unit test writing.
+Eventually, we were glad of this architecture as it helped a lot for the writing of unit tests.
 
-We need to deeply understand the code of Ghidra and properly handle the IDA API. 
-Both of them are masterpieces of software engineering, so It was easy to find the perfect place.
-
-# All is about scope…
+# Everything is about scope…
 
 In Ghidra, during decompilation, it uses a Scope object to request the symbol database. 
 The first work in Yagi was to implement the Scope interface to request the IDA database. 
@@ -116,45 +111,30 @@ It was pretty easy, but I needed to understand when to lock a type, put a read-o
 
 # How to print the exact output of Hex-Rays plugin?
 
-One of the main interests of decompilation is to quickly identify the type of symbol, like import function, global variables, local variables, type, cast, etc… IDA uses a very famous syntax color for its decompilation. 
-So we found a way to output the Ghidra decompilation by using the very flexible Ghidra and IDA API. 
-Ghidra allows you to define a new output language. 
-This Object class is called EmitPrettyPrint. 
-This object can be viewed as a visitor pattern for the decompilation tree. 
-So we just override a set of functions to emit meta char that will be used by the IDA viewer as a color tag.
+One of the main interests of decompilation is to quickly identify the type of symbols (like import functions), global or local variables, casts, etc. 
 
-But having only the static result of decompilation is not enough for any reverse engineer. 
-We need to interact with the code, navigate, find cross-references, rename symbols, retype symbols. 
-As a final step of the decompilation, we used the internal of Ghidra to find the calling functions. 
-We used the internal variable tree (also known as Varnode in the Ghidra world) to find local and global variables. 
-We can also determine the address of the symbol, where the variable is defined (the use address which refers to an assembly address). 
-With all this information we can easily request the IDA database to jump, Xref, or retype global symbols.
+To use the classic IDA's rendering system, we need to define a new "output language", implemented by the `EmitPrettyPrint` object class. This object can be viewed as a visitor pattern for the decompilation tree. The overriding of a set of functions that will emit meta-characters will make the IDA viewer use the right color tag.
+
+Nonetheless, static output of decompilation is not enough for any reverse engineer: We need to interact with the code, navigate, find cross-references, rename symbols, retype symbols. 
+
+The internal variable tree (also known as *Varnode* in the Ghidra realm) allows to find local and global variables, determines symbol's address, variable definition and so on. We use it to populate the IDA database and permits to jump, Xref, or retype global symbols.
 
 # What about local variables?
 
-Local variables are the result of the decompilation and could be unknown by IDA database. 
-The stack variable could match between the two algorithms, actually, it’s true in most cases, so the work was easy, and we used a lot of *Action* systems in Ghidra.
+While there is no issue with stack variable, it is not that easy with local variables as they are discovered only in the decompilation phase (by Ghidra): IDA database doesn't know anything about them.
 
-Ghidra internally uses the "Entity Component System" (ECS) pattern. 
-This pattern has become more and more famous, in particular in the video game industry. 
-ECS is very flexible. If you want to see a beautiful implementation of ECS in Rust It’s [here](https://github.com/amethyst/specs). 
-Here the decompiled function can be viewed as an entity, each tree is like a component, and Actions are systems. 
-Systems must be ordered because some of them can have dependencies. 
+Thanks to the heavy use in Ghidra of the "Entity Component System" (ECS) design pattern (especially famous in the video game industry and by the way, if you want to see a beautiful Rust implementation, check [amethyst/specs](https://github.com/amethyst/specs)), each decompiled function can be viewed as an *Entity*, where each tree is a *Component*, and Actions are *Systems* 
 
-We built most of our interaction with local variables using *Action*. 
-We’ve added Actions for retyping and renaming.
+We also used *Actions* for:
+- Retyping: This will populate the local scope with a symbol that will have a "type lock" attribute.  It means that the associate variable will have a type that can’t change during type inference, and may influence other non-type locked variables.
+- Renaming action takes place after all action was done, by renaming symbols.
 
-Retyping will populate the local scope with a symbol that will have a type lock attribute. 
-It means that the associate variable will have a type that can’t change during type inference, and maybe will influence other non-type locked variables.
-
-Renaming action takes place after all action was done, by renaming symbols.
-
-And magic happened!
+And then magic happens!
 
 # What’s next?
 
-We planned to add more architecture supported by Yagi. 
-We also start to think about using Ghidra more in a dynamic way (emulation, other output languages …). 
+We plan to add more CPU architecture to Yagi.
+We also start to think about using Ghidra more in a dynamic way (emulation, other output languages…). 
 Ghidra offers a lot of features that can be easily included in IDA through the API!
 
 
