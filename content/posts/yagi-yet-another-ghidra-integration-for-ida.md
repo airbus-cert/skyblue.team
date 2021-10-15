@@ -1,8 +1,20 @@
 ---
 title: "Welcome Yagi, Yet Another Ghidra Integration for IDA"
-date: 2021-09-15T08:31:46+02:00
-draft: true
+date: 2021-10-15T07:31:46+02:00
+Summary: Are you an IDA fan but wish it could decompile more exotic
+    architectures? Are you a student who wants the joy of using a decompiler
+    but can’t afford Hex-Rays? Yagi is the tool for you!
+    
+    Yagi integrates the Ghidra decompiler in IDA, both Free and Pro version,
+    at zero cost.
 ---
+
+![Sorry, the current file is not decompilable](/images/e7bafb890666628943429d481aa1e17d2fe58bb6.png)
+
+Are you an IDA fan but wish it could decompile more exotic architectures? Are you a student who wants the joy of using a decompiler but can't afford Hex-Rays? Yagi is the tool for you!
+
+Yagi integrates the Ghidra decompiler in IDA, both Free and Pro version, at zero cost.
+
 
 # TL;DR
 
