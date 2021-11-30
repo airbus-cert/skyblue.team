@@ -100,7 +100,7 @@ When investigating Windows file formats, it's always a good idea to check Joachi
 
 Basically, an EVTX file is composed of several chunks, and each chunk contains a number of records. Each record has an ID, which is unique across all chunks.
 
-We assume the first chunk number is always 0. To get the last chunk number, we will search for the signature `"ElfChnk\x00"` and count its occurences. We assume chunks are numbered in increasing order, starting from zero.
+We assume the first chunk number is always 0. To get the last chunk number, we will search for the signature `"ElfChnk\x00"` and count its occurrences. We assume chunks are numbered in increasing order, starting from zero.
 
 To get the last record ID, we first get the last chunk (easy, because each chunk has a fixed size), and parse the offset to the last record from its header. We then parse the record at this offset to extract its ID.
 
