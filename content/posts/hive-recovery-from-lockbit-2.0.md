@@ -1,7 +1,7 @@
 +++
-title = "Recovering registry hives encrypted by LockBit 2.0"
+title = "Recovering some files encrypted by LockBit 2.0"
 date = 2021-10-15T10:12:00+02:00
-summary = "The LockBit 2.0 ransomware is pretty aggressive with the extensions it encrypts: you can say goodbye to your user hives. Or do you?"
+summary = "The LockBit 2.0 ransomware is pretty aggressive with the extensions it encrypts: you can say goodbye to your user hives and event log. Or do you?"
 +++
 
 The [LockBit 2.0 ransomware](https://www.trendmicro.com/en_us/research/21/h/lockbit-resurfaces-with-version-2-0-ransomware-detections-in-chi.html) has been incredibly "productive" these last few months: their technique is well automated, and the list of compromised companies keeps growing every day.
@@ -84,6 +84,127 @@ def main():
             h2.write(without_header)
 
     print("Done! Hive written to", args.output)
+
+
+if __name__ == "__main__":
+    main()
+```
+
+## (Update) Extending the technique to other file types
+
+In passing, [@citronneur](https://twitter.com/citronneur) mentioned that EVTX files also had a 4 KiB header. Maybe they could be reconstructed as well?
+
+When investigating Windows file formats, it's always a good idea to check Joachim Metz's [`libyal`](https://github.com/libyal) repositories. In that case, bingo! [`libevtx`](https://github.com/libyal/libevtx/blob/main/documentation/Windows%20XML%20Event%20Log%20(EVTX).asciidoc) exists, with some very detailed documentation.
+
+![EVTX header structure](/images/9b7f0d652f174673c2ba36ea501d9ffd.png)
+
+Basically, an EVTX file is composed of several chunks, and each chunk contains a number of records. Each record has an ID, which is unique across all chunks.
+
+We assume the first chunk number is always 0. To get the last chunk number, we will search for the signature `"ElfChnk\x00"` and count its occurences. We assume chunks are numbered in increasing order, starting from zero.
+
+To get the last record ID, we first get the last chunk (easy, because each chunk has a fixed size), and parse the offset to the last record from its header. We then parse the record at this offset to extract its ID.
+
+The checksum is a simple CRC32 of the first 120 bytes of the file header. With this, we are able to recreate all the data from the encrypted file header and read the events!
+
+And here is a Python script which does just that:
+```python
+#!/usr/bin/env python3
+
+import argparse
+import binascii
+import sys
+
+
+def get_number_of_chunks(data):
+    count = 0
+    needle = b"ElfChnk\x00"
+    for offset in range(len(data) - len(needle)):
+        if data[offset : offset + len(needle)] == needle:
+            count += 1
+
+    return count
+
+
+def get_chunk(data, n):
+    data = data[4096:]  # get rid of header
+    print("[+] Getting chunk", n)
+    chunk = data[n * 65536 : (n + 1) * 65536]
+    assert chunk[:8] == b"ElfChnk\x00"
+    return chunk
+
+
+def get_last_record(chunk):
+    offset = int.from_bytes(chunk[44:48], byteorder="little")
+    print(f"[+] Last record offset: {offset} (0x{offset:x})")
+    if offset == 0:
+        print("[!] Error: this EVTX file probably has no events")
+        sys.exit(1)
+    record = chunk[offset:]
+    assert record[:4] == b"\x2a\x2a\x00\x00"
+    return record
+
+
+def get_record_id(record):
+    i = int.from_bytes(record[8:16], byteorder="little")
+    print("[+] Record id:", i)
+    return i
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Fix LockBit2.0 EVTX file")
+
+    parser.add_argument("file", type=str, help="Path to evtx file")
+    parser.add_argument("output", type=str, help="Where to store the resulting file")
+
+    args = parser.parse_args()
+
+    data = None
+    with open(args.file, "rb") as f:
+        data = f.read()
+
+    print("[+] Loaded", args.file)
+
+    chunks = get_number_of_chunks(data)
+    print("[+] Number of chunks:", chunks)
+
+    signature = b"ElfFile\x00"
+    first_chunk_number = (0).to_bytes(8, byteorder="little")
+    last_chunk_number = (chunks - 1).to_bytes(8, byteorder="little")
+
+    next_record_id = get_record_id(get_last_record(get_chunk(data, chunks - 1))) + 1
+    next_record_id = next_record_id.to_bytes(8, byteorder="little")
+    header_size = (128).to_bytes(4, byteorder="little")
+    minor_version = (1).to_bytes(2, byteorder="little")
+    major_version = (3).to_bytes(2, byteorder="little")
+    header_block_size = (4096).to_bytes(2, byteorder="little")
+    number_of_chunks = chunks.to_bytes(2, byteorder="little")
+    unk1 = b"\x00" * 76
+    file_flags = (0).to_bytes(4, byteorder="little")
+    crc32 = -1
+    unk2 = b"\x00" * 3968
+
+    header = (
+        signature
+        + first_chunk_number
+        + last_chunk_number
+        + next_record_id
+        + header_size
+        + minor_version
+        + major_version
+        + header_block_size
+        + number_of_chunks
+        + unk1
+        + file_flags
+    )
+    crc32 = binascii.crc32(header[:120]) & 0xFFFFFFFF
+    header += crc32.to_bytes(4, byteorder="little")
+    header += unk2
+
+    assert (len(header)) == 4096
+
+    with open(args.output, "wb") as f:
+        f.write(header)
+        f.write(data[4096:])
 
 
 if __name__ == "__main__":
