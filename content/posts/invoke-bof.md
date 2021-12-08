@@ -89,7 +89,7 @@ Last, but not least, limitation comes from CLR. The Beacon API uses a lot of var
 In x64 the calling convention uses registers for the fourth first parameter, so as BeaconPrintf uses the first for the logging level, and the second for the string format, we only have two possibles varargs arguments.
 Most of the developers only use one or two varargs arguments, so it’s an acceptable limitation.
 
-# Exemple of use case
+# Example of use case
 
 ## Dump clipboard
 
