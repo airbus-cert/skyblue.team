@@ -108,7 +108,7 @@ Now we can launch every beacon available from Github. For example, we can test a
 ██║██║ ╚████║ ╚████╔╝ ╚██████╔╝██║  ██╗███████╗    ██████╔╝╚██████╔╝██║     
 ╚═╝╚═╝  ╚═══╝  ╚═══╝   ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚═════╝  ╚═════╝ ╚═╝     
                                                
-  [v0.1 Made with love by Airbus CERT https://github.com/airbus-cert]
+  [v0.1 Made with love by CERT https://github.com/airbus-cert]
 
 
 
@@ -145,7 +145,7 @@ We can try to detect an attacker that tries to enable *SE_DEBUG* privilege:
 ██║██║ ╚████║ ╚████╔╝ ╚██████╔╝██║  ██╗███████╗    ██████╔╝╚██████╔╝██║     
 ╚═╝╚═╝  ╚═══╝  ╚═══╝   ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚═════╝  ╚═════╝ ╚═╝     
                                                
-  [v0.1 Made with love by Airbus CERT https://github.com/airbus-cert]
+  [v0.1 Made with love by Aircraft Company CERT https://github.com/airbus-cert]
 
 
 
@@ -183,7 +183,7 @@ You want to execute a process using WMI create process:
 ██║██║ ╚████║ ╚████╔╝ ╚██████╔╝██║  ██╗███████╗    ██████╔╝╚██████╔╝██║
 ╚═╝╚═╝  ╚═══╝  ╚═══╝   ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚═════╝  ╚═════╝ ╚═╝
 
-  [v0.1 Made with love by Airbus CERT https://github.com/airbus-cert]
+  [v0.1 Made with love by Aircraft Company CERT https://github.com/airbus-cert]
 
 
 
@@ -238,7 +238,7 @@ ExecMethod Succeeded!
 ██║██║ ╚████║ ╚████╔╝ ╚██████╔╝██║  ██╗███████╗    ██████╔╝╚██████╔╝██║
 ╚═╝╚═╝  ╚═══╝  ╚═══╝   ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚═════╝  ╚═════╝ ╚═╝
 
-  [v0.1 Make with love by Airbus CERT https://github.com/airbus-cert]
+  [v0.1 Make with love by Aircraft Company CERT https://github.com/airbus-cert]
 
 
 
