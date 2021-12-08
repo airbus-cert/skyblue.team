@@ -15,7 +15,7 @@ A Beacon Object File is split into two parts:
 
 Many Red Teams publish BOFs on their public GitHub repositories, implementing lateral movement, vulnerability, attack, or persistence. Instead of reimplementing these techniques each time we want to try and detect them, We decided to find a way to execute them directly.
 
-We decided to implement a BOF loader in powershell, [invoke-Bof](https://github.com/airbus-cert/Invoke-Bof) to be easily included in any framework, and especially the wonrdeful work done by Redcanary with [atomic-red-team](https://github.com/redcanaryco/atomic-red-team) !!!
+We decided to implement a BOF loader in powershell, [invoke-Bof](https://github.com/airbus-cert/Invoke-Bof) to be easily included in any framework, and especially the wonderful work done by Redcanary with [atomic-red-team](https://github.com/redcanaryco/atomic-red-team) !!!
 
 # What Is a BOF payload?
 
