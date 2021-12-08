@@ -4,15 +4,16 @@ date: 2021-12-08T09:22:42+02:00
 Summary: Invoke-Bof, Is it a kind of purple software?
 ---
 
-CobaltStrike seems to become more and more the best offensive framework, used by most of the RED side of cybersecurity.
+CobaltStrike appears to be the favoured offensive framework, used by a large majority of the offensive side of cybersecurity.
 
 The framework is very extensible and allows Red Teamers to develop specific offensive modules named BOF, short for Beacon Object File. Beacons are what CobaltStrike calls their agents, or final payloads.
 
 A Beacon Object File is split into two parts:
 
-A payload that will be executed on the victim machine
-An aggressor script, which will prepare and interact with the payload
-Many Red Teams publish BOFs on their public GitHub repositories, implementing lateral movement, vulnerability, attack, or persistence. Instead of reimplementing these techniques each time we want to try and detect them, we decided to find a way to execute them directly.
+- A payload that will be executed on the victim machine
+- An aggressor script, which will prepare and interact with the payload
+
+Many Red Teams publish BOFs on their public GitHub repositories, implementing lateral movement, vulnerability, attack, or persistence. Instead of reimplementing these techniques each time we want to try and detect them, We decided to find a way to execute them directly.
 
 We decided to implement a BOF loader in powershell, [invoke-Bof](https://github.com/airbus-cert/Invoke-Bof) to be easily included in any framework, and especially the wonrdeful work done by Redcanary with [atomic-red-team](https://github.com/redcanaryco/atomic-red-team) !!!
 
