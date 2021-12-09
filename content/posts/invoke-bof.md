@@ -199,4 +199,4 @@ $BeaconAPI | Add-Member -MemberType NoteProperty -Name BeaconDataParse -Value ($
 
 Unfortunately, it comes with a subtle limit: typed functions do not have a stack, and thus, it cannot support `va_arg` parameters. And that's a shame because the BOF API uses them, such as a simple `BeaconPrintf`. 
 
-Luckily, most of the developers only use one or two `var_args`, which fits accidentally with the x86_64 calling convention (using registers for the four first parameters) as `BeaconPrintf` uses the first argument for the logging level, and the second for the string format, we only have two possibles varargs arguments.
+Luckily, most developers only use one or two `var_args`, which accidentally fits the x86_64 calling convention (using registers for the four first parameters) as `BeaconPrintf` uses the first argument for the logging level, and the second for the string format, we only have two possibles varargs arguments.
