@@ -8,3 +8,5 @@ github = "https://github.com/airbus-cert"
 
 [params]
 copyright = "&nbsp;"
+customCSS = ["css/ribbon.css"]
+customJS = ["js/ribbon.js"]
