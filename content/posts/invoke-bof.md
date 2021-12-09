@@ -173,9 +173,9 @@ Most of the time, a BOF needs to interact with the C&C, so CobaltStrike offers a
 Powershell being a managed language, powered by the CLR (Common Language Runtime), the challenge is to switch from managed to unmanaged world and from unmanaged to managed world.
 As Powershell is built on top of the CLR, It allows us to use all .Net API's, and especially all API's that can interact with unmanaged memory :
 
-[System.Runtime.InteropServices.Marshal]::AllocHGlobal to perform unmanaged memory allocation
-[System.Runtime.InteropServices.Marshal]::FreeHGlobal free unmanaged memory allocation
-[System.Runtime.InteropServices.Marshal]::Copy that can move memory from unmanaged to managed, and from managed to unmanaged
+- `[System.Runtime.InteropServices.Marshal]::AllocHGlobal` to perform unmanaged memory allocation
+- `[System.Runtime.InteropServices.Marshal]::FreeHGlobal` free unmanaged memory allocation
+- `[System.Runtime.InteropServices.Marshal]::Copy` that can move memory from unmanaged to managed, and from managed to unmanaged
 Sometimes we need to interact with native Windows APIs, like VitualAlloc, to allocate aligned unmanaged memory, VirtualProtect to set correct memory protections of allocated pages, etc…
 
 CLR includes a lot of native function calls, encompassed into an assembly name System.dll. By using reflective capability, Matt Graeber was able to retrieve managed functions pointers of GetProcAddress and GetModuleHandle, and starting from here it's easy to retrieve all API's needed.
