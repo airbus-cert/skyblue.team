@@ -153,7 +153,7 @@ ExecMethod Succeeded!
 
 A BOF payload is a simple object file produced by a C compiler. An Object file (`.o`) is an intermediate file which was not linked. That's why most (all?) BOF payloads are written in C!
 
-As the linker is not done, API call are not resolved, and that is the genius of the CobalStrike developers: The BOF will be linked on-the-fly by the victim machine. Consequently, it saves a lot of space and keeps the BOF tiny, this can make a big difference when using bandwidth constrained channels, such as DNS.
+As the linker is not done, API calls are not resolved, and that is the genius of the CobalStrike developers: the BOF will be linked on-the-fly by the victim machine. Consequently, it saves a lot of space and keeps the BOF tiny, this can make a big difference when using bandwidth constrained channels, such as DNS.
 
 ## Managed to Unmanaged
 
