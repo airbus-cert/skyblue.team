@@ -148,7 +148,7 @@ ExecMethod Succeeded!
 ============================================================================
 ```
 
-# How it works?
+# How does it work?
 ## What is a BOF payload?
 
 A BOF payload is a simple object file produced by a C compiler. An Object file (`.o`) is an intermediate file which was not linked. That's why most (all?) BOF payloads are written in C!
