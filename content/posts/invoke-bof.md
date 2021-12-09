@@ -170,7 +170,7 @@ Most of the time, a BOF needs to interact with the C&C, so CobaltStrike offers a
 - `BeaconPrintf` and `BeaconOutput` to send information to C&C
 - And many other offensive APIs, to perform process or token manipulation, etc...
 
-Powershell being a managed language, powered by the CLR (Common Language Runtine), the challenge is to switch from managed to unmanaged world and from unmanaged to managed world.
+Powershell being a managed language, powered by the CLR (Common Language Runtime), the challenge is to switch from managed to unmanaged world and from unmanaged to managed world.
 
 ## Unmanaged to managed
 
