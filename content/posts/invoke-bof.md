@@ -18,7 +18,7 @@ With that in mind, we designed a BOF loader in powershell, [Invoke-Bof](https://
 
 # Example of use cases
 
-Most of the time, we want to execute a BOF while instrumenting the OS to find the right EventID, ETW or artefacts. Let's go through a few examples available from Github.
+Most of the time, we want to execute a BOF while instrumenting the OS to find the right EventID, ETW or forensic artifact. Let's go through a few examples available on GitHub.
 
 ## BOF_dumpclip
 
