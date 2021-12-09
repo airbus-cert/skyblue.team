@@ -111,7 +111,7 @@ ExecMethod Succeeded!
 ****************************************************************************
 ```
 
-## Dump permission of a pipe
+## Dump permissions of a named pipe
 
 ```
 > $BOFBytes = (Invoke-WebRequest -Uri "https://github.com/boku7/xPipe/raw/main/xpipe.o").Content
