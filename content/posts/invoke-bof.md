@@ -1,7 +1,7 @@
 ---
 title: "Invoke-Bof"
 date: 2021-12-09T09:22:42+02:00
-Summary: Invoke-Bof, a kind of purple software?
+Summary: Invoke-Bof, testing Cobalt Strike detections the easy way
 ---
 
 All the rage of advanced Red Teamers is now to develop offensive modules as [BOF](https://download.cobaltstrike.com/help-beacon-object-files) modules, short for *Beacon Object File*.
