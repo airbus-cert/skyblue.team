@@ -11,7 +11,7 @@ A *Beacon Object File* is split into two parts:
 - A payload that will be executed on the victim machine
 - An aggressor script, which will prepare and interact with the payload
 
-The Red Team community is prolific: tens of BOF modules are available on GitHub, from lateral movement to advanced persistence technique. As detection engineers, how can we execute them easily to observe their artefacts?
+The Red Team community is prolific: tens of BOF modules are available on GitHub, from lateral movement to advanced persistence technique. As detection engineers, how can we execute them easily to observe their artifacts?
 
 In this frame, we designed a BOF loader in powershell, [Invoke-Bof](https://github.com/airbus-cert/Invoke-Bof) to be easily included in any framework, such as the wonderful one from RedCanary, [atomic-red-team](https://github.com/redcanaryco/atomic-red-team)!
 
