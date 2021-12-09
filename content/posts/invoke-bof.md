@@ -13,7 +13,7 @@ A *Beacon Object File* is split into two parts:
 
 The Red Team community is prolific: tens of BOF modules are available on GitHub, from lateral movement to advanced persistence technique. As detection engineers, how can we execute them easily to observe their artifacts?
 
-In this frame, we designed a BOF loader in powershell, [Invoke-Bof](https://github.com/airbus-cert/Invoke-Bof) to be easily included in any framework, such as the wonderful one from RedCanary, [atomic-red-team](https://github.com/redcanaryco/atomic-red-team)!
+With that in mind, we designed a BOF loader in powershell, [Invoke-Bof](https://github.com/airbus-cert/Invoke-Bof) to be easily included in any framework, such as the wonderful one from RedCanary, [atomic-red-team](https://github.com/redcanaryco/atomic-red-team)!
 
 
 # Example of use cases
