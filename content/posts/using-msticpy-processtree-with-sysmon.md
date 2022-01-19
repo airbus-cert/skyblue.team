@@ -8,7 +8,7 @@ Summary:
 
 One of the candies is their Process Tree visualization function: you give a list of processes and you get a nice representation of its hierarchy:
 
-XXX: Insert screenshot
+![](/static/images/9dc9a604a23586b7b5d52f340aa070d0da7f23e3.png)
 
 At $WORK, we are heavy user of Sysmon so we [contributed its support upstream](https://github.com/microsoft/msticpy/pull/267). Nonetheless, even though [all notebooks presented are available on Github](https://github.com/OTRF/infosec-jupyterthon/tree/master/workshops/2021), we were still missing a minimalistic example of ptree's usage.
 
