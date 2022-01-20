@@ -6,8 +6,8 @@ Summary: Delegate to KRBTGT service to forge any TGT
 
 There are a lot of different ways to create a valid TGT, once you get enough privilege on an Active Directory environment. In this article, we will just describe a new one, but to understand we need to talk a little bit about *Constrained Delegation* with protocol transition.
 
-**TL;DR** : We will present a backdoor technic that uses a service account with constraint delegation to the `krbtgt` service, to forge TGT to any user of the domain.
-This technic needs privileges (domain admin) to be installed but does not require to be connected to any resource of the domain, like **DCSync** or **Golden Tickets** needs. The only access to **LDAP** and **Kerberos** ports are enough!
+**TL;DR** : We will present a backdoor technique that uses a service account with constraint delegation to the `krbtgt` service, to forge TGT to any user of the domain.
+This technique needs privileges (domain admin) to be installed but does not require to be connected to any resource of the domain, like **DCSync** or **Golden Tickets** needs. The only access to **LDAP** and **Kerberos** ports are enough!
 
 # What are a TGT and TGS?
 
@@ -39,7 +39,7 @@ Recent vulnerabilities like CVE-2021-34470, CVE-2021-42287, CVE-2021-42278 remem
 The project [Powermad](https://github.com/Kevin-Robertson/Powermad) gives useful scripts to make the exploitation's experience pleasant.
 
 Yet, even though attribute `msDS-AllowedToDelegateTo` is writeable only to users present in `CN=Administrators,CN=Builtin,DC=cosmos,DC=local` group or `CN=Account Operators,CN=Builtin,DC=cosmos,DC=local` group, 
-it is not a sufficient condition, as *Clement Notin* teached me, you also need the `SeEnableDelegationPrivilege` privilege on the Domain Controller. 
+it is not a sufficient condition, as *Clement Notin* taught me, you also need the `SeEnableDelegationPrivilege` privilege on the Domain Controller. 
 And this privilege is set by the “*Default Domain Controller*” GPO :
 
 ```
@@ -53,10 +53,10 @@ In other words, this privilege is only available for members of `CN=Administrato
 We want, with enough privilege, to create a TGT for any users (privileged or not).
 
 The two known attacks are:
-- **Golden Ticket**, but need to perform a conection on a DC to steal the krbtgt secret
+- **Golden Ticket**, but need to perform a connection on a DC to steal the krbtgt secret
 - **DCSync**, but you have to be connected to a workstation joined to the domain, and set a monitored SPN
 
-Both these attacks needs to be connected to a ressource of the domain. But we don't want that.
+Both these attacks needs to be connected to a resource of the domain. But we don't want that.
 
 Now remember our first remark at the beginning of this article :
 
