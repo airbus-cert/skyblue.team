@@ -1,7 +1,7 @@
 ---
 title: "HOWTO use msticpy's process tree with Sysmon?"
 date: 2021-09-11T18:22:42+02:00
-Summary: 
+Summary: This post introduce how to render msticpy's Process Tree with Sysmon telemetry.
 ---
 
 [Jupyterthon 2021](https://infosecjupyterthon.com/introduction.html) was like a Christmas party for Blue teams. The brilliant minds of Microsoft made  convincing demos about their use of Jupyter Notebook and especially their msticpy Python module.
@@ -10,7 +10,7 @@ One of the candies is their Process Tree visualization function: you give a list
 
 ![](/static/images/9dc9a604a23586b7b5d52f340aa070d0da7f23e3.png)
 
-At $WORK, we are heavy user of Sysmon so we [contributed its support upstream](https://github.com/microsoft/msticpy/pull/267). Nonetheless, even though [all notebooks presented are available on Github](https://github.com/OTRF/infosec-jupyterthon/tree/master/workshops/2021), we were still missing a minimalistic example of ptree's usage.
+At $WORK, we are heavy user of Sysmon so we [contributed its support upstream](https://github.com/microsoft/msticpy/pull/267). Nonetheless, even though [all notebooks presented during the conference are available on Github](https://github.com/OTRF/infosec-jupyterthon/tree/master/workshops/2021), we were still missing a minimalistic example of ptree's usage.
 
 So here is one for you:
 
@@ -48,3 +48,14 @@ proc_df["UtcTime"] = pd.to_datetime(proc_df.UtcTime, unit="s", utc=True)
 p_tree_win = ptree.build_process_tree(proc_df)
 ptree.plot_process_tree(p_tree_win)
 ```
+
+And how to highlight specific cells in the rendering? Easy! Use the `legend_col` parameter as [clearly documented](https://msticpy.readthedocs.io/en/latest/visualization/ProcessTree.html?highlight=processtree#process-tree-plotting-syntax):
+
+```python
+proc_df["Interesting"] = (proc_df["Image"] == "C:\\WINDOWS\\System32\\rundll32.exe").astype(int)
+p_tree_win = ptree.build_process_tree(proc_df)
+ptree.plot_process_tree(p_tree_win, legend_col="Interesting")
+```
+
+Enjoy!
+
