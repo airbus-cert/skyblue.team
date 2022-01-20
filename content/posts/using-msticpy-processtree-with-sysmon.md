@@ -4,7 +4,7 @@ date: 2022-01-20T06:22:42+02:00
 Summary: This post introduces how to render msticpy's Process Tree with Sysmon telemetry.
 ---
 
-[Jupyterthon 2021](https://infosecjupyterthon.com/introduction.html) was like a Christmas party for Blue teams. The brilliant minds of Microsoft made  convincing demos about their use of Jupyter Notebook and especially their msticpy Python module.
+[Jupyterthon 2021](https://infosecjupyterthon.com/introduction.html) was like a Xmas party 🎄 for Blue teams. Microsoft brilliant minds made convincing demos about their use of Jupyter Notebook and especially their msticpy Python module.
 
 One of the candies is their Process Tree visualization function: you give a list of processes and you get a nice representation of its hierarchy:
 
