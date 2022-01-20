@@ -10,7 +10,7 @@ One of the candies is their Process Tree visualization function: you give a list
 
 ![](/images/9dc9a604a23586b7b5d52f340aa070d0da7f23e3.png)
 
-At $WORK, we are heavy user of Sysmon so we [contributed its support upstream](https://github.com/microsoft/msticpy/pull/267). Nonetheless, even though [all notebooks presented during the conference are available on Github](https://github.com/OTRF/infosec-jupyterthon/tree/master/workshops/2021), we were still missing a minimalistic example of ptree's usage.
+At $WORK, we are heavy users of Sysmon so we [contributed to make msticpy support it upstream](https://github.com/microsoft/msticpy/pull/267). Nonetheless, even though [all notebooks presented during the conference are available on Github](https://github.com/OTRF/infosec-jupyterthon/tree/master/workshops/2021), we were still missing a minimalistic example of ptree's usage.
 
 So here is one for you:
 
