@@ -4,10 +4,11 @@ date: 2022-01-20T09:22:42+02:00
 Summary: Delegate to KRBTGT service to forge any TGT
 ---
 
-There are a lot of different ways to create a valid TGT, once you get enough privilege on an Active Directory environment. In this article, we will just describe a new one, but to understand we need to talk a little bit about *Constrained Delegation* with protocol transition.
+If you compromise an Active Directory environment and get Domain Administrator privileges, there are a million and one ways to persist in a domain. This article will describe a new one, allowing to create valid TGT (i.e. *have a master key*). This technique relies on a Service Account with a *Constrained Delegation* to the `KRBTGT` service.
 
-**TL;DR** : We will present a backdoor technique that uses a service account with constraint delegation to the `krbtgt` service, to forge TGT to any user of the domain.
-This technique needs privileges (domain admin) to be installed but does not require to be connected to any resource of the domain, like **DCSync** or **Golden Tickets** needs. The only access to **LDAP** and **Kerberos** ports are enough!
+The appeal of this technique is that it does not require to be joined to the domain, contrarily to **DCSync** or **Golden Tickets** attacks: Only network access to **LDAP** and **Kerberos** ports is enough!
+
+But first, to explain the attack in details, we need to talk about a few Kerberos concepts.
 
 # What are a TGT and TGS?
 
@@ -35,11 +36,11 @@ One of the most interesting target services is LDAP, because if you compromise a
 
 # Changing msDS-AllowedToDelegateTo
 
-Recent vulnerabilities like CVE-2021-34470, CVE-2021-42287, CVE-2021-42278 remember us that any non-privileged user can create a machine account easily due to the value of `ms-DS-MachineAccountQuota` set to 10 by default, which means that, out of installation, any user of a domain can join up to 10 machines in the domain. 
+Recent vulnerabilities like CVE-2021-34470, CVE-2021-42287, CVE-2021-42278 remember us that any non-privileged user can create a machine account easily due to the value of `ms-DS-MachineAccountQuota` set to 10 by default. It means that, out of installation, any user of a domain can join up to 10 machines in the domain. 
 The project [Powermad](https://github.com/Kevin-Robertson/Powermad) gives useful scripts to make the exploitation's experience pleasant.
 
 Yet, even though attribute `msDS-AllowedToDelegateTo` is writeable only to users present in `CN=Administrators,CN=Builtin,DC=cosmos,DC=local` group or `CN=Account Operators,CN=Builtin,DC=cosmos,DC=local` group, 
-it is not a sufficient condition, as *Clement Notin* taught me, you also need the `SeEnableDelegationPrivilege` privilege on the Domain Controller. 
+it is not a sufficient condition: As *Clement Notin* taught me, you also need the `SeEnableDelegationPrivilege` privilege on the Domain Controller. 
 And this privilege is set by the “*Default Domain Controller*” GPO :
 
 ```
@@ -53,10 +54,10 @@ In other words, this privilege is only available for members of `CN=Administrato
 We want, with enough privilege, to create a TGT for any users (privileged or not).
 
 The two known attacks are:
-- **Golden Ticket**, but need to perform a connection on a DC to steal the krbtgt secret
-- **DCSync**, but you have to be connected to a workstation joined to the domain, and set a monitored SPN
+- **Golden Ticket**, but you need to perform a connection on a DC to steal the krbtgt secret
+- **DCSync**, but you have to be connected to a workstation joined to the domain, and set a specific SPN which is usually monitored 
 
-Both these attacks needs to be connected to a resource of the domain. But we don't want that.
+Both attacks needs to be connected to a resource of the domain and we don't want that.
 
 Now remember our first remark at the beginning of this article :
 
@@ -70,7 +71,7 @@ Now if we set `krbtgt/COSMOS` as value, what will happens?
 
 The attack will consist into :
 1. Detect a service account with constrained delegation and protocol transition
-1. **Set value `krbtgt/DOMAIN` to the field `msDS-AllowedToDelegateTo` of the service account**, that's the innovative part!
+1. **Set value `krbtgt/DOMAIN` to the field `msDS-AllowedToDelegateTo` of the service account**, that's the innovative part 🆕 !
 1. Ask a TGT for the service account
 1. Perform a `s4u` request (Self, and proxy) to impersonate a target user against the delegated service, here `krbtgt`
 
@@ -328,7 +329,7 @@ Or by using ldap with the following filter:
 (&(userAccountControl:1.2.840.113556.1.4.803:=16777216)(msDS-AllowedToDelegateTo=krbtgt*)!(objectClass=computer))
 ```
 
-# What we have done ?
+# Conclusion
 
 We have configured a service account to allow constrained delegation with protocol transition, to target the `krbtgt` service.
 By using the `s4u` kerberos extension, we can forge a TGT for any user, just by knowing the secret of the controlled service.
@@ -336,7 +337,7 @@ On the contrary of attacks like **DCSync** or **Golden Tickets**, we don't have 
 
 Don't forget, every service accounts on your domain could be a potential backdoor and have to be treated like the `krbtgt` service.
 
-Thanks Clement Notin (@cnotin) for its help :prey:
+Thanks Clement Notin (@cnotin) for his help :pray:
 
 # Links
 
