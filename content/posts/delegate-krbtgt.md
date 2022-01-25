@@ -26,7 +26,7 @@ The important thing to know here is that requesting a TGT or TGS are very simila
 
 We will not go deeper regarding golden ticket, but if you want to learn more about that, I recommend you to read [this article from hackndo](https://en.hackndo.com/kerberos-silver-golden-tickets/) .
 
-To forge a golden ticket you need to have the hash of the krbtgt service account. To do that you have to access the memory of the KDC, which is commonly hosted on a domain controller. Once you get this hash, you can create by hand a valid TGT and fill the PAC information with the privileges wanted. But this attack needs access to the domain controller.
+To forge a golden ticket you need to have the krbtgt service account hash. To do that you have to memory access of the KDC, which is commonly hosted on a domain controller. Once you get this hash, you can create by hand a valid TGT and fill the PAC information with the privileges wanted.
 
 This is why attackers now are focused on service accounts with delegation privileges.
 
