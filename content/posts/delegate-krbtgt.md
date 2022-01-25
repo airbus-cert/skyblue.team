@@ -82,7 +82,7 @@ The attack will consist into :
 1. Ask a TGT for the service account
 1. Perform a `s4u` request (Self, and proxy) to impersonate a target user against the delegated service, here `krbtgt`
 
-In the following example, the service account is `SA-TEST-01` and the privileged user is `sylvain`.
+In the following example, the service account is `SA-TEST-01` and the privileged user is `alice`.
 
 ## Getting Service Account
 
