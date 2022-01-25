@@ -28,7 +28,7 @@ We will not go deeper regarding golden ticket, but if you want to learn more abo
 
 To forge a golden ticket you need to have the krbtgt service account hash. To do that you have to memory access of the KDC, which is commonly hosted on a domain controller. Once you get this hash, you can create by hand a valid TGT and fill the PAC information with the privileges wanted.
 
-This is why attackers now are focused on service accounts with delegation privileges.
+As this attack needs access to the domain controller, attackers prefers to focus on service accounts with delegation privileges.
 
 # What is Delegation?
 
