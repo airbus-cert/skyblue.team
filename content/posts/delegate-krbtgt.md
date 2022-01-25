@@ -88,7 +88,8 @@ In the following example, the service account is `SA-TEST-01` and the privileged
 
 We have two options, create one or compromised one.
 
-We have LDAP to the rescue. We can create and configure a Service account using any LDAP tools, like for the oldest one, `ldp.exe`.
+As LDAP is always our best friend. We can create and configure a Service account using any LDAP tools, like for the oldest one, `ldp.exe`. 
+Be aware that it can be noisy to create a service account.
 But it can be noisy to create a service account
 
 ## Set msDS-AllowedToDelegateTo to krbtgt service
