@@ -34,7 +34,7 @@ As this attack needs access to the domain controller, attackers prefers to focus
 
 As for Kerberos Tickets, I will not deep dive into this topic, because [It is well explained by Harmjoy himself here](http://www.harmj0y.net/blog/redteaming/another-word-on-delegation/).
 
-The point of interest here is how the constrained delegation with protocol transition works. If you can compromise an account with such a privilege, you can forge a TGS for anybody, including high privilege users, that targets the list of services present in the field `msDS-AllowedToDelegateTo`. This attack uses a Kerberos extension named s4u and s4uProxy (Self for User).
+The interesting point here is how the constrained delegation with protocol transition works. If you can compromise an account with such a privilege, you can forge a TGS for anybody, including high privilege users, that targets the services list present in the field `msDS-AllowedToDelegateTo`. This attack uses a Kerberos extension named s4u and s4uProxy (Self for User).
 
 One of the most interesting target services is LDAP, because if you compromise a service account with the LDAP SPN of any DC present into the `msDS-AllowedToDelegateTo`, you can perform a *DCSync* attack.
 
