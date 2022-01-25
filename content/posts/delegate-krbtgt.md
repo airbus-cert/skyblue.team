@@ -86,7 +86,7 @@ In the following example, the service account is `SA-TEST-01` and the privileged
 
 ## Getting Service Account
 
-We have two options, create one or compromised one.
+In this situation we have two options: create one or compromised one.
 
 As LDAP is always our best friend. We can create and configure a Service account using any LDAP tools, like for the oldest one, `ldp.exe`. 
 Be aware that it can be noisy to create a service account.
