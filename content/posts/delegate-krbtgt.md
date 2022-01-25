@@ -40,7 +40,8 @@ Attackers focus generally on targeting LDAP services, because if you compromise 
 
 # Changing msDS-AllowedToDelegateTo
 
-Recent vulnerabilities like CVE-2021-34470, CVE-2021-42287, CVE-2021-42278 remember us that any non-privileged user can create a machine account easily due to the value of `ms-DS-MachineAccountQuota` set to 10 by default. It means that, out of installation, any user of a domain can join up to 10 machines in the domain. 
+Recent vulnerabilities as [CVE-2021-34470](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2021-34470), [CVE-2021-42287](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2021-42287), [CVE-2021-42278](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2021-42278) remember us that any non-privileged user can create a machine account easily due to the value of `ms-DS-MachineAccountQuota` set to 10 by default. It means that, out of installation, any user of a domain can join up to 10 machines in the domain. 
+[Powermad](https://github.com/Kevin-Robertson/Powermad) project gives useful scripts to make the exploitation's experience pleasant.
 The project [Powermad](https://github.com/Kevin-Robertson/Powermad) gives useful scripts to make the exploitation's experience pleasant.
 
 Yet, even though attribute `msDS-AllowedToDelegateTo` is writeable only to users present in `CN=Administrators,CN=Builtin,DC=cosmos,DC=local` group or `CN=Account Operators,CN=Builtin,DC=cosmos,DC=local` group, 
