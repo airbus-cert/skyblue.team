@@ -8,7 +8,7 @@ If you compromise an Active Directory environment and get Domain Administrator p
 
 The main appeal of this technique is that it does not require to be joined to the domain, contrarily to **[DCSync](https://stealthbits.com/blog/what-is-dcsync-an-introduction/)** or **[Golden Tickets](https://en.hackndo.com/kerberos-silver-golden-tickets/)** attacks: Only network access to **LDAP** and **Kerberos** ports is enough!
 
-But first, to explain the attack in details, we need to talk about a few Kerberos concepts.
+But first, to explain the attack in details, we need to review some few Kerberos concepts.
 
 # What are a TGT and TGS?
 
