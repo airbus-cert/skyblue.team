@@ -54,7 +54,7 @@ And this privilege is set by the “*Default Domain Controller*” GPO :
 SeEnableDelegationPrivilege = *S-1-5-32-544
 ```
 
-In other words, this privilege is only available for members of `CN=Administrators,CN=Builtin,DC=cosmos,DC=local`. Harmj0y explains how to backdoor it using write access to [GPO](https://www.harmj0y.net/blog/activedirectory/the-most-dangerous-user-right-you-probably-have-never-heard-of/).
+In other words, this privilege is only available for members of `CN=Administrators,CN=Builtin,DC=cosmos,DC=local`. [Harmj0y](https://twitter.com/harmj0y?lang=en) explains how to backdoor it using write access to [GPO](https://www.harmj0y.net/blog/activedirectory/the-most-dangerous-user-right-you-probably-have-never-heard-of/).
 
 # What do we want to do?
 
