@@ -20,7 +20,7 @@ But first, to explain the attack in details, we need to review some few Kerberos
 - A TGS, which stands for *Ticket Granting Service*, is used to ask for access to any kind of service using Kerberos, such as remote desktop, CIFS, LDAP etc…
 
 
-The important thing to know here is that requesting a TGT or TGS are very similar because requesting a TGT is only a TGS for the krbtgt/DOMAIN service. Keep this detail in mind!
+The important thing to know here is that requesting a TGT or TGS are very similar. TGT is only a TGS for a krbtgt/DOMAIN service. Keep this detail in mind!
 
 # What is a Golden Ticket?
 
