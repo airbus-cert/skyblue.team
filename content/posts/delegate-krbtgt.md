@@ -100,7 +100,7 @@ Now, let's use [Rubeus](https://github.com/GhostPack/Rubeus) to create a TGT for
 
 ## Ask TGT for SA-TEST-01
 
-First of all, We will ask a TGT for the service account, the only secret we need is the hash or password of this service account:
+First of all, we will ask a TGT for the service account, the only secret we need is the hash or password of this service account:
 
 ```text
 c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe asktgt /user:SA-TEST-01 /domain:COSMOS /dc:127.0.0.1 /password:test /outfile:sa_tgt
