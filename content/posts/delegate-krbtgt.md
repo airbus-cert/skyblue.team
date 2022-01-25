@@ -44,7 +44,9 @@ Recent vulnerabilities as [CVE-2021-34470](https://msrc.microsoft.com/update-gui
 [Powermad](https://github.com/Kevin-Robertson/Powermad) project gives useful scripts to make the exploitation's experience pleasant.
 The project [Powermad](https://github.com/Kevin-Robertson/Powermad) gives useful scripts to make the exploitation's experience pleasant.
 
-Yet, even though attribute `msDS-AllowedToDelegateTo` is writeable only to users present in `CN=Administrators,CN=Builtin,DC=cosmos,DC=local` group or `CN=Account Operators,CN=Builtin,DC=cosmos,DC=local` group, 
+Yet, even though attribute `msDS-AllowedToDelegateTo` is writeable only by users present in `CN=Administrators,CN=Builtin,DC=cosmos,DC=local` group or `CN=Account Operators,CN=Builtin,DC=cosmos,DC=local` group, 
+it is not a sufficient condition: As *[Clement Notin](https://twitter.com/cnotin?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor)* confirmed me, you also need the `SeEnableDelegationPrivilege` privilege on the Domain Controller. 
+And this privilege is set by the “*Default Domain Controller*” GPO :
 it is not a sufficient condition: As *Clement Notin* taught me, you also need the `SeEnableDelegationPrivilege` privilege on the Domain Controller. 
 And this privilege is set by the “*Default Domain Controller*” GPO :
 
