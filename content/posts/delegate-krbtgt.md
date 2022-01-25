@@ -16,7 +16,9 @@ But first, to explain the attack in details, we need to review some few Kerberos
 - TGT, which stands for *Ticket Granting Ticket*, is used by Kerberos services to authenticate a user or a computer. To get a TGT you need to prove your identity, and once you get one, you can ask for a ticket to access the different services.
 
 
-A TGS, which stands for *Ticket Granting Service*, is used to ask for access to any kind of service using Kerberos, like remote desktop, CIFS, LDAP etc…
+
+- A TGS, which stands for *Ticket Granting Service*, is used to ask for access to any kind of service using Kerberos, such as remote desktop, CIFS, LDAP etc…
+
 
 The important thing to know here is that requesting a TGT or TGS are very similar because requesting a TGT is only a TGS for the krbtgt/DOMAIN service. Keep this detail in mind!
 
