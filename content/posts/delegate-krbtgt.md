@@ -249,7 +249,7 @@ c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe s4u /msdsspn:krbtgt/COSMOS /domai
 [*] Ticket written to sylvain_krbtgt_COSMOS
 ```
 
-Here `Rubeus` ask for `S4uSelf` ticket for himself (SA-TEST-01) and then ask a TGS for `sylvain` for the service `krbtgt` (actually it's a TGT!)
+Here `Rubeus` ask for `S4uSelf` ticket for himself (SA-TEST-01) and then ask a TGS for `alice` for the service `krbtgt` (actually it's a TGT!)
 
 ## Asking a TGS for any service now using the TGS(T) received from s4u
 
