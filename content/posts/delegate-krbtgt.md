@@ -6,7 +6,7 @@ Summary: Delegate to KRBTGT service to forge any TGT
 
 If you compromise an Active Directory environment and get Domain Administrator privileges, there are a million and one ways to persist in a domain. This article will describe a new one, allowing to create valid TGT (i.e. *have a master key*). This technique relies on a Service Account with a *Constrained Delegation* to the `KRBTGT` service.
 
-The appeal of this technique is that it does not require to be joined to the domain, contrarily to **DCSync** or **Golden Tickets** attacks: Only network access to **LDAP** and **Kerberos** ports is enough!
+The main appeal of this technique is that it does not require to be joined to the domain, contrarily to **[DCSync](https://stealthbits.com/blog/what-is-dcsync-an-introduction/)** or **[Golden Tickets](https://en.hackndo.com/kerberos-silver-golden-tickets/)** attacks: Only network access to **LDAP** and **Kerberos** ports is enough!
 
 But first, to explain the attack in details, we need to talk about a few Kerberos concepts.
 
