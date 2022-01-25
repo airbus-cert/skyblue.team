@@ -60,7 +60,7 @@ In other words, this privilege is only available for members of `CN=Administrato
 
 We want, with enough privilege, to create a TGT for any users (privileged or not).
 
-The two known attacks are:
+For now, in order to achieve that, two ways are known :
 - **Golden Ticket**, but you need to perform a connection on a DC to steal the krbtgt secret
 - **DCSync**, but you have to be connected to a workstation joined to the domain, and set a specific SPN which is usually monitored 
 
