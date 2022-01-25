@@ -64,7 +64,7 @@ For now, in order to achieve that, two ways are known :
 - **Golden Ticket**, but you need to perform a connection on a DC to steal the krbtgt secret
 - **DCSync**, but you have to be connected to a workstation joined to the domain, and set a specific SPN which is usually monitored 
 
-Both attacks needs to be connected to a resource of the domain and we don't want that.
+Both attacks need to be connected to a resource of the domain. However, we found a new technique that doesn't need it. 
 
 Now remember our first remark at the beginning of this article :
 
