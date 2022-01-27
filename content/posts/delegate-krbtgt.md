@@ -92,7 +92,7 @@ But it can be noisy to create a service account
 
 Legitimate administration tools like “*Users and Computers*” can not set a SPN to `krbtgt/DOMAIN` directly. However, it works using ldp over LDAP:
 
-**![|624x341](/images/c358ad8130662869e9f9aef19e9d1c10baf7a3e9.png)**
+**![](/images/c358ad8130662869e9f9aef19e9d1c10baf7a3e9.jpeg)**
 
 In the screenshot, we set the service account with a target SPN value of `krbtgt/COSMOS`.
 
