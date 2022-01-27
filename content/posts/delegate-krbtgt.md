@@ -342,7 +342,7 @@ On the contrary of attacks like **DCSync** or **Golden Tickets**, we don't have 
 
 Don't forget, every service account on your domain could be a potential backdoor and it should be treated like the `krbtgt` service itself.
 
-Thanks Clement Notin (@cnotin) for his help :pray:
+Thanks Clement Notin (@cnotin) for his help 🙏
 
 # Links
 
