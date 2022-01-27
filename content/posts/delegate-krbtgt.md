@@ -1,7 +1,7 @@
 ---
 title: "Delegate to KRBTGT service"
 date: 2022-01-20T09:22:42+02:00
-Summary: Delegate to KRBTGT service to forge any TGT
+Summary:  This article describe a new persistence technique in Active Directory that allows to create valid TGT (i.e. have a master key). This technique relies on a Service Account with a Constrained Delegation to the KRBTGT service.
 ---
 
 If you compromise an Active Directory environment and get Domain Administrator privileges, there are a million and one ways to persist in a domain. This article will describe a new one, allowing to create valid TGT (i.e. *have a master key*). This technique relies on a Service Account with a *Constrained Delegation* to the `KRBTGT` service.
