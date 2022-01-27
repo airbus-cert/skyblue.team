@@ -329,8 +329,9 @@ To detect it, we can rely on event id `4738`, **A user account was changed**, an
 
 Or by using ldap with the following filter:
 
-```
-(&(userAccountControl:1.2.840.113556.1.4.803:=16777216)(msDS-AllowedToDelegateTo=krbtgt*)!(objectClass=computer))
+```text
+(&(userAccountControl:1.2.840.113556.1.4.803:=16777216)
+   (msDS-AllowedToDelegateTo=krbtgt*)!(objectClass=computer))
 ```
 
 # Conclusion
