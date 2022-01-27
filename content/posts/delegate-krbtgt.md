@@ -1,6 +1,6 @@
 ---
 title: "Delegate to KRBTGT service"
-date: 2022-01-20T09:22:42+02:00
+date: 2022-01-27T09:22:42+02:00
 Summary:  This article describe a new persistence technique in Active Directory that allows to create valid TGT (i.e. have a master key). This technique relies on a Service Account with a Constrained Delegation to the KRBTGT service.
 ---
 
