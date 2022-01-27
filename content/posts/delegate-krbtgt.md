@@ -26,13 +26,13 @@ The important thing to know here is that requesting a TGT or TGS are very simila
 
 We will not go deeper regarding golden ticket, but if you want to learn more about that, I recommend you to read [this article from hackndo](https://en.hackndo.com/kerberos-silver-golden-tickets/) .
 
-To forge a golden ticket you need to have the krbtgt service account hash. To do that you have to memory access of the KDC, which is commonly hosted on a domain controller. Once you get this hash, you can create by hand a valid TGT and fill the PAC information with the privileges wanted.
+To forge a golden ticket you need to have the krbtgt service account hash. To do that you need to have memory access to the KDC, which is commonly hosted on a domain controller. Once you get this hash, you can create, by hand, a valid TGT and fill the PAC information with the privileges wanted.
 
-As this attack needs access to the domain controller, attackers prefers to focus on service accounts with delegation privileges.
+As this attack needs access to the domain controller, attackers prefer to focus on service accounts with delegation privileges.
 
 # What is Delegation?
 
-As for Kerberos Tickets, I will not deep dive into this topic, because [It is well explained by Harmjoy himself here](http://www.harmj0y.net/blog/redteaming/another-word-on-delegation/).
+As for Kerberos Tickets, I will not deep dive into this topic, because [it is well explained by Harmjoy himself here](http://www.harmj0y.net/blog/redteaming/another-word-on-delegation/).
 
 The interesting point here is how the constrained delegation with protocol transition works. If you can compromise an account with such a privilege, you can forge a TGS for anybody, including high privilege users, that targets the services list present in the field `msDS-AllowedToDelegateTo`. This attack uses a Kerberos extension named s4u and s4uProxy (Self for User).
 
@@ -40,14 +40,10 @@ Attackers focus generally on targeting LDAP services, because if you compromise 
 
 # Changing msDS-AllowedToDelegateTo
 
-Recent vulnerabilities as [CVE-2021-34470](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2021-34470), [CVE-2021-42287](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2021-42287), [CVE-2021-42278](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2021-42278) remember us that any non-privileged user can create a machine account easily due to the value of `ms-DS-MachineAccountQuota` set to 10 by default. It means that, out of installation, any user of a domain can join up to 10 machines in the domain. 
-[Powermad](https://github.com/Kevin-Robertson/Powermad) project gives useful scripts to make the exploitation's experience pleasant.
-The project [Powermad](https://github.com/Kevin-Robertson/Powermad) gives useful scripts to make the exploitation's experience pleasant.
+Recent vulnerabilities such as [CVE-2021-34470](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2021-34470), [CVE-2021-42287](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2021-42287), [CVE-2021-42278](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2021-42278) remember us that any non-privileged user can create a machine account easily due to the value of `ms-DS-MachineAccountQuota` set to 10 by default. It means that, out of installation, any user of a domain can join up to 10 machines in the domain. 
+The [Powermad](https://github.com/Kevin-Robertson/Powermad) project gives useful scripts to make the exploitation's experience pleasant.
 
-Yet, even though attribute `msDS-AllowedToDelegateTo` is writeable only by users present in `CN=Administrators,CN=Builtin,DC=cosmos,DC=local` group or `CN=Account Operators,CN=Builtin,DC=cosmos,DC=local` group, 
-it is not a sufficient condition: As *[Clement Notin](https://twitter.com/cnotin?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor)* confirmed me, you also need the `SeEnableDelegationPrivilege` privilege on the Domain Controller. 
-And this privilege is set by the “*Default Domain Controller*” GPO :
-it is not a sufficient condition: As *Clement Notin* taught me, you also need the `SeEnableDelegationPrivilege` privilege on the Domain Controller. 
+Yet, even though the attribute `msDS-AllowedToDelegateTo` is writeable only by users present in `CN=Administrators,CN=Builtin,DC=cosmos,DC=local` group or `CN=Account Operators,CN=Builtin,DC=cosmos,DC=local` group,  it is not a sufficient condition: As *[Clement Notin](https://twitter.com/cnotin?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor)* taught me, you also need the `SeEnableDelegationPrivilege` privilege on the Domain Controller. 
 And this privilege is set by the “*Default Domain Controller*” GPO :
 
 ```
@@ -318,7 +314,7 @@ c:\work\dev\Rubeus\Rubeus\bin\Debug>Rubeus.exe asktgs /ticket:alice_krbtgt_COSMO
   Base64(key)              :  euuUjdxXsl/gVUH7pUp5ovSCi2HN2qg17009XJ8TR/I=
 ```
 
-We are now Domain Admin without knowing anything about it, and it works for any users!
+We are now Domain Admin without knowing anything about it, and it works for any user!
 
 Keep in mind this wisdom from harmj0y:
 >  There are a million ways to backdoor Active Directory given sufficient rights (make that a million and one : )
@@ -343,7 +339,7 @@ We have configured a service account to allow constrained delegation with protoc
 By using the `s4u` kerberos extension, we can forge a TGT for any user, just by knowing the secret of the controlled service.
 On the contrary of attacks like **DCSync** or **Golden Tickets**, we don't have to be connected to a machine to install the backdoor, but we still need high privilege.
 
-Don't forget, every service accounts on your domain could be a potential backdoor and have to be treated like the `krbtgt` service.
+Don't forget, every service account on your domain could be a potential backdoor and it should be treated like the `krbtgt` service itself.
 
 Thanks Clement Notin (@cnotin) for his help :pray:
 
