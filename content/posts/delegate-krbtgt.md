@@ -86,7 +86,6 @@ In this situation we have two options: create one or compromised one.
 
 As LDAP is always our best friend. We can create and configure a Service account using any LDAP tools, like for the oldest one, `ldp.exe`. 
 Be aware that it can be noisy to create a service account.
-But it can be noisy to create a service account
 
 ## Set msDS-AllowedToDelegateTo to krbtgt service
 
