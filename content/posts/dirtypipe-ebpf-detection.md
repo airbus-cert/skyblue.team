@@ -8,7 +8,7 @@ CVE-2022-0847, aka Dirty Pipe, was first reported by Max Kellermann on February 
 
 So how could we detect the exploitation of CVE-2022-0847? 🤔
 
-Dirty Pipe being mostly about the page cache, pipes and splices, we knew we had to monitor syscalls. We first thought about Auditd, a built-in Linux kernel feature made to monitor syscalls, file access, and more. Auditd is a nice tool since you can filter properties such as arguments value or permissions. But would it have been applicable to our case? Well, let's think about it: 🔍
+Dirty Pipe being mostly about the page cache, pipes and splices, we knew we had to monitor syscalls. We first thought about Auditd, a built-in Linux kernel feature made to monitor syscalls, file access, and more. Auditd is a nice tool since you can filter properties such as argument values or permissions. But would it have been applicable to our case? Well, let's think about it: 🔍
 
 - Could we have hooked *open()*? It's a very common syscall, and the argument could have been any file… ➤ No ❌
 - Could we have hooked *pipe()*? Hooking a simple *splice()* doesn't make sense... ➤ No ❌
