@@ -87,6 +87,8 @@ kernel is vulnerable, it will overwrite the targeted file.
 
 ![demo](/images/088d790795eb65a66c268d61039feeea5455bae6.gif)
 
+[dirtypipe-ebpf_detection](https://github.com/airbus-cert/dirtypipe-ebpf_detection)
+
 > Just before releasing our work we found this wonderful article from
 > Datadog team!
 >
