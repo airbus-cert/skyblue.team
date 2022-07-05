@@ -4,14 +4,14 @@ date: 2022-07-05T16:00:00+02:00
 Summary: This article is about detecting Dirty Pipe exploitation attempts thanks to eBPF.
 ---
 
-CVE-2022-0847, aka Dirty Pipe, was first reported by Max Kellermann on February 2022. This vulnerability allows to overwrite a read-only file, including root owned ones, from any unprivileged user. As you can imagine, the exploitation of Dirty Pipe is a wide open door to privilege escalations, in a pretty straight forward and clean way… In fact, Dirty Pipe is so clean, that it looks like it was a legitimate feature and that Linux was meant to work that way. It affects Linux kernel ever since the version 5.8 and was fixed in Linux 5.16.11, 5.15.25 and 5.10.102. Max Kellermann wrote a great article about his discovery on his blog which I strongly recommend if you wanna learn more about Dirty Pipe: [dirtypipe.cm4all.com](https://dirtypipe.cm4all.com/).
+CVE-2022-0847, aka Dirty Pipe, was first reported by Max Kellermann on February 2022. This vulnerability allows to overwrite a read-only file, including root owned ones, from any unprivileged user. As you can imagine, the exploitation of Dirty Pipe is a wide open door to privilege escalations, in a pretty straight forward and clean way… In fact, Dirty Pipe is so clean, that it looks like it was a legitimate feature and that Linux was meant to work that way. It affects every Linux kernel since the version 5.8 and was fixed in Linux 5.16.11, 5.15.25 and 5.10.102. Max Kellermann wrote a great article about his discovery on his blog which I strongly recommend if you want to learn more about Dirty Pipe: [dirtypipe.cm4all.com](https://dirtypipe.cm4all.com/).
 
 So how could we detect the exploitation of CVE-2022-0847? 🤔
 
-Dirty Pipe being mostly about the page cache, pipes and splices, we knew we had to monitor syscalls. We first thought about Auditd, a built-in Linux kernel feature made to monitor syscalls, file access, and more. Auditd is a nice tool knowing that you can filter properties such as arguments value or permissions. But would it have been applicable to our case? Well, let's think about it: 🔍
+Dirty Pipe being mostly about the page cache, pipes and splices, we knew we had to monitor syscalls. We first thought about Auditd, a built-in Linux kernel feature made to monitor syscalls, file access, and more. Auditd is a nice tool since you can filter properties such as arguments value or permissions. But would it have been applicable to our case? Well, let's think about it: 🔍
 
 - Could we have hooked *open()*? It's a very common syscall, and the argument could have been any file… ➤ No ❌
-- Could we have hooked *pipe()*? Hooking a simple *splice()* doesn't make sens... ➤ No ❌
+- Could we have hooked *pipe()*? Hooking a simple *splice()* doesn't make sense... ➤ No ❌
 - Could we have hooked *write()*? That wouldn't have helped either, writing in a file descriptor is completely normal… ➤ No ❌
 - Could we have hooked *splice()*? That's interesting! Let's look at *splice()* arguments: `splice(int fd_in, off64_t *off_in, int fd_out, off64_t *off_out, size_t len, unsigned int flags);`. What does Dirty Pipe do? *fd_in* is a file, *fd_out* is a pipe, and *len* is above 0. So first, splicing a file and a pipe isn't necessarily something bad. Second, splicing a length above 0 is totally normal. Third, a file and a pipe are file descriptors, *fd_in* and *fd_out* are integers equal to 3, 4, 5, 6, etc… So we wouldn't even be able to see the difference between file descriptors. ➤ No ❌
 - Checking if the `PIPE_BUF_FLAG_CAN_MERGE` is set in the page? Don't even think about it with Auditd... ➤ No ❌
@@ -24,7 +24,7 @@ And then, a colleague suggested THE tool. The one that was going to allow us to 
 
 eBPF is a technology made to execute code between the user space and the kernel. It supports user probes, kernel probes, but also tracepoints! With that, every single time a hooked system function is called, the program running at the kernel/user space level will be in capacity of manipulating it's arguments, reading structures, checking the return values, etc…
 
-Thanks to eBPF, we could have done syscalls correlation, but it would have been very slow, without mentioning the problematic of memory management in order to keep a trace of all the calls by PID… So we had another idea 💡:
+Thanks to eBPF, we could have done syscall correlation, but it would have been very slow, without mentioning the problem of memory management in order to keep a trace of all the calls by PID… So we had another idea 💡:
 
 1. Hook the *splice()* syscall
 2. Get its *fd_in* and *fd_out*
