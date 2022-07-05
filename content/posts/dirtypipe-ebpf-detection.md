@@ -87,7 +87,7 @@ kernel is vulnerable, it will overwrite the targeted file.
 
 ![demo](/images/088d790795eb65a66c268d61039feeea5455bae6.gif)
 
-> Just before releasing our work we found the this wonderful article from
+> Just before releasing our work we found this wonderful article from
 > Datadog team!
 >
 > [Datadog, *"The Dirty Pipe vulnerability: Overview, detection, and
