@@ -4,18 +4,18 @@ date: 2022-07-05T16:00:00+02:00
 Summary: This article is about detecting Dirty Pipe exploitation attempts thanks to eBPF.
 ---
 
-CVE-2022-0847, aka Dirty Pipe, was first reported by Max Kellermann on February
-2022. This vulnerability allows to overwrite a read-only file, including root
-owned ones, from any unprivileged user. As you can imagine, the exploitation of
-Dirty Pipe is a wide open door to privilege escalations, in a pretty straight
-forward and clean way… In fact, Dirty Pipe is so clean, that it looks like it
-was a legitimate feature and that Linux was meant to work that way. It affects
-every Linux kernel since the version 5.8 and was fixed in Linux 5.16.11, 5.15.25
-and 5.10.102. Max Kellermann wrote a great article about his discovery on his
-blog which I strongly recommend if you want to learn more about Dirty Pipe:
+CVE-2022-0847, aka Dirty Pipe, was first reported by Max Kellermann in February
+2022. This vulnerability allows to overwrite any read-only file, including
+root-owned ones, from any unprivileged user. As you can imagine, the
+exploitation of Dirty Pipe is a wide open door to privilege escalation in a
+pretty straight forward and clean way… In fact, Dirty Pipe is so clean that it
+looks like it was a legitimate feature and that Linux was meant to work that
+way. It affects every Linux kernel since the version 5.8 and was fixed in Linux
+5.16.11, 5.15.25 and 5.10.102. Max Kellermann wrote a great article about his
+discovery on his blog which I strongly recommend if you want to learn more:
 [dirtypipe.cm4all.com](https://dirtypipe.cm4all.com/).
 
-So how could we detect the exploitation of CVE-2022-0847? 🤔
+So how could we detect exploitation of CVE-2022-0847? 🤔
 
 Dirty Pipe being mostly about the page cache, pipes and splices, we knew we had
 to monitor syscalls. We first thought about Auditd, a built-in Linux kernel
@@ -40,22 +40,21 @@ would it have been applicable to our case? Well, let's think about it: 🔍
 - Checking if the `PIPE_BUF_FLAG_CAN_MERGE` is set in the page? Don't even think
   about it with Auditd... ➤ No ❌
 
-"it looks like it was a legitimate feature"*, well, this was kind of a problem
-for us, how could we detect an evil behavior, if every single syscall seemed
-legitimate?
+"it looks like it was a legitimate feature", well this was kind of a problem for
+us, how could we detect evil behavior if every single syscall seems legitimate?
 
 Well, Auditd wasn't the solution. We also tried
 [SysmonForLinux](https://github.com/Sysinternals/SysmonForLinux), but it was
-still pretty new at the time, and wasn't convincing…
+still pretty new at the time, and wasn't convincing.
 
-And then, a colleague suggested THE tool. The one that was going to allow us to
-detect this filthy exploit: [eBPF](https://ebpf.io/) 🐝.
+And then, a colleague suggested *the* tool. The one that was going to allow us
+to detect this filthy exploit: [eBPF](https://ebpf.io/) 🐝.
 
-eBPF is a technology made to execute code between the user space and the kernel.
-It supports user probes, kernel probes, but also tracepoints! With that, every
+eBPF is a technology made to execute code between userspace and the kernel. It
+supports user probes, kernel probes, but also tracepoints! With that, every
 single time a hooked system function is called, the program running at the
 kernel/user space level will be in capacity of manipulating it's arguments,
-reading structures, checking the return values, etc…
+reading structures, checking the return values, etc.
 
 Thanks to eBPF, we could have done syscall correlation, but it would have been
 very slow, without mentioning the problem of memory management in order to keep
@@ -89,6 +88,8 @@ kernel is vulnerable, it will overwrite the targeted file.
 ![demo](/images/088d790795eb65a66c268d61039feeea5455bae6.gif)
 
 > Just before releasing our work we found the this wonderful article from
-> Datadog team !<br>[Datadog, *"The Dirty Pipe vulnerability: Overview,
-> detection, and remediation"*, March 10th
+> Datadog team!
+>
+> [Datadog, *"The Dirty Pipe vulnerability: Overview, detection, and
+> remediation"*, March 10th
 > 2022](https://www.datadoghq.com/blog/dirty-pipe-vulnerability-overview-and-remediation/)
