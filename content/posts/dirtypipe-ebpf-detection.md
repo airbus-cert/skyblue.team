@@ -10,8 +10,8 @@ So how could we detect the exploitation of CVE-2022-0847? 🤔
 
 Dirty Pipe being mostly about the page cache, pipes and splices, we knew we had to monitor syscalls. We first thought about Auditd, a built-in Linux kernel feature made to monitor syscalls, file access, and more. Auditd is a nice tool knowing that you can filter properties such as arguments value or permissions. But would it have been applicable to our case? Well, let's think about it: 🔍
 
-- Could we have hooked *open()*? It's a very common syscall, and the argument could have ben any file… ➤ No ❌
-- Could we have hooked *pipe()*? A pipe is a pipe... ➤ No ❌
+- Could we have hooked *open()*? It's a very common syscall, and the argument could have been any file… ➤ No ❌
+- Could we have hooked *pipe()*? Hooking a simple *splice()* doesn't make sens... ➤ No ❌
 - Could we have hooked *write()*? That wouldn't have helped either, writing in a file descriptor is completely normal… ➤ No ❌
 - Could we have hooked *splice()*? That's interesting! Let's look at *splice()* arguments: `splice(int fd_in, off64_t *off_in, int fd_out, off64_t *off_out, size_t len, unsigned int flags);`. What does Dirty Pipe do? *fd_in* is a file, *fd_out* is a pipe, and *len* is above 0. So first, splicing a file and a pipe isn't necessarily something bad. Second, splicing a length above 0 is totally normal. Third, a file and a pipe are file descriptors, *fd_in* and *fd_out* are integers equal to 3, 4, 5, 6, etc… So we wouldn't even be able to see the difference between file descriptors. ➤ No ❌
 - Checking if the `PIPE_BUF_FLAG_CAN_MERGE` is set in the page? Don't even think about it with Auditd... ➤ No ❌
@@ -43,4 +43,4 @@ Technically, if you read Max Kellermann's article, this isn't a way to detect th
 
 ![demo](/images/088d790795eb65a66c268d61039feeea5455bae6.gif)
 
-- [Source] [Datadog, *"The Dirty Pipe vulnerability: Overview, detection, and remediation"*, March 10th 2022](https://www.datadoghq.com/blog/dirty-pipe-vulnerability-overview-and-remediation/)
+> Just before releasing our work we found the this wonderful article from Datadog team !<br>[Datadog, *"The Dirty Pipe vulnerability: Overview, detection, and remediation"*, March 10th 2022](https://www.datadoghq.com/blog/dirty-pipe-vulnerability-overview-and-remediation/)
