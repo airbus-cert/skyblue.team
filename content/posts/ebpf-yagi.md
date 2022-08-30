@@ -30,7 +30,7 @@ So the first thing is to find a clear reference to the `ELF` header (which can b
 
 [](/images/ebpf-yagi-1.png)
 
-So we found an interesting function :
+That's indeed an interesting function:
 
 [](/images/ebpf-yagi-2.png)
 
