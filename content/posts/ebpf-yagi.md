@@ -50,7 +50,7 @@ After loading this plugin, IDA will disassemble it perfectly using this new engi
 
 ## Decompile eBPF
 
-The famous *Hex-Ray* decompiler is only available for a restricted set of processors while Ghidra decompiling engine supports a lot more. This is why we  developped [Yagi](https://github.com/airbus-cert/Yagi). 
+The famous *Hex-Ray* decompiler is only available for a restricted set of processors while Ghidra decompiling engine supports a lot more. This is why we  developed [Yagi](https://github.com/airbus-cert/Yagi). 
 
 Yagi is a an intgegration of the Ghidra decompiler in IDA. But Ghidra, in the main branch, doesn't support eBPF. But a security researcher implement the eBPF part for Ghidra : [eBPF-for-Ghidra](https://github.com/Nalen98/eBPF-for-Ghidra)
 
