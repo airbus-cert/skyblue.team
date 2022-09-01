@@ -1,6 +1,6 @@
 # Reversing eBPF using IDA
 
-`eBPF` was introduced in the Linux Kernel to add powerful monitoring capabilities. `eBPF` allow us to quickly hook any syscall, or particular kernel function, to produce statistics, logs etc...
+`eBPF` was introduced in the Linux Kernel to add powerful monitoring capabilities. `eBPF` allow us to quickly hook any syscall, or particular kernel or user land function, to produce statistics, logs etc...
 This program is compiled in a particularly low-level machine code-named CO-RE (Compile Once - Run Everywhere). It's then executed by a virtual machine inside the kernel.
 `eBPF` is a RISC register machine with a total of 11 64-bit registers, a program counter, and a 512 byte fixed-size stack. 9 registers are general purpose read-write, one is a read-only stack pointer and the program counter is implicit,
 we can only jump to a certain offset from it. The eBPF registers are always 64-bit wide.
@@ -26,7 +26,7 @@ We used the last version of [pamspy](https://github.com/citronneur/pamspy/releas
 
 The `eBPF` programs handled by [libbpf](https://github.com/libbpf/libbpf) are compiled using `llvm`. It will produce an `ELF` binary.
 
-The first thing is to find the ELF header (which can be easily obfuscated but it's not the purpose of this blog post): :
+The first thing is to find the ELF header (which can be easily obfuscated but it's not the purpose of this blog post):
 
 [](/images/ebpf-yagi-1.png)
 
@@ -36,13 +36,13 @@ That's indeed an interesting function:
 
 This function initialises the *libbpf*'s structure to load the eBPF program: It declares its name, a pointer to ELF header, and the size of the program.
 
-Here, we need to extract 4008 bytes to have the eBPF program.  Unfortunately, IDA will fail to open in because it doesn't know the compiler ID 247.
+Here, we need to extract 4008 bytes to have the eBPF program.
 
 Now we have our original `ELF` with `eBPF` bytecode inside.
 
 ## Disassemble eBPF
 
-In `IDA`, processor plugins are in charge to load new types of architecture. Fortunately for us, It exist an `IDA` processor for eBPF : [eBPF_processor](https://github.com/zandi/eBPF_processor). 
+Unfortunately, IDA will fail to open in because it doesn't know the compiler ID 247. In `IDA`, processor plugins are in charge to load new types of architecture. Fortunately for us, It exist an `IDA` processor for eBPF : [eBPF_processor](https://github.com/zandi/eBPF_processor). 
 This is an up-to-date version of the one made by [Clément Berthaux ](https://github.com/saaph/eBPF_processor) for a challenge (I suppose for a SSTIC challenge ;-) ), with a lot of additions!
 
 Even if `IDA` said that he can't handle the compiler id 247, the one used by `llvm` for `eBPF`, if you install and select the `eBPF` processor, `IDA` will disassemble it perfectly.
