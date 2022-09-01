@@ -18,7 +18,7 @@ It's not surprising to see more and more security researchers use `eBPF` for off
 
 All these programs rely on [libbpf](https://github.com/libbpf/libbpf). So we are interested in how to reverse `eBPF` program loaded by [libbpf](https://github.com/libbpf/libbpf), to know if it's malicious or not.
 
-As we are a user of `IDA`, we want to produce a simple way to produce C code from a program that uses [libbpf](https://github.com/libbpf/libbpf).
+As we are users of `IDA`, we want to produce a simple way to produce C code from a program that uses [libbpf](https://github.com/libbpf/libbpf).
 
 We used the last version of [pamspy](https://github.com/citronneur/pamspy/releases/tag/v0.2) as a source to reverse.
 
@@ -26,7 +26,7 @@ We used the last version of [pamspy](https://github.com/citronneur/pamspy/releas
 
 The `eBPF` programs handled by [libbpf](https://github.com/libbpf/libbpf) are compiled using `llvm`. It will produce an `ELF` binary.
 
-So the first thing is to find a clear reference to the `ELF` header (which can be easily obfuscated but it's not the purpose of this blog post) :
+The first thing is to find the ELF header (which can be easily obfuscated but it's not the purpose of this blog post): :
 
 [](/images/ebpf-yagi-1.png)
 
@@ -36,14 +36,14 @@ So we found an interesting function :
 
 This function is in charge to set the correct structure of the libbpf to load the ebpf program. It set the name, a pointer to ELF header, and the size of the ELF.
 
-We just need to extract 4008 bytes to have the eBPF program.
+Here, we need to extract 4008 bytes to have the eBPF program.  Unfortunately, IDA will fail to open in because it doesn't know the compiler ID 247.
 
 Now we have our original `ELF` with `eBPF` bytecode inside.
 
 ## Disassemble eBPF
 
 In `IDA`, processor plugins are in charge to load new types of architecture. Fortunately for us, It exist an `IDA` processor for eBPF : [eBPF_processor](https://github.com/zandi/eBPF_processor). 
-This is an up-to-date version of the one made by [Clément Berthaux ](https://github.com/saaph/eBPF_processor) for a challenge (I suppose for a SSTIC challenge ;-) ).
+This is an up-to-date version of the one made by [Clément Berthaux ](https://github.com/saaph/eBPF_processor) for a challenge (I suppose for a SSTIC challenge ;-) ), with a lot of additions!
 
 Even if `IDA` said that he can't handle the compiler id 247, the one used by `llvm` for `eBPF`, if you install and select the `eBPF` processor, `IDA` will disassemble it perfectly.
 
@@ -56,7 +56,7 @@ Yagi is a an intgegration of the `Ghidra` decompiler in `IDA`. But `Ghidra`, in 
 
 In [Yagi v1.5.0](https://github.com/airbus-cert/Yagi/releases/tag/v1.5.0) we added support for eBPF.
 
-So after adding 165 bpf helpers signatures to improve decompilation, here is the result :
+So after adding 165 *bpf* helpers signatures to help in the decompilation process, here is the result :
 
 [](/images/ebpf-yagi-4.png)
 
@@ -69,3 +69,4 @@ Enjoy!
  - https://github.com/citronneur/pamspy
  - https://github.com/zandi/eBPF_processor
  - https://blogs.blackberry.com/en/2021/12/reverse-engineering-ebpfkit-rootkit-with-blackberrys-free-ida-processor-tool
+ 
