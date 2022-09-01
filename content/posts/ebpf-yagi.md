@@ -30,11 +30,11 @@ The first thing is to find the ELF header (which can be easily obfuscated but it
 
 [](/images/ebpf-yagi-1.png)
 
-So we found an interesting function :
+That's indeed an interesting function:
 
 [](/images/ebpf-yagi-2.png)
 
-This function is in charge to set the correct structure of the libbpf to load the ebpf program. It set the name, a pointer to ELF header, and the size of the ELF.
+This function initialises the *libbpf*'s structure to load the eBPF program: It declares its name, a pointer to ELF header, and the size of the program.
 
 Here, we need to extract 4008 bytes to have the eBPF program.  Unfortunately, IDA will fail to open in because it doesn't know the compiler ID 247.
 
