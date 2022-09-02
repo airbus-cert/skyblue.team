@@ -1,3 +1,9 @@
+---
+title: "Reversing eBPF using IDA"
+date: 2022-09-02T09:00:00+02:00
+Summary: We document our journey decompiling eBPF program using Ghidra and Yagi.
+---
+
 # Reversing eBPF using IDA
 
 eBPF was introduced in the Linux Kernel to add powerful monitoring capabilities. It allow to quickly hook any syscall, or any kernel or user land function, to produce statistics, logs etc...
