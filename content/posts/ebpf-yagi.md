@@ -33,11 +33,11 @@ eBPF programs handled by [libbpf](https://github.com/libbpf/libbpf) are compiled
 
 The first thing is to find the ELF header (which can be easily obfuscated but it's not the purpose of this blog post):
 
-[](/static/images/ebpf-yagi-1.png)
+![](/images/ebpf-yagi-1.png)
 
 That's indeed an interesting function:
 
-[](/static/images/ebpf-yagi-2.png)
+![](/images/ebpf-yagi-2.png)
 
 This function initialises the *libbpf*'s structure to load the eBPF program: It declares its name, a pointer to ELF header, and the size of the program.
 
@@ -52,7 +52,7 @@ This is an up-to-date version of the one made by [Clément Berthaux ](https://gi
 
 After loading this plugin, IDA will disassemble it perfectly using this new engine.
 
-[](/static/images/ebpf-yagi-3.png)
+![](/images/ebpf-yagi-3.png)
 
 ## Decompile eBPF
 
@@ -64,7 +64,7 @@ In [Yagi v1.5.0](https://github.com/airbus-cert/Yagi/releases/tag/v1.5.0) we add
 
 So after adding 165 *bpf* helpers signatures to help in the decompilation process, here is the result :
 
-[](/static/images/ebpf-yagi-4.png)
+![](/images/ebpf-yagi-4.png)
 
 Voila! Enjoy!
 
