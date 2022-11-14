@@ -374,7 +374,7 @@ By analyzing functions called from the `dllmain_dispatch`, we observed a particu
 
 ![](./images/flareon9/6/2.png)
 
-This is a classic technic to load imported functions from obfuscated names, as a global pointer. We noted the use of the API set related to namedpipe!
+This is a classic technique to load imported functions from obfuscated names, as a global pointer. We noted the use of the API set related to namedpipe!
 - CreateNamedPipeA
 - ConnectNamedPipe
 
