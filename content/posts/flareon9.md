@@ -22,15 +22,15 @@ Files :
 
 So let's start by analyzing `script.js` :
 
-![](./images/flareon9/1/1.png)
+![](/images/flareon9/1/1.png)
 
 Ok ok ok, let's analyzing `words.js` :
 
-![](./images/flareon9/1/2.png)
+![](/images/flareon9/1/2.png)
 
 Ok ok ok ...
 
-![](./images/flareon9/1/3.png)
+![](/images/flareon9/1/3.png)
 
 ![](https://media.giphy.com/media/JAsKtsJvzpd8k/giphy.gif)
 
@@ -52,11 +52,11 @@ Your goal is simple: find the correct pixel and click it
 Good luck!
 ```
 
-![](./images/flareon9/2/1.png)
+![](/images/flareon9/2/1.png)
 
-![](./images/flareon9/2/2.png)
+![](/images/flareon9/2/2.png)
 
-![](./images/flareon9/2/3.png)
+![](/images/flareon9/2/3.png)
 
 We had to find **the** pixel to click on.
 
@@ -82,7 +82,7 @@ For the `y` pixel, `dword_412008 % cy`, `dword_412008` was also static: `0x6E4F2
 
 So, `x = 0x52414C46 % 741 = 95; y = 0x6E4F2D45 % 641 = 313`:
 
-![](./images/flareon9/2/4.png)
+![](/images/flareon9/2/4.png)
 
 ![](https://media.tenor.com/rHDVLwneDV0AAAAd/tom-and-jerry-depressed.gif)
 
@@ -99,39 +99,39 @@ Files:
 - DLLs
 - `Magic8Ball.exe`
 
-![](./images/flareon9/3/1.png)
+![](/images/flareon9/3/1.png)
 
 Pressing on the arrow keys would shake the ball, and pressing enter would display some random messages.
 
-![](./images/flareon9/3/2.png)
+![](/images/flareon9/3/2.png)
 
 When we opened the PE in IDA, we quickly identified the main part:
 
-![](./images/flareon9/3/3.png)
+![](/images/flareon9/3/3.png)
 
 As you can see, the program manipulated the same object a lot, including to store the ball's answers:
 
-![](./images/flareon9/3/4.png)
+![](/images/flareon9/3/4.png)
 
 Once the object initialized, the program entered in a loop to filter the different events:
 
-![](./images/flareon9/3/5.png)
+![](/images/flareon9/3/5.png)
 
 We didn't dig too much in `getEvent`:
 
-![](./images/flareon9/3/6.png)
+![](/images/flareon9/3/6.png)
 
 The important stuff was in `getFlag`…
 
-![](./images/flareon9/3/7.png)
+![](/images/flareon9/3/7.png)
 
 Magic8Ball checked if the last pressed keys where equal to the characters *"LLURULDUL"*, *"L"* for *Left*, *"R"* for *"Right"*, etc… Then, it compared our input with a string stored in the object, so we went back to the last manipulation of `myObject_`: `sub_592090`
 
-![](./images/flareon9/3/8.png)
+![](/images/flareon9/3/8.png)
 
 It copied *"gimme flag pls?"* in `this + 92`. So we tried to enter the text and press the right keys:
 
-![](./images/flareon9/3/9.png)
+![](/images/flareon9/3/9.png)
 
 ![](https://media.tenor.com/dg3pPoj88PoAAAAd/bowl-bowling.gif)
 
@@ -207,7 +207,7 @@ int __cdecl sub_401000(char *Str)
 
 When we launched the executable with a parameter :
 
-![](./images/flareon9/4/1.png)
+![](/images/flareon9/4/1.png)
 
 The program seems to crash, as noted by the author of the challenge in the introduction...
 
@@ -241,11 +241,11 @@ print("".join([chr(0xc3 - x) for x in static]))
 
 And magic happens: 
 
-![](./images/flareon9/4/2.png)
+![](/images/flareon9/4/2.png)
 
 So let's try our passphrase :
 
-![](./images/flareon9/4/3.png)
+![](/images/flareon9/4/3.png)
 
 # 05 - T8
 
@@ -261,7 +261,7 @@ Files:
 
 When we first opened the pcap file, we instantly understood that `t8.exe` was sending a base64 key to `flare-on.com`, and received a base64 encrypted message in return.
 
-![](./images/flareon9/5/1.png)
+![](/images/flareon9/5/1.png)
 
 `t8.exe` was a 32 bits C++ console program. In order to reproduce what happened in the pcap, we made a little Python Web server that responds the same base64 message and modified the Windows `hosts` file to redirect `flare-on.com` to our server:
 
@@ -285,21 +285,21 @@ if __name__ == '__main__':
 
 But nothing happened… At all… So we checked the code:
 
-![](./images/flareon9/5/2.png)
+![](/images/flareon9/5/2.png)
 
 ![](https://media.tenor.com/iN-Cd6g1j08AAAAM/spongebob-squarepants-patrick-star.gif)
 
 That's a long sleep! 
 
-![](./images/flareon9/5/3.png)
+![](/images/flareon9/5/3.png)
 
 Because it was still looping forever after patching the sleep, we just took off the condition...
 
-![](./images/flareon9/5/4.png)
+![](/images/flareon9/5/4.png)
 
-![](./images/flareon9/5/5.png)
+![](/images/flareon9/5/5.png)
 
-![](./images/flareon9/5/6.png)
+![](/images/flareon9/5/6.png)
 
 Here is information we had to keep in mind: The integer at the end of the user agent changes as well as the base64 key.
 
@@ -307,25 +307,25 @@ So we had to dig a little more in this PE.
 
 By going through the code, we easily spotted the place where it sends its HTTP request:
 
-![](./images/flareon9/5/7.png)
+![](/images/flareon9/5/7.png)
 
 It was also the place where it concatenates the header and the random number. The function `sub_2E25B0` was the last one to handle this number before concatenating it. It was actually converting it into a string:
 
-![](./images/flareon9/5/8.png)
+![](/images/flareon9/5/8.png)
 
 So we just patched the program to hardcode `11950` in `v3`:
 
-![](./images/flareon9/5/9.png)
+![](/images/flareon9/5/9.png)
 
 Then we executed the PE again and surprise…
 
-![](./images/flareon9/5/10.png)
+![](/images/flareon9/5/10.png)
 
 It changed the integer in the header, but we also got the base64 from the pcap! But why? Because lost into wild, `t8.exe` encrypts the string *"ahoy"* with the random integer (for some reason, it does it on 64bits for every single character).
 
 Because of our incredible laziness, we decided to put a breakpoint at the output of the HTTP response decryption:
 
-![](./images/flareon9/5/11.png)
+![](/images/flareon9/5/11.png)
 
 We made it!
 
@@ -357,7 +357,7 @@ There was another file with the challenge, which seems to be a dump of an intern
 
 Let's use the best .Net reverse tool : [DnSpy](https://github.com/dnSpy/dnSpy)
 
-![](./images/flareon9/6/1.png)
+![](/images/flareon9/6/1.png)
 
 The code is pretty simple, only one function named `GetFlag` tries to connect to a named pipe named `\\.\Flareon`, sends a password, and expects the flag as a return.
 
@@ -372,7 +372,7 @@ We analyzed the DLL entry point and saw normal CRT (C runtime) stuff. The dll mi
 It reminds me of a project name [Dllexport](https://github.com/3F/DllExport), which export managed functions to a native application.
 By analyzing functions called from the `dllmain_dispatch`, we observed a particular function :
 
-![](./images/flareon9/6/2.png)
+![](/images/flareon9/6/2.png)
 
 This is a classic technique to load imported functions from obfuscated names, as a global pointer. We noted the use of the API set related to namedpipe!
 - CreateNamedPipeA
@@ -380,7 +380,7 @@ This is a classic technique to load imported functions from obfuscated names, as
 
 So by searching cross-references of these global variables, we found where the pipe stuff is made. 
 
-![](./images/flareon9/6/3.png)
+![](/images/flareon9/6/3.png)
 
 And finally where the password is checked :
 
@@ -396,21 +396,21 @@ We chose the second one !!!
 
 When we loaded the assembly into `dnSpy` we found the original name: `FlareOn_x86`. By renaming the assembly `FlareOn_x86.dll` we can create a .Net project, with `FlareOn_x86.dll` as references, and call the `GetFlag` API.
 
-![](./images/flareon9/6/4.png)
+![](/images/flareon9/6/4.png)
 
 When we launched the exe, we have the expected "Authorization Failed" string as seen in the `checkPassword` function.
 
 Let's relaunch the binary in debugging with a breakpoint at the appropriate place :
 
-![](./images/flareon9/6/5.png)
+![](/images/flareon9/6/5.png)
 
 Bingo the password is `MyV0ic3!` !!!
 
 Now we can relaunch our program with the right password!
 
-![](./images/flareon9/6/6.png)
+![](/images/flareon9/6/6.png)
 
-![](./images/flareon9/6/7.png)
+![](/images/flareon9/6/7.png)
 
 # 07 - anode
 
@@ -423,12 +423,12 @@ Files :
 The binary seems to have the same icon as [nodejs](https://nodejs.org/en/), the famous javascript engine!
 Before digging into it, we tried it :
 
-![](./images/flareon9/7/1.png)
+![](/images/flareon9/7/1.png)
 
 It's not a normal `node.exe`, even if we pass a javascript as a parameter, the executable ask for a flag.
 We will try to inspect strings in the file to find the `Enter flag:` one.
 
-![](./images/flareon9/7/2.png)
+![](/images/flareon9/7/2.png)
 
 The script seems to be present in cleartext inside the binary. So we extract it easily.
 
@@ -483,11 +483,11 @@ We observed the presence of the `nexe` sentinel, which is a reference to the [ne
 
 So once extracted, we tested the script with a recent version of node. The first thing we noted is the length of the input flag must be 44 :
 
-![](./images/flareon9/7/3.png)
+![](/images/flareon9/7/3.png)
 
 After extracting the exact version of node used by the challenges, 14.15.3, we downloaded the same hash using virustotal. And in the details of the hash we observed that we are not the first using this hash for the flareon :
 
-![](./images/flareon9/7/4.png)
+![](/images/flareon9/7/4.png)
 
 The next is to diffing the two binaries, using [bindiff](https://www.zynamics.com/bindiff.html), and we found a lot of diff. So we decided to compare with the one used by nexe as a template, available from [Github](https://github.com/nexe/nexe/releases/download/v3.3.3/windows-x86-14.15.3).
 
@@ -497,11 +497,11 @@ The first is `v8::base::RandomNumberGenerator::SetSeed`.
 
 The original one :
 
-![](./images/flareon9/7/6.png)
+![](/images/flareon9/7/6.png)
 
 The modified one : 
 
-![](./images/flareon9/7/5.png)
+![](/images/flareon9/7/5.png)
 
 We also observed the same modification on `MathRandom::RefillCache` function.
 
@@ -576,7 +576,7 @@ This patch match all modifications made by the authors of the challenge.
 
 Once built we can now run the script as expected!
 
-![](./images/flareon9/7/7.png)
+![](/images/flareon9/7/7.png)
 
 We now have a perfect environment to test and trace our javascript file!
 
@@ -680,11 +680,11 @@ Files :
 
 The payload is a .Net payload, so let's start with the best .Net disassembler, aka [dnSpy](https://github.com/dnSpy/dnSpy).
 
-![](./images/flareon9/8/1.png)
+![](/images/flareon9/8/1.png)
 
 The `FLARE15.Flare74()` is a function that will load some useful resources for the rest of the execution. Then take a look at the `Program.flared_38` and ...
 
-![](./images/flareon9/8/2.png)
+![](/images/flareon9/8/2.png)
 
 Ok...
 
@@ -692,13 +692,13 @@ Ok...
 
 Ok, let's take a look into a raw disassembler `ILDasm`, which is part of the visual studio toolset.
 
-![](./images/flareon9/8/3.png)
+![](/images/flareon9/8/3.png)
 
 Ok...
 
 So let's try to run it !!!
 
-![](./images/flareon9/8/4.png)
+![](/images/flareon9/8/4.png)
 
 When invoking `Program.flared_38`, an `InvalidProgramException` exception is launched. This exception is part of the CLR, when trying to run an invalid program. This is what we saw in the disassembler.
 
@@ -706,7 +706,7 @@ It's not a disassembler obfuscation, it's also a bad program. Now take a look at
 
 There is a naming convention, the `XXX.flared_XX` functions seem to be obfuscated, and `XXX.flare_XX` are normal functions. We went directly to the `FLARE15.flare_71(e, m, b)` which is called from the exception handler in a few function :
 
-![](./images/flareon9/8/5.png)
+![](/images/flareon9/8/5.png)
 
 This function will retrieve the calling context, which function generates an exception, by inspecting the stack trace of the exception `e`. 
 Then it will dynamically create a new function from the parameters `m` and `b`, and call it with the original parameter.
@@ -731,14 +731,14 @@ dynamicILInfo.SetCode(b, methodBody.MaxStackSize);
 
 For example, the function `FLARE15.flared_70` is desobfuscated using `FLARE15.wl_m`, `FLARE15.wl_b` global variables.
 
-![](./images/flareon9/8/6.png)
+![](/images/flareon9/8/6.png)
 
 The code will patch the different token id used by the function, and try to do a mapping between the local token id and global token id of the assembly. 
 
 To better understand what is done by the loader, we have to understand what are tokens in .Net. Tokens are used to uniquely identify any kind of .Net object (Methods, Assembly, ...) inside an Assembly.
 We can see all tokens for one assembly by inspecting the Storage stream #0 in PE header :
 
-![](./images/flareon9/8/7.png)
+![](/images/flareon9/8/7.png)
 
 `DynamicILInfo` allows you to create a private token namespace local to a function. 
 
@@ -747,7 +747,7 @@ We can make a parallel with a classic payload loader, where the `m` parameter is
 We also observed that the space available inside the PE for each obfuscated function is the same sized as the deobfuscated bytecode. 
 For example, the `FLARE15.flared_70`, the length of `FLARE15.wl_b` is 85 bytes, and the space in the file is also equal to 85 !!!
 
-![](./images/flareon9/8/8.png)
+![](/images/flareon9/8/8.png)
 
 So if we patch the PE file we can create a deobfuscated one!
 
@@ -818,7 +818,7 @@ This function is invoked to patch :
 
 Tada!
 
-![](./images/flareon9/8/9.png)
+![](/images/flareon9/8/9.png)
 
 At this point we have a few functions (7) deobfuscated, but we still have a lot of them unavailable inside `dnSpy`.
 Let's take look inside the new one!
@@ -863,7 +863,7 @@ static void Main(string[] args)
 
 And Tada Tada!
 
-![](./images/flareon9/8/10.png)
+![](/images/flareon9/8/10.png)
 
 And start the understanding of the backdoor...
 
@@ -877,16 +877,16 @@ By understanding the automata, you reach the interesting function `FLARE14.flare
 
 Each time the C&C sends a command, the function also checks a particular collection `ObservableCollection` named `FLARE15.c`:
 
-![](./images/flareon9/8/11.png)
+![](/images/flareon9/8/11.png)
 
 The `FLARE14.flare_56` function will check if the byte passed as a parameter, XORed with `248`, match the next byte inside the `ObservableCollection`. If it's the right one the element is removed from the list.
 
-![](./images/flareon9/8/12.png)
+![](/images/flareon9/8/12.png)
 
 Each time an element is added or removed from the list, a callback is invoked.
 This function will check if the collection is empty, and if it's true, a file is written on the disk.
 
-![](./images/flareon9/8/13.png)
+![](/images/flareon9/8/13.png)
 
 And we guessed the file is our goal. The `ObservableCollection` is used as a State Machine too. To decrypt the file we have to have the `FLARE14.h` hash which is computed from an action performed by the backdoor *plus* a salt:
 
@@ -894,7 +894,7 @@ And we guessed the file is our goal. The `ObservableCollection` is used as a Sta
 
 The salt is computed by `FLARE14.flare_57()` by checking the calling context :
 
-![](./images/flareon9/8/14.png)
+![](/images/flareon9/8/14.png)
 
 So we emulated all the automata inside my `Packer` assembly :
 
@@ -932,7 +932,7 @@ And it's *NOT* working...
 Wait wait wait, in our `Packer` assembly we referenced the deobfuscated backdoor, so we totally changed the calling context of the function, and the salt is not the same.
 So by referencing the original assembly :
 
-![](./images/flareon9/8/15.gif)
+![](/images/flareon9/8/15.gif)
 
 
 # 09 - encryptor
@@ -949,11 +949,11 @@ Smells like ransomware and crypto!
 
 ![](https://media.tenor.com/tNhtH9x3WZEAAAAC/swing-dance-swing-your-hips.gif)
 
-![](./images/flareon9/9/1.png)
+![](/images/flareon9/9/1.png)
 
 Of course, running it directly from a console didn't do anything.
 
-![](./images/flareon9/9/2.png)
+![](/images/flareon9/9/2.png)
 
 First we had to create our own encrypted file with a known clear text so we could try to decrypt it, and `flareon.exe` only encrypted files ending by `.EncryptMe`:
 
@@ -963,25 +963,25 @@ First we had to create our own encrypted file with a known clear text so we coul
 
 *./test/TryMe.txt.Encrypted*
 
-![](./images/flareon9/9/3.png)
+![](/images/flareon9/9/3.png)
 
 The encrypted file was clearly separated in 5 different parts. The first one was obviously our encrypted text, and the 4 others had to help the gang to decrypt files.
 
 A `HOW_TO_DECRYPT.txt` file was also created on the user's desktop:
 
-![](./images/flareon9/9/4.png)
+![](/images/flareon9/9/4.png)
 
 For some reason, the last part of the *.Encrypted* file wasn't here…
 
 Let's look at the `generateKey()` function:
 
-![](./images/flareon9/9/5.png)
+![](/images/flareon9/9/5.png)
 
 It encrypts *something* (truly not important) with `e = 5` as a static exponent and `n_` as a static modulus (yes, they didn't use the `n` they just computed...).
 
 Then, back to the main, the program created the *.Encrypted* file, and executed the `encrypt()` function, passing the *.Encrypted*  file discriptor and the clear text in argument.
 
-![](./images/flareon9/9/6.png)
+![](/images/flareon9/9/6.png)
 
 Here comes the fun part:
 1. It generated a random number `encryptme` on 32 Bytes and stored it in a 2 * 16 Bytes array 
@@ -1001,7 +1001,7 @@ We had the modulus `n`, we also had the static exponent `e`, so we just had to d
 
 *SuspiciousFile.txt.Encrypted*
 
-![](./images/flareon9/9/7.png)
+![](/images/flareon9/9/7.png)
 
 ```python
 m = 0x5a04e95cd0e9bf0c8cdda2cbb0f50e7db8c89af791b4e88fd657237c1be4e6599bc4c80fd81bdb007e43743020a245d5f87df1c23c4d129b659f90ece2a5c22df1b60273741bf3694dd809d2c485030afdc6268431b2287c597239a8e922eb31174efcae47ea47104bc901cea0abb2cc9ef974d974f135ab1f4899946428184c
@@ -1017,7 +1017,7 @@ print(hex(pow(m,e,n)))
 
 But… How long is that? Well, it's 48 Bytes long… But how come?
 
-![](./images/flareon9/9/8.png)
+![](/images/flareon9/9/8.png)
 
 The RSA function encrypted 136 Bytes of the clear text, but it passed a 32 Bytes random number, so it overflowed to the 4 * 0 Bytes + 12 Bytes `nonce`! We recovered the secret, the nonce, and we had the encrypted text!
 
@@ -1071,52 +1071,52 @@ Files:
 
 First we had to install [Mini vMac](https://www.gryphel.com/c/minivmac/), so we downloaded the version [36.04-wx64](https://www.gryphel.com/d/minivmac/minivmac-36.04/minivmac-36.04-wx64.bin.zip).
 
-![](./images/flareon9/10/1.png)
+![](/images/flareon9/10/1.png)
 
 After finding a ROM, we followed the *["Getting started with Mini vMac"](https://www.gryphel.com/c/minivmac/start.html)* article and downloaded [ua608d](https://www.gryphel.com/c/minivmac/extras/ua608d/index.html) in order to unarchive the [Macintosh System Software disk images](https://www.gryphel.com/c/sw/system/sys60/index.html).
 
-![](./images/flareon9/10/2.png)
+![](/images/flareon9/10/2.png)
 
 ```
 ua608d.exe SSW_6.0.8-1.4MB_Disk1of2.sea.bin "System Startup"
 ua608d.exe SSW_6.0.8-1.4MB_Disk2of2.sea.bin "System Additions"
 ```
 
-![](./images/flareon9/10/3.png)
+![](/images/flareon9/10/3.png)
 
 At that point, opening `Nur geträumt.img` wouldn't work, we actually had to rename it to take off the unicode characters.
 
-![](./images/flareon9/10/4.png)
+![](/images/flareon9/10/4.png)
 
 `Nur geträumt`:
 
-![](./images/flareon9/10/5.png)
+![](/images/flareon9/10/5.png)
 
 We could analyze the software with `Super ResEdit 2.1.3`:
 
-![](./images/flareon9/10/6.png)
+![](/images/flareon9/10/6.png)
 
 The `Flag` section contained the following:
 
-![](./images/flareon9/10/7.png)
+![](/images/flareon9/10/7.png)
 
-![](./images/flareon9/10/8.png)
+![](/images/flareon9/10/8.png)
 
-![](./images/flareon9/10/9.png)
+![](/images/flareon9/10/9.png)
 
 We could have analyzed the assembly to reverse the whole application, but we decided to do otherwise.
 
-![](./images/flareon9/10/10.png)
+![](/images/flareon9/10/10.png)
 
 And if we entered more *"a"*, the output would remane the same. But we added another character:
 
-![](./images/flareon9/10/11.png)
+![](/images/flareon9/10/11.png)
 
 1 Byte out of 2 changed… It kinda looked like an XOR to us.
 
 We knew the end of the flag would be `@flare-on.com`, so we tried to recover the key:
 
-![](./images/flareon9/10/12.png)
+![](/images/flareon9/10/12.png)
 
 *"1"* gave us *"5"*, so:
 
@@ -1124,7 +1124,7 @@ We knew the end of the flag would be `@flare-on.com`, so we tried to recover the
 chr(ord('1') ^ ord('5') ^ ord('m')) # = 'i'
 ```
 
-![](./images/flareon9/10/13.png)
+![](/images/flareon9/10/13.png)
 
 It gave us an *"m"*! So we tried for the *"o"*:
 
@@ -1151,7 +1151,7 @@ If you look online, it's the lyrics of [99 Luftballons](https://youtu.be/Fpu5a0B
 
 So we typed the first line of the lyrics:
 
-![](./images/flareon9/10/14.png)
+![](/images/flareon9/10/14.png)
 
 The flag was the second line!
 
@@ -1169,13 +1169,13 @@ Files :
 
 We first analyzed the PE with DIE (*D*etect *I*t *E*asy) and noticed it was a Python script packed with [PyInstaller](https://pyinstaller.org/en/stable/), which packs a python application with all its dependencies.
 
-![](./images/flareon9/11/1.png)
+![](/images/flareon9/11/1.png)
 
 In order to get the executed script, we used [PyInstaller Extractor](https://github.com/extremecoders-re/pyinstxtractor), but to do so, we had to find the right Python version.
 
 Searching *"python"* in the strings quickly showed us a `python37.dll`, and ProcMon also pointed out `python37.dll` was loaded.
 
-![](./images/flareon9/11/2.png)
+![](/images/flareon9/11/2.png)
 
 Once extracted: `python3.7 pyinstxtractor.py 11.exe`, the python bytecode could be found in `11.pyc`. A simple way to recover the original source code was to run [uncompyle6](https://pypi.org/project/uncompyle6/).
 
@@ -1289,7 +1289,7 @@ print('Hello World!')
 
 Once executed with our modified Python, the content of `python.dump` was:
 
-![](./images/flareon9/11/3.png)
+![](/images/flareon9/11/3.png)
 
 ```
 >>> import marshal, dis
@@ -1371,7 +1371,7 @@ The good news is that we knew that the python script sends a request over the in
 
 First, we wanted the `body` of the `request`, `python3.7 pyframetrace.py 11.py --name request --lname body`:
 
-![](./images/flareon9/11/5.png)
+![](/images/flareon9/11/5.png)
 
 Then, we looked for a `b64encode`, `python3.7 pyframetrace.py 11.py --name b64encode`: 
 
@@ -1379,7 +1379,7 @@ Then, we looked for a `b64encode`, `python3.7 pyframetrace.py 11.py --name b64en
 
 This is not very human friendly… So we checked the different functions called by the program, `python3.7 -m trace -l 11.py`:
 
-![](./images/flareon9/11/7.png)
+![](/images/flareon9/11/7.png)
 
 So we filtered `python3.7 pyframetrace.py 11.py --name encrypt`:
 
