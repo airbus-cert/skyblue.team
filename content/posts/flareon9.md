@@ -1361,7 +1361,7 @@ And here comes Py Frame Trace, a basic tool made to read the frames you want fro
 
 If we wanted to filter the right frames, we had to have an idea of what `11.py` did.
 
-![ ](./images/11/4.png)
+![](/images/flareon9/11/4.png)
 
 I know what you're thinking… But
 
@@ -1375,7 +1375,7 @@ First, we wanted the `body` of the `request`, `python3.7 pyframetrace.py 11.py -
 
 Then, we looked for a `b64encode`, `python3.7 pyframetrace.py 11.py --name b64encode`: 
 
-![ ](./images/11/6.png)
+![](/images/flareon9/11/6.png)
 
 This is not very human friendly… So we checked the different functions called by the program, `python3.7 -m trace -l 11.py`:
 
@@ -1383,10 +1383,10 @@ This is not very human friendly… So we checked the different functions called 
 
 So we filtered `python3.7 pyframetrace.py 11.py --name encrypt`:
 
-![ ](./images/11/8.png)
+![](/images/flareon9/11/8.png)
 
 ![](https://media.tenor.com/lOPTx_JZJ3gAAAAC/the-office-steve-carell.gif)
 
 Little bonus, there was the RC4 `key` in the `__init__`, `python3.7 pyframetrace.py 11.py --name __init__ --lname key`
 
-![ ](./images/11/9.png)
+![](/images/flareon9/11/9.png)
