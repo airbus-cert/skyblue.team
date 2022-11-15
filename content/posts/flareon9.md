@@ -7,13 +7,12 @@ Summary: The write up of the annual Flare-on challenge!!!
 
 # 01 - flaredle
 
-```
-Welcome to Flare-On 9!
+> Welcome to Flare-On 9!
+>
+> You probably won't win. Maybe you're like us and spent the year playing Wordle. We made our own version that is too hard to beat without cheating.
+>
+> Play it live at: http://flare-on.com/flaredle/
 
-You probably won't win. Maybe you're like us and spent the year playing Wordle. We made our own version that is too hard to beat without cheating.
-
-Play it live at: http://flare-on.com/flaredle/
-```
 Files :
 - `index.html`
 - `script.js`
@@ -36,21 +35,17 @@ Ok ok ok ...
 
 # 02 - Pixel Poker
 
-```
-I said you wouldn't win that last one. I lied. The last challenge was basically a captcha. Now the real work begins. Shall we play another game?
-```
+> I said you wouldn't win that last one. I lied. The last challenge was basically a captcha. Now the real work begins. Shall we play another game?
 
 Files:
 - `PixelPoker.exe`
 - `readme.txt`
 
-```
-Welcome to PixelPoker ^_^, the pixel game that's sweeping the nation!
-
-Your goal is simple: find the correct pixel and click it
-
-Good luck!
-```
+> Welcome to PixelPoker ^_^, the pixel game that's sweeping the nation!
+>
+> Your goal is simple: find the correct pixel and click it
+>
+> Good luck!
 
 ![](/images/flareon9/2/1.png)
 
@@ -88,9 +83,7 @@ So, `x = 0x52414C46 % 741 = 95; y = 0x6E4F2D45 % 641 = 313`:
 
 # 03 - Magic 8 Ball
 
-```
-You got a question? Ask the 8 ball!
-```
+> You got a question? Ask the 8 ball!
 
 Files:
 - `assets/`
@@ -137,9 +130,8 @@ It copied *"gimme flag pls?"* in `this + 92`. So we tried to enter the text and 
 
 # 04 - darn_mice
 
-```
-"If it crashes its user error." -Flare Team
-```
+> "If it crashes its user error." -Flare Team
+
 Files :
 - `darn_mice.exe`
 
@@ -228,18 +220,20 @@ And It loop over the 35 bytes of the static array.
 
 Ok, we have to find an x86 opcode, with a one-byte size that can be called. So the only one is the `RET` instruction, coded `0xC3`.
 
-Every byte from the static array added with user input must be equal to `0xC3` : 
+Every byte from the static array added with user input must be equal to `0xC3` :
 
 static[i] + input[i] == 0xc3
 
 Let's make a little python script :
 
-```
-static = [0x50,0x5e,0x5e,0xA3,0x4F,0x5B,0x51,0x5E,0x5E,0x97,0xA3,0x80,0x90,0xA3,0x80,0x90,0xA3,0x80,0x90,0xA3,0x80,0x90,0xA3,0x80,0x90,0xA3,0x80,0x90,0xA3,0x80,0x90,0xA2,0xA3,0x6B,0x7F]
+```python
+static = [0x50,0x5e,0x5e,0xA3,0x4F,0x5B,0x51,0x5E,0x5E,0x97,0xA3,0x80,0x90, \
+0xA3,0x80,0x90,0xA3,0x80,0x90,0xA3,0x80,0x90,0xA3,0x80,0x90,0xA3,0x80,0x90, \
+0xA3,0x80,0x90,0xA2,0xA3,0x6B,0x7F]
 print("".join([chr(0xc3 - x) for x in static]))
 ```
 
-And magic happens: 
+And magic happens:
 
 ![](/images/flareon9/4/2.png)
 
@@ -249,11 +243,9 @@ So let's try our passphrase :
 
 # 05 - T8
 
-```
-FLARE FACT #823: Studies show that C++ Reversers have fewer friends on average than normal people do. That's why you're here, reversing this, instead of with them, because they don't exist.
-
-We’ve found an unknown executable on one of our hosts. The file has been there for a while, but our networking logs only show suspicious traffic on one day. Can you tell us what happened?
-```
+> FLARE FACT #823: Studies show that C++ Reversers have fewer friends on average than normal people do. That's why you're here, reversing this, instead of with them, because they don't exist.
+>
+> We’ve found an unknown executable on one of our hosts. The file has been there for a while, but our networking logs only show suspicious traffic on one day. Can you tell us what happened?
 
 Files:
 - `t8.exe`
@@ -289,7 +281,7 @@ But nothing happened… At all… So we checked the code:
 
 ![](https://media.tenor.com/iN-Cd6g1j08AAAAM/spongebob-squarepants-patrick-star.gif)
 
-That's a long sleep! 
+That's a long sleep!
 
 ![](/images/flareon9/5/3.png)
 
@@ -333,11 +325,10 @@ We made it!
 
 # 06 - à la mode
 
-```
-FLARE FACT #824: Disregard flare fact #823 if you are a .NET Reverser too.
+> FLARE FACT #824: Disregard flare fact #823 if you are a .NET Reverser too.
+>
+> We will now reward your fantastic effort with a small binary challenge. You've earned it kid!
 
-We will now reward your fantastic effort with a small binary challenge. You've earned it kid!
-```
 Files :
 - `HowDoesThisWork.dll`
 
@@ -349,9 +340,9 @@ HowDoesThisWork.dll: PE32 executable (DLL) (GUI) Intel 80386 Mono/.Net assembly,
 
 There was another file with the challenge, which seems to be a dump of an internal chat with the IR team:
 ```
-[FLARE Team]  Hey IR Team, it looks like this sample has some other binary that might 
+[FLARE Team]  Hey IR Team, it looks like this sample has some other binary that might
               interact with it, do you have any other files that might be of help.
-			  
+
 [IR Team]     Nope, sorry this is all we got from the client, let us know what you got.
 ```
 
@@ -378,7 +369,7 @@ This is a classic technique to load imported functions from obfuscated names, as
 - CreateNamedPipeA
 - ConnectNamedPipe
 
-So by searching cross-references of these global variables, we found where the pipe stuff is made. 
+So by searching cross-references of these global variables, we found where the pipe stuff is made.
 
 ![](/images/flareon9/6/3.png)
 
@@ -414,9 +405,8 @@ Now we can relaunch our program with the right password!
 
 # 07 - anode
 
-```
-You've made it so far! I can't believe it! And so many people are ahead of you!
-```
+> You've made it so far! I can't believe it! And so many people are ahead of you!
+
 Files :
 - `anode.exe`
 
@@ -432,7 +422,7 @@ We will try to inspect strings in the file to find the `Enter flag:` one.
 
 The script seems to be present in cleartext inside the binary. So we extract it easily.
 
-```
+```js
 const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -462,9 +452,9 @@ readline.question(`Enter flag: `, flag => {
           b[26] -= b[24] + b[41] + b[13] + b[43] + b[6] + b[30] + 225;
           b[26] &= 0xFF;
         }
-		
+
 		...
-		
+
 	  default:
         console.log("uh-oh, math.random() is too random...");
         process.exit(0);
@@ -493,13 +483,13 @@ The next is to diffing the two binaries, using [bindiff](https://www.zynamics.co
 
 And we spotted three functions, all related to math ...
 
-The first is `v8::base::RandomNumberGenerator::SetSeed`. 
+The first is `v8::base::RandomNumberGenerator::SetSeed`.
 
 The original one :
 
 ![](/images/flareon9/7/6.png)
 
-The modified one : 
+The modified one :
 
 ![](/images/flareon9/7/5.png)
 
@@ -508,9 +498,9 @@ We also observed the same modification on `MathRandom::RefillCache` function.
 These modifications set a static feed for the `Math.random` function, this is why the script below becomes predictable!
 
 The last modified function is `Literal::ToBooleanIsTrue`. Modifications change the way the javascript engine interprets a different kind of object in an `if` expression.
-This is why the script made the following test at the very beginning: 
+This is why the script made the following test at the very beginning:
 
-```
+```js
 if (1n) {
 	console.log("uh-oh, math is too correct...");
 	process.exit(0);
@@ -572,7 +562,7 @@ index d45b4d0a5f..c53bfc8708 100644
 
 ```
 
-This patch match all modifications made by the authors of the challenge.
+This patch matches all modifications made by the authors of the challenge.
 
 Once built we can now run the script as expected!
 
@@ -582,9 +572,9 @@ We now have a perfect environment to test and trace our javascript file!
 
 We made some modifications to trace which frame is executing and the state of the random generator state :
 
-The first thing we made, we replaced the `Math.random` function with a wrapper that will log the number on the console output : 
+The first thing we made, we replaced the `Math.random` function with a wrapper that will log the number on the console output :
 
-```
+```js
 function math_floor(a)
 {
 	var tmp = Math.floor(a);
@@ -595,7 +585,7 @@ function math_floor(a)
 
 Then we put a `console.trace()` instruction in each branch to trace which frames are executed :
 
-```
+```js
 case 22221850:
 	if (1052707195) { console.trace(); // <--- we are tracing !
 	  b[13] ^= (b[30] + b[33] + b[28] + b[32] + b[12] + b[41] + math_floor(Math.random() * 256)) & 0xFF;
@@ -626,9 +616,9 @@ floor 679960405
 ...
 ```
 
-We made a script able to parse this trace file to produce a version without any branch obfuscation and call of `Math.random` : 
+We made a script able to parse this trace file to produce a version without any branch obfuscation and call of `Math.random` :
 
-```
+```js
 b[29] -= b[37] + b[23] + b[22] + b[24] + b[26] + b[10] + 7;
 b[29] &= 0xFF;
 b[39] += b[34] + b[2] + b[1] + b[43] + b[20] + b[9] + 79;
@@ -638,31 +628,31 @@ b[19] ^= (b[26] + b[0] + b[40] + b[37] + b[23] + b[32] + 255) & 0xFF;
 ...
 ```
 
-This algorithm is a composition of bijection, that accepts an inverse ((f o g)^(-1) = g^(-1) o f^(-1)).
+This algorithm is a composition of bijection, that accepts an inverse `((f o g)^(-1) = g^(-1) o f^(-1))`.
 The inverse of `+=` is `-=`, the inverse `-=` is `+=` and the inverse of `^=` is itself. At the end of the original script, we have the final state of the input vector, which will become our initial vector!
 
 ![](https://media.giphy.com/media/3owzW5c1tPq63MPmWk/giphy.gif)
 
 We have to apply it in reverse order, so we made the following python script :
 
-```
-b = [106, 196, 106, 178, 174, 102, 31, 91, 66, 255, 86, 196, 74, 139, 219, 166, 106, 4, 211, 68, 227, 72, 156, 38, 239, 153, 223, 225, 73, 171, 51, 4, 234, 50, 207, 82, 18, 111, 180, 212, 81, 189, 73, 76];
-  
-b[39] -= b[18] + b[16] + b[8] + b[19] + b[5] + b[23] + 36;
-b[39] &= 0xFF;
-b[22] -= b[16] + b[18] + b[7] + b[23] + b[1] + b[27] + 50;
-b[22] &= 0xFF;
-b[34] -= b[35] + b[40] + b[13] + b[41] + b[23] + b[25] + 14;
-b[34] &= 0xFF;
-b[21] -= b[39] + b[6] + b[0] + b[33] + b[8] + b[40] + 179;
-b[21] &= 0xFF;
+```python
+b = [106, 196, 106, 178, 174, 102, 31, 91, 66, 255, 86, 196, 74, 139, 219, 166, 106, 4, 211, 68, 227, 72, 156, 38, 239, 153, 223, 225, 73, 171, 51, 4, 234, 50, 207, 82, 18, 111, 180, 212, 81, 189, 73, 76]
+
+b[39] -= b[18] + b[16] + b[8] + b[19] + b[5] + b[23] + 36
+b[39] &= 0xFF
+b[22] -= b[16] + b[18] + b[7] + b[23] + b[1] + b[27] + 50
+b[22] &= 0xFF
+b[34] -= b[35] + b[40] + b[13] + b[41] + b[23] + b[25] + 14
+b[34] &= 0xFF
+b[21] -= b[39] + b[6] + b[0] + b[33] + b[8] + b[40] + 179
+b[21] &= 0xFF
 ...
-b[29] += b[37] + b[23] + b[22] + b[24] + b[26] + b[10] + 7;
-b[29] &= 0xFF;
+b[29] += b[37] + b[23] + b[22] + b[24] + b[26] + b[10] + 7
+b[29] &= 0xFF
 print("".join([chr(x) for x in b]))
 ```
 
-And Mathematic magic happened : 
+And Mathematic magic happened :
 
 ```
 n0t_ju5t_A_j4vaSCriP7_ch4l1eng3@flare-on.com
@@ -671,9 +661,7 @@ n0t_ju5t_A_j4vaSCriP7_ch4l1eng3@flare-on.com
 
 # 08 - backdoor
 
-```
-I'm such a backdoor, decompile me why don't you...
-```
+> I'm such a backdoor, decompile me why don't you...
 
 Files :
 - `FlareOn.Backdoor.exe`
@@ -708,10 +696,10 @@ There is a naming convention, the `XXX.flared_XX` functions seem to be obfuscate
 
 ![](/images/flareon9/8/5.png)
 
-This function will retrieve the calling context, which function generates an exception, by inspecting the stack trace of the exception `e`. 
+This function will retrieve the calling context, which function generates an exception, by inspecting the stack trace of the exception `e`.
 Then it will dynamically create a new function from the parameters `m` and `b`, and call it with the original parameter.
 
-```
+```c#
 // Retrieve calling context of the obfuscated function
 StackTrace stackTrace = new StackTrace(e);
 int metadataToken = stackTrace.GetFrame(0).GetMethod().MetadataToken;
@@ -733,18 +721,18 @@ For example, the function `FLARE15.flared_70` is desobfuscated using `FLARE15.wl
 
 ![](/images/flareon9/8/6.png)
 
-The code will patch the different token id used by the function, and try to do a mapping between the local token id and global token id of the assembly. 
+The code will patch the different token id used by the function, and try to do a mapping between the local token id and global token id of the assembly.
 
 To better understand what is done by the loader, we have to understand what are tokens in .Net. Tokens are used to uniquely identify any kind of .Net object (Methods, Assembly, ...) inside an Assembly.
 We can see all tokens for one assembly by inspecting the Storage stream #0 in PE header :
 
 ![](/images/flareon9/8/7.png)
 
-`DynamicILInfo` allows you to create a private token namespace local to a function. 
+`DynamicILInfo` allows you to create a private token namespace local to a function.
 
 We can make a parallel with a classic payload loader, where the `m` parameter is the relocation table, and `b` parameter is the bytecode.
 
-We also observed that the space available inside the PE for each obfuscated function is the same sized as the deobfuscated bytecode. 
+We also observed that the space available inside the PE for each obfuscated function is the same sized as the deobfuscated bytecode.
 For example, the `FLARE15.flared_70`, the length of `FLARE15.wl_b` is 85 bytes, and the space in the file is also equal to 85 !!!
 
 ![](/images/flareon9/8/8.png)
@@ -755,7 +743,7 @@ So if we patch the PE file we can create a deobfuscated one!
 
 We created a `Patcher` assembly that will use the `FlareOn.Backdoor.exe`. From our main, we will invoke the function `FLARE15.flare_74()` to load resources, then we create a function `Compile` that is equivalent to `FLARE15.flare_71(e, m, b)`, but patching the token id using the global one!
 
-```
+```c#
 static Byte[] Compile(MethodBase baseMethod, Dictionary<uint, int> m, byte[] b)
 {
 	int metadataToken = baseMethod.MetadataToken;
@@ -785,7 +773,7 @@ static Byte[] Compile(MethodBase baseMethod, Dictionary<uint, int> m, byte[] b)
 		uint key = keyValuePair.Key;
 		bool flag = value >= 1879048192 && value < 1879113727;
 		int tokenFor = value;
-		
+
 		b[(int)key] = (byte)tokenFor;
 		b[(int)(key + 1U)] = (byte)(tokenFor >> 8);
 		b[(int)(key + 2U)] = (byte)(tokenFor >> 16);
@@ -797,7 +785,7 @@ static Byte[] Compile(MethodBase baseMethod, Dictionary<uint, int> m, byte[] b)
 
 Then we invoked the function and write the generated bytecode at the correct offset for each function. For example, the function `FLARE15.flared_70` :
 
-```
+```c#
 b = Compile(typeof(FLARE15).GetMethod("flared_70"), FLARE15.wl_m, FLARE15.wl_b);
 using (var source = File.OpenWrite("C:\\work\\flareon\\2022\\08\\08_backdoor\\FlareOn.Backdoor_patched_1.exe"))
 {
@@ -836,16 +824,14 @@ Back to our `Patcher` assembly, we created a function that does exactly the same
 
 For example, the function `FLARE14.flared_56` :
 
-```
-
+```c#
 public static byte[] patch_function(MethodBase baseMethod)
 {
-	
+
 	var h = hash(baseMethod.MetadataToken);
 	var b = find_section(h);
 	return patch_meta(decode(new byte[4] { 18, 120, 171, 223 }, b));
 }
-
 
 static void Main(string[] args)
 {
@@ -858,7 +844,6 @@ static void Main(string[] args)
 	}
 	...
 }
-			
 ```
 
 And Tada Tada!
@@ -898,7 +883,7 @@ The salt is computed by `FLARE14.flare_57()` by checking the calling context :
 
 So we emulated all the automata inside my `Packer` assembly :
 
-```
+```c#
 public static void soluce()
 {
 	FLARE14.h = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
@@ -912,9 +897,9 @@ public static void soluce()
 	FLARE14.flare_56(int.Parse(text), "f38");
 	text = "hostname";
 	FLARE14.h.AppendData(Encoding.ASCII.GetBytes(foo + text));
-	
+
 	...
-	
+
 	byte[] d = find_section(FLARE14.flare_54(FLARE14.sh));
 	byte[] hashAndReset = FLARE14.h.GetHashAndReset();
 	byte[] array = FLARE12.flare_46(hashAndReset, d);
@@ -937,9 +922,7 @@ So by referencing the original assembly :
 
 # 09 - encryptor
 
-```
-You're really crushing it to get this far. This is probably the end for you. Better luck next year!
-```
+> You're really crushing it to get this far. This is probably the end for you. Better luck next year!
 
 Files:
 - `flareon.exe`
@@ -984,7 +967,7 @@ Then, back to the main, the program created the *.Encrypted* file, and executed 
 ![](/images/flareon9/9/6.png)
 
 Here comes the fun part:
-1. It generated a random number `encryptme` on 32 Bytes and stored it in a 2 * 16 Bytes array 
+1. It generated a random number `encryptme` on 32 Bytes and stored it in a 2 * 16 Bytes array
 2. Then, it generated a  random number `nonce` on 12 Bytes and stored 4 * 0 Bytes + the random 12 Bytes in a 9 * 16 Bytes array
 3. After that, it encrypted `clear` to `encrypted` in Salsa20 and wrote it in the file
 4. To finish, it encrypted the first 32 random bytes in RSA with the previously generated private key `d` as exponent, and the previously generated `n` as modulus
@@ -993,7 +976,7 @@ wait…
 
 ![](https://media.tenor.com/6INkPj7Pr9EAAAAd/shocked-shocked-face.gif)
 
-They **encrypted** their clear text with their **private** key! 
+They **encrypted** their clear text with their **private** key!
 
 After that, they wrote `n_`, `n`, `something`, and the RSA encrypted message in the file.
 
@@ -1024,7 +1007,7 @@ The RSA function encrypted 136 Bytes of the clear text, but it passed a 32 Bytes
 ![](https://media.tenor.com/D8U9CyNuL5wAAAAM/disappointed-face-palm.gif)
 
 ```python
-from Crypto.Cipher import ChaCha20 
+from Crypto.Cipher import ChaCha20
 
 m = 0x5a04e95cd0e9bf0c8cdda2cbb0f50e7db8c89af791b4e88fd657237c1be4e6599bc4c80fd81bdb007e43743020a245d5f87df1c23c4d129b659f90ece2a5c22df1b60273741bf3694dd809d2c485030afdc6268431b2287c597239a8e922eb31174efcae47ea47104bc901cea0abb2cc9ef974d974f135ab1f4899946428184c
 
@@ -1032,7 +1015,7 @@ n = 0xdc425c720400e05a92eeb68d0313c84a978cbcf47474cbd9635eb353af864ea46221546a0f
 
 e = 0x10001
 
-salsa = pow(m,e,n)	
+salsa = pow(m,e,n)
 
 print(f'N = {hex(n)}')
 print(f'E = {hex(e)}')
@@ -1047,23 +1030,20 @@ print(cipher.decrypt(plaintext).decode())
 ```
 
 ```
-N = 0xdc425c720400e05a92eeb68d0313c84a978cbcf47474cbd9635eb353af864ea46221546a0f4d09aaa0885113e31db53b565c169c3606a241b569912a9bf95c91afbc04528431fdcee6044781fbc8629b06f99a11b99c05836e47638bbd07a232c658129aeb094ddaf4c3ad34563ee926a87123bc669f71eb6097e77c188b9bc9
+N = 0xdc425c720400e05a92eeb68d0313c84a978cbcf47474cbd9635eb353af864ea462 <snip>
 E = 0x10001
-M = 0x5a04e95cd0e9bf0c8cdda2cbb0f50e7db8c89af791b4e88fd657237c1be4e6599bc4c80fd81bdb007e43743020a245d5f87df1c23c4d129b659f90ece2a5c22df1b60273741bf3694dd809d2c485030afdc6268431b2287c597239a8e922eb31174efcae47ea47104bc901cea0abb2cc9ef974d974f135ab1f4899946428184c
-SALSA20 = 0x958f924dfe4033c80ffc490200000000989b32381e5715b4a89a87b150a5d528c943a775e7a2240542fc392aa197b001
+M = 0x5a04e95cd0e9bf0c8cdda2cbb0f50e7db8c89af791b4e88fd657237c1be4e6599b <snip>
+SALSA20 = 0x958f924dfe4033c80ffc490200000000989b32381e5715b4a89a87b150a5 <snip>
 Hello!
 
 The flag is:
 
 R$A_$16n1n6_15_0pp0$17e_0f_3ncryp710n@flare-on.com
-
 ```
 
 # 10 - Nur geträumt
 
-```
-This challenge is a Macintosh disk image (Disk Copy 4.2 format, for those who need to know) containing a 68K Macintosh program. You must determine the passphrase used to decode the flag contained within the application. Super ResEdit, an augmented version of Apple's ResEdit resource editor which adds a disassembler, is also included on the disk image to help you complete the challenge, though you will likely also need to do some outside research to guess the passphrase. This application can be run on any Macintosh emulator (or any real Macintosh from as far back as a Mac Plus running System 6.0.x up to a G5 running Classic). The setup of the emulation environment is part of the challenge, so few spoilers live here, but if you want to save yourself some headaches, Mini vMac is a pretty good choice that doesn't take much effort to get up and running compared to some other options. This application was written on a Power Macintosh 7300 using CodeWarrior Pro 5, ResEdit, and Resourcerer (my old setup from roughly 1997, still alive!). It was tested on a great many machines and emulators, and validated to run well on Mac OS from 6.0.8 through 10.4. Happy solving! Be curious!
-```
+> This challenge is a Macintosh disk image (Disk Copy 4.2 format, for those who need to know) containing a 68K Macintosh program. You must determine the passphrase used to decode the flag contained within the application. Super ResEdit, an augmented version of Apple's ResEdit resource editor which adds a disassembler, is also included on the disk image to help you complete the challenge, though you will likely also need to do some outside research to guess the passphrase. This application can be run on any Macintosh emulator (or any real Macintosh from as far back as a Mac Plus running System 6.0.x up to a G5 running Classic). The setup of the emulation environment is part of the challenge, so few spoilers live here, but if you want to save yourself some headaches, Mini vMac is a pretty good choice that doesn't take much effort to get up and running compared to some other options. This application was written on a Power Macintosh 7300 using CodeWarrior Pro 5, ResEdit, and Resourcerer (my old setup from roughly 1997, still alive!). It was tested on a great many machines and emulators, and validated to run well on Mac OS from 6.0.8 through 10.4. Happy solving! Be curious!
 
 Files:
 - `Nur geträumt.img`
@@ -1159,11 +1139,10 @@ The flag was the second line!
 
 # 11 - The challenge that shall not be named
 
-```
-Protection, Obfuscation, Restrictions... Oh my!!
+> Protection, Obfuscation, Restrictions... Oh my!!
+>
+> The good part about this one is that if you fail to solve it I don't need to ship you a prize.
 
-The good part about this one is that if you fail to solve it I don't need to ship you a prize.
-```
 Files :
 - `11.exe`
 
@@ -1373,7 +1352,7 @@ First, we wanted the `body` of the `request`, `python3.7 pyframetrace.py 11.py -
 
 ![](/images/flareon9/11/5.png)
 
-Then, we looked for a `b64encode`, `python3.7 pyframetrace.py 11.py --name b64encode`: 
+Then, we looked for a `b64encode`, `python3.7 pyframetrace.py 11.py --name b64encode`:
 
 ![](/images/flareon9/11/6.png)
 
