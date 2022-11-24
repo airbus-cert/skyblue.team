@@ -19,15 +19,23 @@ Files :
 - `style.css`
 - `word.js`
 
+This challenge is a custom version of [Wordle](https://www.nytimes.com/games/wordle/index.html), the hit game of the Covid-19 lockdown.
+
+This version uses 21-characters long words...chances are that finding the right word will give us the flag!
+
+![interface](/images/flareon9/1/flaredle.png)
+
 So let's start by analyzing `script.js` :
 
 ![](/images/flareon9/1/1.png)
 
-Ok ok ok, let's analyzing `words.js` :
+We can see that the dictionary is in the `words.js` file, and that the correct one is the one in 58th position.
+
+To get this word, we copy-paste the word list in a Python interpreter and go fetch `WORDS[57]` ourselves!
 
 ![](/images/flareon9/1/2.png)
 
-Ok ok ok ...
+The correct word seems to be `flareonisallaboutcats`! Let's try to input it in the game now...
 
 ![](/images/flareon9/1/3.png)
 
@@ -41,21 +49,32 @@ Files:
 - `PixelPoker.exe`
 - `readme.txt`
 
-> Welcome to PixelPoker ^_^, the pixel game that's sweeping the nation!
->
-> Your goal is simple: find the correct pixel and click it
->
-> Good luck!
+Here's the contents of `readme.txt`:
+```
+Welcome to PixelPoker ^_^, the pixel game that's sweeping the nation!
+
+Your goal is simple: find the correct pixel and click it
+
+Good luck!
+```
+
+Running the provided executable opens up a window with a bunch of random noise. Our cursor position is indicated in the window title.
 
 ![](/images/flareon9/2/1.png)
 
+Let's run the executable through [Detect-it-Easy](https://github.com/horsicq/Detect-It-Easy) to have a first idea of what it is.
+
 ![](/images/flareon9/2/2.png)
+
+Well, a 32 bit GUI app compiled with MSVC. Nothing too original just yet. Let's open it in IDA. We can quickly find the function responsible for handling window messages: 
 
 ![](/images/flareon9/2/3.png)
 
-We had to find **the** pixel to click on.
+We can see some code responsible for updating the window title (handling message 512, `WM_MOUSEMOVE`). Then, if the user didn't click, the function exits prematurely (513 is `WM_LBUTTONDOWN`). [A complete list of Windows message can be found on the WineHQ wiki](https://wiki.winehq.org/List_Of_Windows_Messages).
 
-The `x` pixel had to be equal to `dword_412004 % dword_413280`. `dword_412004` had a static value: `0x52414C46` and `dword_413280` was used right before as a `BitBlt` argument, and more specifically, the `x` one:
+We had to find **the** pixel to click on, and brute-force wasn't an option because we only had 10 tries before the app stops and shows a game-over image.
+
+We can see that the `x` position of the click is checked against `dword_412004 % dword_413280`. The first operand is static (`0x52414C46`) and the second one is used in the game-over clause to display the picture, as the fourth argument. Let's remind ourselves of the `BitBlt` method:
 
 ```cpp
 BOOL BitBlt(
@@ -71,11 +90,20 @@ BOOL BitBlt(
 );
 ```
 
-For the `y` pixel, `dword_412008 % cy`, `dword_412008` was also static: `0x6E4F2D45`, and `cy` was used as the `y` argument of `BitBlt`.
+The fourth argument is `cx`: [(MSDN docs)](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-bitblt#parameters)
+>`[in] cx`
+>
+>The width, in logical units, of the source and destination rectangles.
 
-`dword_413280` and `cy` were the size of the pixels window, which was: `741*641`
+We can infer that the width in pixels of the game-over image is the same as the window, so `741`.
 
-So, `x = 0x52414C46 % 741 = 95; y = 0x6E4F2D45 % 641 = 313`:
+The same can be applied to the second check: the `y` position is checked against `dword_412008 % cy`. The first operand has a fixed value of `0x6E4F2D45`, and `cy` is `641` in our case.
+
+By doing the math ourselves, we find:
+- `x = 0x52414C46 % 741 = 95`
+- `y = 0x6E4F2D45 % 641 = 313`
+
+After clicking on the pixel at (95, 313), we get the flag.
 
 ![](/images/flareon9/2/4.png)
 
@@ -92,17 +120,22 @@ Files:
 - DLLs
 - `Magic8Ball.exe`
 
+Let's run the program to see what it does!
+
 ![](/images/flareon9/3/1.png)
 
-Pressing on the arrow keys would shake the ball, and pressing enter would display some random messages.
+We can ask a question to the magic 8 ball by typing it in the window, and then shake the ball by using the arrow keys. Finally, we can press the <kbd>Enter</kbd> key to get an answer.
+
+Once again, let's use [Detect-it-Easy](https://github.com/horsicq/Detect-It-Easy) to see what the executable is made of.
 
 ![](/images/flareon9/3/2.png)
 
+Another 32 bit GUI app built with MSVC!
 When we opened the PE in IDA, we quickly identified the main part:
 
 ![](/images/flareon9/3/3.png)
 
-As you can see, the program manipulated the same object a lot, including to store the ball's answers:
+The constructor initialized the object's members before doing anything else. We can see all the possible answers, and other values we don't know the use of yet.
 
 ![](/images/flareon9/3/4.png)
 
@@ -122,7 +155,7 @@ Magic8Ball checked if the last pressed keys where equal to the characters *"LLUR
 
 ![](/images/flareon9/3/8.png)
 
-It copied *"gimme flag pls?"* in `this + 92`. So we tried to enter the text and press the right keys:
+It copied *"gimme flag pls?"* in `this + 92`. So we tried to enter this question in the box, and pressed the right arrow key combination:
 
 ![](/images/flareon9/3/9.png)
 
@@ -137,7 +170,7 @@ Files :
 
 darn_mice.exe is an x86 executable. When opened into IDA, the main function is :
 
-```
+```cpp
 int __cdecl sub_401000(char *Str)
 {
   void (__cdecl *v2)(_DWORD); // eax
@@ -179,25 +212,32 @@ int __cdecl sub_401000(char *Str)
   v5[33] = 0x6B;
   v5[34] = 0x7F;
   v5[35] = 0;
+
   printf("On your plate, you see four olives.\n");
+
   v3 = strlen(Str);
-  if ( !v3 || v3 > 0x23 )
+  if ( !v3 || v3 > 35 )
     return printf("No, nevermind.\n");
+
   printf("You leave the room, and a mouse EATS one!\n");
-  for ( i = 0; i < 0x24 && v5[i] && Str[i]; ++i )
+
+  for (i = 0; i < 36 && v5[i] && Str[i]; ++i )
   {
-    v2 = (void (__cdecl *)(_DWORD))VirtualAlloc(0, 0x1000u, 0x3000u, 0x40u);
+    v2 = (void (__cdecl *)(_DWORD))VirtualAlloc(NULL, 0x1000u, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
     *(_BYTE *)v2 = Str[i] + v5[i];
     v2(v2);
     printf("Nibble...\n");
   }
+
   printf("When you return, you only: %s\n", Str);
+
   mw_encrypt((int)byte_419000, dword_419030, (PUCHAR)Str, pbSalt, (int)byte_419000, dword_419030);
   return printf("%s\n", byte_419000);
 }
 ```
 
-When we launched the executable with a parameter :
+We can see the program checks for the existence of a command-line argument, and that the length of this parameter is 35 or less.
+Let's give it an argument :
 
 ![](/images/flareon9/4/1.png)
 
@@ -205,35 +245,36 @@ The program seems to crash, as noted by the author of the challenge in the intro
 
 ![](https://media.giphy.com/media/mq5y2jHRCAqMo/giphy.gif)
 
-It seems that the "Nibble" is never printed on my console, so the crash happens before... and oh What?
+It seems that the "Nibble" is never printed on my console, so the crash happens before... and oh what is this?
 
-```
-v2 = (void (__cdecl *)(_DWORD))VirtualAlloc(0, 0x1000u, 0x3000u, 0x40u);
+```cpp
+v2 = (void (__cdecl *)(_DWORD))VirtualAlloc(NULL, 0x1000u, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 *(_BYTE *)v2 = Str[i] + v5[i];
 v2(v2);
 ```
 
 ![](https://media.giphy.com/media/ghuvaCOI6GOoTX0RmH/giphy.gif)
 
-The code tries to jump inside a memory region with the executable flag and filled by one byte which is composed by the addition of a static variable and the input of the user...
-And It loop over the 35 bytes of the static array.
+The code tries to jump inside a memory region with the executable flag, whose first byte is the result of the addition of a static variable and the input of the user...
 
-Ok, we have to find an x86 opcode, with a one-byte size that can be called. So the only one is the `RET` instruction, coded `0xC3`.
+And it loops over the 35 bytes of the static array.
 
-Every byte from the static array added with user input must be equal to `0xC3` :
+Ok, we have to find an x86 opcode, with a one-byte size that can be called without crashing the program. The only one is the `RET` instruction, coded `0xC3`.
 
-static[i] + input[i] == 0xc3
+Every byte from the static array added with user input must be equal to `0xC3` : 
+
+```cpp
+v5[i] + Str[i] == 0xc3
+```
 
 Let's make a little python script :
 
 ```python
-static = [0x50,0x5e,0x5e,0xA3,0x4F,0x5B,0x51,0x5E,0x5E,0x97,0xA3,0x80,0x90, \
-0xA3,0x80,0x90,0xA3,0x80,0x90,0xA3,0x80,0x90,0xA3,0x80,0x90,0xA3,0x80,0x90, \
-0xA3,0x80,0x90,0xA2,0xA3,0x6B,0x7F]
+static = [0x50,0x5e,0x5e,0xA3,0x4F,0x5B,0x51,0x5E,0x5E,0x97,0xA3,0x80,0x90,0xA3,0x80,0x90,0xA3,0x80,0x90,0xA3,0x80,0x90,0xA3,0x80,0x90,0xA3,0x80,0x90,0xA3,0x80,0x90,0xA2,0xA3,0x6B,0x7F]
 print("".join([chr(0xc3 - x) for x in static]))
 ```
 
-And magic happens:
+And magic happens: 
 
 ![](/images/flareon9/4/2.png)
 
@@ -251,7 +292,7 @@ Files:
 - `t8.exe`
 - `traffic.pcapng`
 
-When we first opened the pcap file, we instantly understood that `t8.exe` was sending a base64 key to `flare-on.com`, and received a base64 encrypted message in return.
+When we first opened the PCAP file, we instantly understood that `t8.exe` was sending an UTF16-encoded base64 key to `flare-on.com`, and received a base64 message in return.
 
 ![](/images/flareon9/5/1.png)
 
@@ -262,12 +303,16 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 class CustomHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         self.send_response(200)
-        self.wfile.write(b'TdQdBRa1nxGU06dbB27E7SQ7TJ2+cd7zstLXRQcLbmh2nTvDm1p5IfT/Cu0JxShk6tHQBRWwPlo9zA1dISfslkLgGDs41WK12ibWIflqLE4Yq3OYIEnLNjwVHrjL2U4Lu3ms+HQc4nfMWXPgcOHb4fhokk93/AJd5GTuC5z+4YsmgRh1Z90yinLBKB+fmGUyagT6gon/KHmJdvAOQ8nAnl8K/0XG+8zYQbZRwgY6tHvvpfyn9OXCyuct5/cOi8KWgALvVHQWafrp8qB/JtT+t5zmnezQlp3zPL4sj2CJfcUTK5copbZCyHexVD4jJN+LezJEtrDXP1DJNg==')
+        self.wfile.write(
+            b'TdQdBRa1nxGU06dbB27E7SQ7TJ2+cd7zstLXRQcLbmh2nTvDm1p5IfT/Cu0JxShk6tHQBRWwPlo9zA1dISfslkLgGDs41WK12ibWIflqLE4Yq3OYIEnLNjwVHrjL2U4Lu3ms+HQc4nfMWXPgcOHb4fhokk93/AJd5GTuC5z+4YsmgRh1Z90yinLBKB+fmGUyagT6gon/KHmJdvAOQ8nAnl8K/0XG+8zYQbZRwgY6tHvvpfyn9OXCyuct5/cOi8KWgALvVHQWafrp8qB/JtT+t5zmnezQlp3zPL4sj2CJfcUTK5copbZCyHexVD4jJN+LezJEtrDXP1DJNg=='
+        )
         print(self.headers)
+
 def main():
     srv = HTTPServer(('',80), CustomHandler)
     print('Running...')
     srv.serve_forever()
+
 if __name__ == '__main__':
     try:
         main()
@@ -281,7 +326,7 @@ But nothing happened… At all… So we checked the code:
 
 ![](https://media.tenor.com/iN-Cd6g1j08AAAAM/spongebob-squarepants-patrick-star.gif)
 
-That's a long sleep!
+That's a long sleep! Let's edit the sleep time to "0".
 
 ![](/images/flareon9/5/3.png)
 
@@ -289,11 +334,13 @@ Because it was still looping forever after patching the sleep, we just took off 
 
 ![](/images/flareon9/5/4.png)
 
+Then, we started the patched program, and finally we get something!
+
 ![](/images/flareon9/5/5.png)
 
 ![](/images/flareon9/5/6.png)
 
-Here is information we had to keep in mind: The integer at the end of the user agent changes as well as the base64 key.
+Here is some information we had to keep in mind: the integer at the end of the User-Agent changed, as well as the base64 key.
 
 So we had to dig a little more in this PE.
 
@@ -301,11 +348,11 @@ By going through the code, we easily spotted the place where it sends its HTTP r
 
 ![](/images/flareon9/5/7.png)
 
-It was also the place where it concatenates the header and the random number. The function `sub_2E25B0` was the last one to handle this number before concatenating it. It was actually converting it into a string:
+It was also the place where it adds the random number (`myNumber`) to the User-Agent header. The function `sub_2E25B0` was the last one to handle this number before concatenating it. It was actually converting it into a string:
 
 ![](/images/flareon9/5/8.png)
 
-So we just patched the program to hardcode `11950` in `v3`:
+We simply patched this function to hardcode the value `11950` in `v3`, as seen in the original PCAP:
 
 ![](/images/flareon9/5/9.png)
 
@@ -313,11 +360,13 @@ Then we executed the PE again and surprise…
 
 ![](/images/flareon9/5/10.png)
 
-It changed the integer in the header, but we also got the base64 from the pcap! But why? Because lost into wild, `t8.exe` encrypts the string *"ahoy"* with the random integer (for some reason, it does it on 64bits for every single character).
+It changed the integer in the header, but we also got the same base64-encoded key from the original PCAP! But why? Because lost into wild, `t8.exe` encrypts the string *"ahoy"* with the random integer (for some reason, it does it on 64bits for every single character).
 
 Because of our incredible laziness, we decided to put a breakpoint at the output of the HTTP response decryption:
 
 ![](/images/flareon9/5/11.png)
+
+`i_s33_you_m00n@flare-on.com`
 
 We made it!
 
@@ -346,7 +395,7 @@ There was another file with the challenge, which seems to be a dump of an intern
 [IR Team]     Nope, sorry this is all we got from the client, let us know what you got.
 ```
 
-Let's use the best .Net reverse tool : [DnSpy](https://github.com/dnSpy/dnSpy)
+Let's use the best .NET reverse tool : [dnSpy](https://github.com/dnSpy/dnSpy)
 
 ![](/images/flareon9/6/1.png)
 
@@ -356,36 +405,39 @@ But who is on the other side of the named pipe?
 
 ![](https://media.giphy.com/media/WqlAnl5ksjw8E/giphy.gif)
 
-As it's the only binary delivered by the IR team (see note), we thought that the binary is self-sufficient.
-So we will open it now with low-level disassemblers, like IDA :
+Because this DLL is the only binary delivered by the IR team (see note), we thought that the binary was self-sufficient.
+So we will open it now with a low-level disassembler, like IDA :
 
-We analyzed the DLL entry point and saw normal CRT (C runtime) stuff. The dll mixed native and managed code, it's not a pure managed assembly.
-It reminds me of a project name [Dllexport](https://github.com/3F/DllExport), which export managed functions to a native application.
-By analyzing functions called from the `dllmain_dispatch`, we observed a particular function :
+We analyzed the DLL entry point and saw normal C runtime (CRT) stuff. The DLL mixes native and managed code, it's not a pure managed assembly.
+It reminds me of a project named [DllExport](https://github.com/3F/DllExport), which exports managed functions to a native application.
+
+By analyzing functions called from the `dllmain_dispatch` function, we observed a particular function called `LoadApi()`:
 
 ![](/images/flareon9/6/2.png)
 
-This is a classic technique to load imported functions from obfuscated names, as a global pointer. We noted the use of the API set related to namedpipe!
-- CreateNamedPipeA
-- ConnectNamedPipe
+This function dynamically loads functions from obfuscated names. The function pointers are stored in global variables. We can see the program loading methods related to named pipe usage, which tells us we are on the right track:
+- `CreateNamedPipeA`
+- `ConnectNamedPipe`
 
-So by searching cross-references of these global variables, we found where the pipe stuff is made.
+So by searching cross-references to these global variables, we found where the pipe methods are used. 
 
 ![](/images/flareon9/6/3.png)
 
 And finally where the password is checked :
 
-The checked is a comparison with static obfuscated data. Then the flag is deobfuscated from a static data too.
+**TODO: add a screenshot!**
 
-We have two solutions :
+The check is a comparison with static obfuscated data. Then the flag is deobfuscated from static data as well.
+
+There are two ways we can get the flag now:
 - Continue in static analysis and understand and reimplement the obfuscation algorithm
 - Use dynamic analysis and break when the password is deobfuscated
 
-We chose the second one !!!
+We chose the second one!!!
 
 ![](https://media.giphy.com/media/XGauQmWCNn3n2PEK3X/giphy.gif)
 
-When we loaded the assembly into `dnSpy` we found the original name: `FlareOn_x86`. By renaming the assembly `FlareOn_x86.dll` we can create a .Net project, with `FlareOn_x86.dll` as references, and call the `GetFlag` API.
+When we loaded the assembly into `dnSpy` we found the original name: `FlareOn_x86`. By renaming the assembly `FlareOn_x86.dll` we can create a new .NET project, with `FlareOn_x86.dll` in references, and call the `GetFlag` API ourselves.
 
 ![](/images/flareon9/6/4.png)
 
@@ -410,7 +462,8 @@ Now we can relaunch our program with the right password!
 Files :
 - `anode.exe`
 
-The binary seems to have the same icon as [nodejs](https://nodejs.org/en/), the famous javascript engine!
+The binary seems to have the same icon as [NodeJS](https://nodejs.org/en/), the famous JavaScript engine!
+
 Before digging into it, we tried it :
 
 ![](/images/flareon9/7/1.png)
@@ -469,13 +522,13 @@ readline.question(`Enter flag: `, flag => {
 <nexe~~sentinel>
 ```
 
-We observed the presence of the `nexe` sentinel, which is a reference to the [nexe](https://github.com/nexe/nexe) project. `nexe` is a packer for javascript script, that intends to transform any script in a standalone application.
+We observed the presence of the `nexe` sentinel, which is a reference to the [nexe](https://github.com/nexe/nexe) project. `nexe` is a packer for JavaScript scripts, that intends to transform any script in a standalone application.
 
-So once extracted, we tested the script with a recent version of node. The first thing we noted is the length of the input flag must be 44 :
+So once extracted, we tested the script with a recent version of Node. The first thing we noted is the length of the input flag must be 44, so let's try supplying a 44 characters long flag:
 
 ![](/images/flareon9/7/3.png)
 
-After extracting the exact version of node used by the challenges, 14.15.3, we downloaded the same hash using virustotal. And in the details of the hash we observed that we are not the first using this hash for the flareon :
+After extracting the exact version of node used by the challenges, 14.15.3, we downloaded the same hash using VirusTotal. And in the details of the hash we observed that we are not the first using this hash for the flareon :
 
 ![](/images/flareon9/7/4.png)
 
@@ -495,10 +548,10 @@ The modified one :
 
 We also observed the same modification on `MathRandom::RefillCache` function.
 
-These modifications set a static feed for the `Math.random` function, this is why the script below becomes predictable!
+These modifications set a static feed for the `Math.random` function, this is why the script above becomes predictable!
 
 The last modified function is `Literal::ToBooleanIsTrue`. Modifications change the way the javascript engine interprets a different kind of object in an `if` expression.
-This is why the script made the following test at the very beginning:
+This is why the script made the following test at the very beginning: 
 
 ```js
 if (1n) {
@@ -509,7 +562,7 @@ if (1n) {
 
 So we decided to clone the [node.exe](https://github.com/nodejs/node) at the tag v14.15.3 and apply the following patch :
 
-```
+```diff
 diff --git a/deps/v8/src/ast/ast.cc b/deps/v8/src/ast/ast.cc
 index 651508b677..568732079b 100644
 --- a/deps/v8/src/ast/ast.cc
@@ -574,7 +627,7 @@ We made some modifications to trace which frame is executing and the state of th
 
 The first thing we made, we replaced the `Math.random` function with a wrapper that will log the number on the console output :
 
-```js
+```javascript
 function math_floor(a)
 {
 	var tmp = Math.floor(a);
@@ -585,7 +638,7 @@ function math_floor(a)
 
 Then we put a `console.trace()` instruction in each branch to trace which frames are executed :
 
-```js
+```javascript
 case 22221850:
 	if (1052707195) { console.trace(); // <--- we are tracing !
 	  b[13] ^= (b[30] + b[33] + b[28] + b[32] + b[12] + b[41] + math_floor(Math.random() * 256)) & 0xFF;
@@ -628,7 +681,7 @@ b[19] ^= (b[26] + b[0] + b[40] + b[37] + b[23] + b[32] + 255) & 0xFF;
 ...
 ```
 
-This algorithm is a composition of bijection, that accepts an inverse `((f o g)^(-1) = g^(-1) o f^(-1))`.
+This algorithm is a composition of bijection, which accepts an inverse $(f \cdot g)^{-1} = f^{-1} \cdot g^{-1}$.
 The inverse of `+=` is `-=`, the inverse `-=` is `+=` and the inverse of `^=` is itself. At the end of the original script, we have the final state of the input vector, which will become our initial vector!
 
 ![](https://media.giphy.com/media/3owzW5c1tPq63MPmWk/giphy.gif)
@@ -666,7 +719,7 @@ n0t_ju5t_A_j4vaSCriP7_ch4l1eng3@flare-on.com
 Files :
 - `FlareOn.Backdoor.exe`
 
-The payload is a .Net payload, so let's start with the best .Net disassembler, aka [dnSpy](https://github.com/dnSpy/dnSpy).
+The payload is a .NET payload, so let's start with the best .NET disassembler, aka [dnSpy](https://github.com/dnSpy/dnSpy).
 
 ![](/images/flareon9/8/1.png)
 
@@ -699,7 +752,7 @@ There is a naming convention, the `XXX.flared_XX` functions seem to be obfuscate
 This function will retrieve the calling context, which function generates an exception, by inspecting the stack trace of the exception `e`.
 Then it will dynamically create a new function from the parameters `m` and `b`, and call it with the original parameter.
 
-```c#
+```csharp
 // Retrieve calling context of the obfuscated function
 StackTrace stackTrace = new StackTrace(e);
 int metadataToken = stackTrace.GetFrame(0).GetMethod().MetadataToken;
@@ -723,7 +776,8 @@ For example, the function `FLARE15.flared_70` is desobfuscated using `FLARE15.wl
 
 The code will patch the different token id used by the function, and try to do a mapping between the local token id and global token id of the assembly.
 
-To better understand what is done by the loader, we have to understand what are tokens in .Net. Tokens are used to uniquely identify any kind of .Net object (Methods, Assembly, ...) inside an Assembly.
+To better understand what is done by the loader, we have to understand what are tokens in .NET Tokens are used to uniquely identify any kind of .NET object (Methods, Assembly, ...) inside an Assembly.
+
 We can see all tokens for one assembly by inspecting the Storage stream #0 in PE header :
 
 ![](/images/flareon9/8/7.png)
@@ -743,7 +797,7 @@ So if we patch the PE file we can create a deobfuscated one!
 
 We created a `Patcher` assembly that will use the `FlareOn.Backdoor.exe`. From our main, we will invoke the function `FLARE15.flare_74()` to load resources, then we create a function `Compile` that is equivalent to `FLARE15.flare_71(e, m, b)`, but patching the token id using the global one!
 
-```c#
+```csharp
 static Byte[] Compile(MethodBase baseMethod, Dictionary<uint, int> m, byte[] b)
 {
 	int metadataToken = baseMethod.MetadataToken;
@@ -785,7 +839,7 @@ static Byte[] Compile(MethodBase baseMethod, Dictionary<uint, int> m, byte[] b)
 
 Then we invoked the function and write the generated bytecode at the correct offset for each function. For example, the function `FLARE15.flared_70` :
 
-```c#
+```csharp
 b = Compile(typeof(FLARE15).GetMethod("flared_70"), FLARE15.wl_m, FLARE15.wl_b);
 using (var source = File.OpenWrite("C:\\work\\flareon\\2022\\08\\08_backdoor\\FlareOn.Backdoor_patched_1.exe"))
 {
@@ -813,7 +867,7 @@ Let's take look inside the new one!
 
 These functions are used to make the second level of obfuscation. The goal is not so far from the previous one. The difference is the location of the deobfuscated bytecode.
 To load bytecode, the algorithm will compute the hash of the signature of the target function, find a section in the PE named with the beginning of hash, and decrypt it using RC4 algorithm and a static key:
-* `FLARE15.flared_66` is in charge to compute a hash from the metadata of .Net function.
+* `FLARE15.flared_66` is in charge to compute a hash from the metadata of .NET function.
 * `FLARE15.flared_69` is in charge to find the right section in the PE
 * `FLARE12.flared_47` is a RC4 encryption method
 * `FLARE15.flared_67` is equivalent to `FLARE15.flare_71` function, but with bytecode, parser to patch without the need for a "relocation table".
@@ -824,7 +878,7 @@ Back to our `Patcher` assembly, we created a function that does exactly the same
 
 For example, the function `FLARE14.flared_56` :
 
-```c#
+```csharp
 public static byte[] patch_function(MethodBase baseMethod)
 {
 
@@ -854,11 +908,11 @@ And start the understanding of the backdoor...
 
 ![](./https://media.giphy.com/media/lJnAXeJO8tE7E37mxq/giphy.gif)
 
-So the backdoor seems to be trying to reach a random DNS name and check some conditions, like the last digit of the IP address have to be greater than 128...
-It keeps track of number of tries by writing its state in a locla file. By setting the correct number you can predict the next DNS name...
+So the backdoor seems to be trying to reach a random DNS name and check some conditions, like the last digit of the IP address has to be greater than 128...
+It keeps track of the number of tries by writing its state in a local file. By setting the correct number you can predict the next DNS name...
 
 But all this stuff is not needed to understand the challenge. The backdoor is based on a state machine implemented inside the `FLARE13` object.
-By understanding the automata, you reach the interesting function `FLARE14.flared_56`. This function handle commands from the C&C, but with something more.
+By understanding the automata, you reach the interesting function `FLARE14.flared_56`. This function handles commands from the C&C, but with something more.
 
 Each time the C&C sends a command, the function also checks a particular collection `ObservableCollection` named `FLARE15.c`:
 
@@ -932,6 +986,8 @@ Smells like ransomware and crypto!
 
 ![](https://media.tenor.com/tNhtH9x3WZEAAAAC/swing-dance-swing-your-hips.gif)
 
+Let's run it through Detect-It-Easy:
+
 ![](/images/flareon9/9/1.png)
 
 Of course, running it directly from a console didn't do anything.
@@ -940,13 +996,17 @@ Of course, running it directly from a console didn't do anything.
 
 First we had to create our own encrypted file with a known clear text so we could try to decrypt it, and `flareon.exe` only encrypted files ending by `.EncryptMe`:
 
-*./test/TryMe.txt.EncryptMe*: `ABC`
+- *./test/TryMe.txt.EncryptMe*: 
+  ```
+  ABC
+  ```
 
-`flareone.exe ./test/`
+- ```
+  > flareon.exe ./test/
+  ```
 
-*./test/TryMe.txt.Encrypted*
-
-![](/images/flareon9/9/3.png)
+- *./test/TryMe.txt.Encrypted*
+    ![](./images/9/3.png)
 
 The encrypted file was clearly separated in 5 different parts. The first one was obviously our encrypted text, and the 4 others had to help the gang to decrypt files.
 
@@ -962,13 +1022,13 @@ Let's look at the `generateKey()` function:
 
 It encrypts *something* (truly not important) with `e = 5` as a static exponent and `n_` as a static modulus (yes, they didn't use the `n` they just computed...).
 
-Then, back to the main, the program created the *.Encrypted* file, and executed the `encrypt()` function, passing the *.Encrypted*  file discriptor and the clear text in argument.
+Then, back to the main, the program created the *.Encrypted* file, and executed the `encrypt()` function, passing the *.Encrypted* file descriptor and the clear text in argument.
 
 ![](/images/flareon9/9/6.png)
 
 Here comes the fun part:
-1. It generated a random number `encryptme` on 32 Bytes and stored it in a 2 * 16 Bytes array
-2. Then, it generated a  random number `nonce` on 12 Bytes and stored 4 * 0 Bytes + the random 12 Bytes in a 9 * 16 Bytes array
+1. It generated a random number `encryptme` on 32 bytes and stored it in a 2 * 16 bytes array 
+2. Then, it generated a  random number `nonce` on 12 bytes and stored 4 * 0 bytes + the random 12 bytes in a 9 * 16 bytes array
 3. After that, it encrypted `clear` to `encrypted` in Salsa20 and wrote it in the file
 4. To finish, it encrypted the first 32 random bytes in RSA with the previously generated private key `d` as exponent, and the previously generated `n` as modulus
 
@@ -980,7 +1040,7 @@ They **encrypted** their clear text with their **private** key!
 
 After that, they wrote `n_`, `n`, `something`, and the RSA encrypted message in the file.
 
-We had the modulus `n`, we also had the static exponent `e`, so we just had to do `C^e[n]` to decrypt the 32 random Bytes!
+We had the modulus `n`, we also had the static exponent `e`, so we just had to do `C^e[n]` to decrypt the 32 random bytes!
 
 *SuspiciousFile.txt.Encrypted*
 
@@ -998,11 +1058,11 @@ print(hex(pow(m,e,n)))
 
 `0x958f924dfe4033c80ffc490200000000989b32381e5715b4a89a87b150a5d528c943a775e7a2240542fc392aa197b001`
 
-But… How long is that? Well, it's 48 Bytes long… But how come?
+But… How long is that? Well, it's 48 bytes long… But how come?
 
 ![](/images/flareon9/9/8.png)
 
-The RSA function encrypted 136 Bytes of the clear text, but it passed a 32 Bytes random number, so it overflowed to the 4 * 0 Bytes + 12 Bytes `nonce`! We recovered the secret, the nonce, and we had the encrypted text!
+The RSA function encrypted 136 bytes of the clear text, but it passed a 32 bytes random number, so it overflowed to the 4 * 0 bytes + 12 Bytes `nonce`! We recovered the secret, the nonce, and we had the encrypted text!
 
 ![](https://media.tenor.com/D8U9CyNuL5wAAAAM/disappointed-face-palm.gif)
 
@@ -1092,7 +1152,7 @@ And if we entered more *"a"*, the output would remane the same. But we added ano
 
 ![](/images/flareon9/10/11.png)
 
-1 Byte out of 2 changed… It kinda looked like an XOR to us.
+1 byte every 2 changed… It kinda looked like a rolling XOR cipher to us.
 
 We knew the end of the flag would be `@flare-on.com`, so we tried to recover the key:
 
@@ -1283,7 +1343,7 @@ Once executed with our modified Python, the content of `python.dump` was:
 
 But it was too good to be true… `11.py` was far more complex, and because of all the references and different objects, we couldn't get the whole code at the level…
 
-Then, we noticied an in intriguing piece of code in `_PyEval_EvalFrameDefault`:
+Then, we noticed an intriguing piece of code in `_PyEval_EvalFrameDefault`:
 
 ```c
 call_trace_protected(tstate->c_tracefunc, tstate->c_traceobj, tstate, f, PyTrace_CALL, Py_None)
@@ -1334,7 +1394,7 @@ Let's take a look at `cpython-3.7.9\Lib\trace.py`:
 ...
 ```
 
-In fact, Trace tries to emulate the `__main__` namespace so programs can't catch it! It compiles the program, and executes it with the emulated namespace. So we reimplemented it in order to get every single frame and read them.
+In fact, `trace` tries to emulate the `__main__` namespace so programs can't catch it! It compiles the program, and executes it with the emulated namespace. So we reimplemented it in order to get every single frame and read them.
 
 And here comes Py Frame Trace, a basic tool made to read the frames you want from a program by applying the right filters!
 
