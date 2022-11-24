@@ -425,7 +425,7 @@ So by searching cross-references to these global variables, we found where the p
 
 And finally where the password is checked :
 
-**TODO: add a screenshot!**
+![](/images/flareon9/6/check_password.png)
 
 The check is a comparison with static obfuscated data. Then the flag is deobfuscated from static data as well.
 
