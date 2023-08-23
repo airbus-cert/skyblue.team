@@ -1,3 +1,10 @@
+---
+title: "Microsoft **TTD**: A Brief History of Time"
+date: 2023-08-23T17:13:46+02:00
+Summary: : From **TTD** to malware analysis ⏱️
+
+---
+
 # A Brief History of Time: from Microsoft **TTD** to malware analysis⏱️
 
 ### At [Airbus CERT](https://github.com/airbus-cert), we love to fly though time ✈️
@@ -187,5 +194,12 @@ I started to desing [autottd](https://github.com/atxr/autottd), an *AWS* prototy
 ## Conclusion
 
 I would like to thanks the CERT team for welcoming me during this wonderful internship, especially [Sylvain Peyrefitte](https://github.com/citronneur), my tutor, who was the mind behind most of these project ideas 💡
+
+#### Repos:
+- 🕵️ [TTDProcessTracker](https://github.com/atxr/ttdprocesstracker)
+- 🐞 [anti-ttd](https://github.com/atxr/anti-ttd)
+- 🔎 [yara-ttd](https://github.com/airbus-cert/yara-ttd)
+- 📝 [ttd2mdmp](https://github.com/airbus-cert/ttd2mdmp)
+- ⚙️ [autottd](https://github.com/atxr/autottd)
 
 By [Alexandre Tullot](https://github.com/atxr)
