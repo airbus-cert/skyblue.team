@@ -25,7 +25,7 @@ It allows you to capture a trace of a process during its execution and to store 
 
 The security community quickly started adopting *TTD* for bug hunting. The killer feature that allows going backwards in a debugger is handy for finding bug sources in a binary. 
 
-![Time travel!](time_travel.png)
+![Time travel!](/images/ttd/time_travel.png)
 
 In the malware analysis field, *TTD* had a smaller impact, even if its potential is huge! Here are a few ideas:
 - Use *TTD* as a sandbox to record malware behaviour
@@ -43,25 +43,25 @@ It is worth mentioning that in the middle of my internship, Microsoft released a
 At the beginning of my internship, there was no way to record a child process because the *TTD.exe command line utility* wasn't released. In *WinDbg*, the feature was disabled, probably because it wasn't implemented yet.
 However, many samples I am dealing with create new child processes and recording with *TTD* was a pain.
 
-![inception](inception.png)
+![inception](/images/ttd/inception.png)
 
 That's why I decided to develop the feature by myself! The goal was to create a Windows driver that could trace a PID and suspend any child processes created by this PID. Then, the driver informs the client that a new child was suspended, and the client attaches *TTD* to this new PID. Finally, the client resumes the new child process!
 
-![TTDProcessTracker scheme](scheme.png)
+![TTDProcessTracker scheme](/images/ttd/scheme.png)
 
 Of course, in the middle of the project, Microsoft released its *TTD.exe command line utility*, and my project became useless... 🥲
 Of course, it didn't because it was my first experience with Windows drivers, and I learnt a lot! ⚙️
 
 I still released the source code of the project for fun and profit! You can check it out at [TTDProcessTracker](https://github.com/atxr/ttdprocesstracker).
 
-![TTDProcessTracker demo](pt_demo.gif)
+![TTDProcessTracker demo](/images/ttd/pt_demo.gif)
 
 ## *TTD* detection: **anti-ttd**
 
 Once I finished the development of *TTDProcessTracker*, I tried to test it on the [pyarmor](https://github.com/dashingsoft/pyarmor) packer.
 This packer creates a temp folder with all the required DLLs and restarts the process within this directory. 
 
-![pyarmor scheme](pyarmor.png)
+![pyarmor scheme](/images/ttd/pyarmor.png)
 
 I packed a simple "Hello World" Python script and tried to run TTDProcessTracker on it, and ... it failed. Actually, it didn't really fail because I could record both the original and newly created process, but the second one crashed before printing "Hello, World!". I was probably facing an anti-debug trick that could detect *TTD*. 
 
@@ -112,7 +112,7 @@ Hence, you can hook the packed binary wherever you want with your *yara* rules!
 A simple binary that launches calc.exe, packed with [UPX](https://upx.github.io).
 _yara-ttd_ finds the `calc.exe` string in the module memory during thread creation.
 
-![upx-demo](upx_demo.gif)
+![upx-demo](/images/ttd/upx_demo.gif)
 
 
 ### An obfuscated shellcode that runs `calc.exe`
@@ -120,7 +120,7 @@ _yara-ttd_ finds the `calc.exe` string in the module memory during thread creati
 The tested binary decrypts a shellcode and runs it in a new thread.
 _yara-ttd_ finds the `calc.exe` string on the heap when hooking on the `ntdll!NtCreateThreadEx` function.
 
-![Shellcode-demo](shellcode_demo.gif)
+![Shellcode-demo](/images/ttd/shellcode_demo.gif)
 
 ## Extract my *TTD* trace: **ttd2mdmp**
 
@@ -128,7 +128,7 @@ During [a chat with the *capa* team from Mandiant](https://github.com/mandiant/c
 
 There are many previous works on Minidumps analysis compared to *TTD* trace, and that's why I started to build [**ttd2mdmp**](https://github.com/airbus-cert/ttd2mdmp), a tool to extract a Minidump from a *TTD* trace.
 
-![ttd2mdmp](ttd2mdmp.gif)
+![ttd2mdmp](/images/ttd/ttd2mdmp.gif)
 
 As for *yara-ttd*, you must choose a time position to generate the Minidump. This can be done either with a *TTD* time position or with a function hook, which will extract as many Minidumps as hooks.
 
@@ -178,7 +178,7 @@ That's why sandbox automation is among the most critical incoming work in this *
 
 I started to desing [autottd](https://github.com/atxr/autottd), an *AWS* prototype that would automate the recording of a sample inside an EC2 instance.
 
-![autottd scheme](autottd.png)
+![autottd scheme](/images/ttd/autottd.png)
 
 > ⚠️ **Note**:
 >
