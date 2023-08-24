@@ -1,7 +1,7 @@
 ---
 title: "Microsoft TTD: A Brief History of Time"
 date: 2023-08-23T17:13:46+02:00
-Summary: : From **TTD** to malware analysis ⏱️
+Summary: : From TTD to malware analysis ⏱️
 
 ---
 
@@ -9,7 +9,7 @@ Summary: : From **TTD** to malware analysis ⏱️
 
 ### At [Airbus CERT](https://github.com/airbus-cert), we love to fly though time ✈️
 
-With the successful release of [ttddbg](https://github.com/airbus-cert/ttddbg), the Airbus CERT team understood the potential of [Microsoft *Time Travel Debugging* (*TTD*)](https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/time-travel-debugging-overview) for security purposes. Hence, as an intern for five months at Airbus CERT, I continued to dig into this topic to discover what other secrets could be hiding through time.
+With the successful release of [ttddbg](https://github.com/airbus-cert/ttddbg), the Airbus CERT team understood the potential of [Microsoft *Time Travel Debugging* (*TTD*)](https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/time-travel-debugging-overview) for security purposes. Hence, as an intern for five months at Airbus CERT, I have continued to dig into this topic to discover what other secrets could be hiding through time.
 
 > 🏎️**TLDR**💨:
 >
@@ -40,7 +40,7 @@ In the malware analysis field, *TTD* had a smaller impact, even if its potential
 - Use *TTD* to bypass anti-debug technics
 
 Of course, *TTD* is proprietary software, which implies two things:
-- This work could not exist without [**ttd-bindings**](https://github.com/commial/ttd-bindings). A huge thanks to the contributors to this project 🙏
+- This work could not exist without [**ttd-bindings**](https://github.com/commial/ttd-bindings). A huge thanks to [@commial](https://github.com/commial), the main contributor to this project 🙏
 - Secondly, this project **supports Windows only 🪟** (for now) because it needs to use the *TTD* dll to replay traces. As a former avid Linux user, I had to grin and bear it 🥲
 
 It is worth mentioning that in the middle of my internship, Microsoft released a significant update of *TTD*. First, they announced the end of the *preview* period and then released a [*TTD.exe* command line utility](https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/time-travel-debugging-ttd-exe-command-line-util). Thanks to it, automation is now more straightforward!
@@ -183,7 +183,7 @@ At this point, when working on a sample, you need to fire up a Windows virtual m
 
 That's why sandbox automation is among the most critical incoming work in this *TTD* journey.
 
-I started to desing [autottd](https://github.com/atxr/autottd), an *AWS* prototype that would automate the recording of a sample inside an EC2 instance.
+I started to build [autottd](https://github.com/atxr/autottd), an *AWS* prototype that would automate the recording of a sample inside an EC2 instance.
 
 ![autottd scheme](/images/ttd/autottd.png)
 
