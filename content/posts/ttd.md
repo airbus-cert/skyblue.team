@@ -1,5 +1,5 @@
 ---
-title: "Microsoft **TTD**: A Brief History of Time"
+title: "Microsoft TTD: A Brief History of Time"
 date: 2023-08-23T17:13:46+02:00
 Summary: : From **TTD** to malware analysis ⏱️
 
