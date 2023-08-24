@@ -14,12 +14,12 @@ With the successful release of [ttddbg](https://github.com/airbus-cert/ttddbg), 
 > 🏎️**TLDR**💨:
 >
 > You will find in this blog:
-> - A Windows driver to track child process during *TTD* recording ([[blog]](#trace-child-processes-ttdprocesstracker) - [[github]](https://github.com/atxr/ttdprocesstracker))
-> - My research on *TTD* anti-debug technics ([[blog]](#ttd-detection-anti-ttd) - [[github]](https://github.com/atxr/anti-ttd))
-> - Use YARA rules on Time Travel Debugging traces ([[blog]](#the-ultimate-packer-nemesis-yara-ttd) - [[github]](https://github.com/airbus-cert/yara-ttd))
-> - A Windows Minidump extractor for *TTD* traces ([[blog]](#extract-my-ttd-trace-ttd2mdmp) - [[github]](https://github.com/airbus-cert/ttd2mdmp))
-> - Ideas to improve *capa* with dynamic feature analysis thanks to *TTD* ([[blog]](#dynamic-feature-analysis-capa--ttd))
-> - A prototype to automate *TTD* recording in AWS instances ([[blog]](#ttd-sandbox-automation) - [[github]](https://github.com/atxr/autottd))
+> 1. [A Windows driver to track child process during *TTD* recording](#trace-child-processes-ttdprocesstracker) ([Github](https://github.com/atxr/ttdprocesstracker))
+> 2. [My research on *TTD* anti-debug technics](#ttd-detection-anti-ttd) ([Github](https://github.com/atxr/anti-ttd))
+> 3. [Use YARA rules on Time Travel Debugging traces](#the-ultimate-packer-nemesis-yara-ttd) ([Github](https://github.com/airbus-cert/yara-ttd))
+> 4. [A Windows Minidump extractor for *TTD* traces](#extract-my-ttd-trace-ttd2mdmp) ([Github](https://github.com/airbus-cert/ttd2mdmp))
+> 5. [Ideas to improve *capa* with dynamic feature analysis thanks to *TTD*](#dynamic-feature-analysis-capa--ttd)
+> 6. [A prototype to automate *TTD* recording in AWS instances](#ttd-sandbox-automation) ([Github](https://github.com/atxr/autottd))
 
 ## A little travel back in time: Microsoft **Time Travel Debugging**
 
