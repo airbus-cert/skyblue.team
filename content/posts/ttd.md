@@ -7,7 +7,7 @@ Summary: From TTD to malware analysis ⏱️
 
 # A Brief History of Time: from Microsoft **TTD** to malware analysis⏱️
 
-### At [Airbus CERT](https://github.com/airbus-cert), we love to fly though time ✈️
+### At Airbus CERT, we love to fly though time ✈️
 
 With the successful release of [ttddbg](https://github.com/airbus-cert/ttddbg), the Airbus CERT team understood the potential of [Microsoft *Time Travel Debugging* (*TTD*)](https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/time-travel-debugging-overview) for security purposes. Hence, as an intern for five months at Airbus CERT, I have continued to dig into this topic to discover what other secrets could be hiding through time.
 
