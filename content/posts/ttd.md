@@ -15,7 +15,7 @@ With the successful release of [ttddbg](https://github.com/airbus-cert/ttddbg), 
 >
 > You will find in this blog:
 > 1. [A Windows driver to track child process during *TTD* recording](#trace-child-processes-ttdprocesstracker) ([Github](https://github.com/atxr/ttdprocesstracker))
-> 2. [My research on *TTD* anti-debug technics](#ttd-detection-anti-ttd) ([Github](https://github.com/atxr/anti-ttd))
+> 2. [My research on *TTD* anti-debug techniques](#ttd-detection-anti-ttd) ([Github](https://github.com/atxr/anti-ttd))
 > 3. [Use YARA rules on Time Travel Debugging traces](#the-ultimate-packer-nemesis-yara-ttd) ([Github](https://github.com/airbus-cert/yara-ttd))
 > 4. [A Windows Minidump extractor for *TTD* traces](#extract-my-ttd-trace-ttd2mdmp) ([Github](https://github.com/airbus-cert/ttd2mdmp))
 > 5. [Ideas to improve *capa* with dynamic feature analysis thanks to *TTD*](#dynamic-feature-analysis-capa--ttd)
@@ -37,7 +37,7 @@ The security community quickly started adopting *TTD* for bug hunting. The kille
 In the malware analysis field, *TTD* had a smaller impact, even if its potential is huge! Here are a few ideas:
 - Use *TTD* as a sandbox to record malware behaviour
 - Record malware execution in a trace file and then analyze this file with classical static tools
-- Use *TTD* to bypass anti-debug technics
+- Use *TTD* to bypass anti-debug techniques
 
 Of course, *TTD* is proprietary software, which implies two things:
 - This work could not exist without [**ttd-bindings**](https://github.com/commial/ttd-bindings). A huge thanks to [@commial](https://github.com/commial), the main contributor to this project 🙏
