@@ -72,11 +72,11 @@ This packer creates a temp folder with all the required DLLs and restarts the pr
 
 I packed a simple "Hello World" Python script and tried to run TTDProcessTracker on it, and ... it failed. Actually, it didn't really fail because I could record both the original and newly created process, but the second one crashed before printing "Hello, World!". I was probably facing an anti-debug trick that could detect *TTD*. 
 
-That's why I decided to create [**anti-ttd**](https://github.com/atxr/anti-ttd), a research project to test all the existing anti-debug technics on *TTD* to see how I could block/hide it.
+That's why I decided to create [**anti-ttd**](https://github.com/atxr/anti-ttd), a research project to test all the existing anti-debug techniques on *TTD* to see how I could block/hide it.
 
-I used [unprotect.it](https://unprotect.it) to get a good start on well-known anti-debug technics and noticed that most of these classical tricks don't work on *TTD* because it isn't *real* debugger.
+I used [unprotect.it](https://unprotect.it) to get a good start on well-known anti-debug techniques and noticed that most of these classical tricks don't work on *TTD* because it isn't *real* debugger.
 
-When recording a process with *TTD*, a DLL is injected into the process and records the process in a *.run* file. Hence, I also designed several *TTD* specific anti-debug technics:
+When recording a process with *TTD*, a DLL is injected into the process and records the process in a *.run* file. Hence, I also designed several *TTD* specific anti-debug techniques:
 
 👪 **Parent process**: 
 Check if the parent process is *ttd.exe*. It can be bypassed if the *ttd.exe* binary is renamed. 
