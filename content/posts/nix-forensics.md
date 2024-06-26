@@ -1,17 +1,25 @@
 ---
 title: "Using Nix to setup a reproducible forensics environment"
 date: 2024-06-18
-Summary: "dadazd"
+Summary: >
+      The blog post explains the use of Nix to create a reproducible forensics analysis environment, addressing the inefficiencies of traditional methods like Docker and Ansible. It highlights the challenges of maintaining consistent setups across different machines and analysts. Nix offers a solution by providing precise dependency management and environment reproducibility. The post guides on using Nix to set up and transfer environments efficiently, ensuring consistency and reliability in forensic analysis workflows.
 ---
 
-At `$WORK`, we are big proponents of responding to incidents using live
-telemetry from our EDR, and instrumenting its huge power using its API. However,
-it is not always possible to leverage this: we sometimes have to respond to
-incidents where our usual tool suite is not available. In these cases, we
-usually resort to good old disk and memory forensics, using a combination
-of internal and publicly available tools such as [The Sleuth
-Kit](https://www.sleuthkit.org/), [libyal](https://github.com/libyal), or
-[Regrippy](https://github.com/airbus-cert/regrippy).
+
+# Summary
+
+*{{< param "Summary" >}}*
+
+We published our environment in [nix-forensics](https://github.com/airbus-cert/nix-forensics): Try it!
+
+# Problem statement
+
+- If, tomorrow, you lose your laptop, how long will it take for you to rebuild your whole forensics analysis environment?
+- When two analysts work on the same case, are you sure they are using the same version?
+- Do you have the ability to instantiate a beefy EC2 with all your forensics tools ready to use?
+- Are you sure all patches or features you had to your toolbox are known to you and tracked?
+
+If the answer to one of these questions is no, this post is for you!
 
 Historically, analysts were expected to figure out by themselves how to install
 all the tools in our toolbox: this means battling with Python versions, relying
@@ -20,24 +28,63 @@ maintain local builds of lesser-known applications. This led to a "works on my
 machine" mentality which made it more difficult to switch computers or
 temporarily deport our analysis environment to remote machines.
 
+Change was needed! For years, we have explored many options:
+- A [Dockerfile](https://github.com/nbareil/docker-forensics) but working inside a Docker container is painful when you need to handle FUSE mount points. And describing a 100% reproducible environment in a Dockerfile is a challenge in the long term.
+- A magic script executing git/virtualenv/go/rust install, "procedural style".
+- Using ansible recipes to become declarative.
+- Packer+Ansible to build Vmware/Qemu images
+
+But all these initiatives failed, mainly for the main reasons: They were relying on the "intelligence" of the package manager, which can be good enough if all tools are available as Debian package (which is unrealistic). And forget about doing any modification (patch or feature) or you will become a full time distribution maintainer.
+
+## Nix, it is not a cult
+
 In parallel, several members of the team had been experimenting with
 [Nix](https://nixos.org/), for various reasons: some to automate their
 development environment, others as a way to access packages not available
 in their distro's repositories. Nix, in a nutshell, is a [package
 manager](https://nix.dev/manual/nix/2.22/introduction) whose build files
-are written in a [functional language](https://nix.dev/tutorials/nix-language). The
-[nixpkgs](https://github.com/NixOS/nixpkgs) GitHub repository contains
-definitions for how to build an important number of open-source (as well
-as some closed-source) software.
+are written in a [functional language](https://nix.dev/tutorials/nix-language).
+
+[nixpkgs](https://github.com/NixOS/nixpkgs) is the [biggest packages collection available](https://repology.org/repositories/statistics/total), despite being barely known. Nix is available on all platforms: Linux, Mac, Windows. When a tool is available, it runs natively on the host: There is no CPU emulation, no cygwin adaptation, no abstraction layer such as wine, etc. Of course, it works only with tools which support the platform!
+
+Installing Nix is not a one-way process: It will work independantly from your system, only operating on files in `/nix` and nothing else, it will not mess in any way with your regular operating system. So there is no risk trying it!
 
 As a result, we worked on a solution using Nix to automatically setup all the
 tools we were used to in an isolated environment (using
 [nix-shell](https://nix.dev/manual/nix/2.22/command-ref/nix-shell)). This
 meant having to write derivations (Nix packages) for most of our internal
 tools, finding ways to handle private repositories, and making sure
-various Python versions did not step over each other. This blog post will
-attempt to show how we organized our environment, and how we overcame the
-various issues faced during development.
+various Python versions did not step over each other.
+
+## See it in practice
+
+We have published a public version of our forensics environment on our Github:
+
+https://github.com/airbus-cert/nix-forensics
+
+To use it, it is as simple as:
+
+1. [Install Nix using DeterminateSystem installer](https://github.com/DeterminateSystems/nix-installer?tab=readme-ov-file#the-determinate-nix-installer)
+1. Clone our [repository](https://github.com/airbus-cert/nix-forensics
+)
+1. Enter the directory, launch `nix-shell`, wait a bit for the first time
+1. Done, all tools are available in your `$PATH`!
+
+```
+$ git clone https://github.com/airbus-cert/nix-forensics.git
+$ cd nix-forensics
+$ nix-shell
+[nix-shell:~/nix-forensics-public]$ regrippy  --list|head
+- auditpol(SECURITY): Get the advanced security audit policy settings
+- compname(SYSTEM): Returns the computer name
+- env(['SYSTEM', 'SOFTWARE', 'NTUSER.DAT']): Lists all environment variables
+- filedialogmru(NTUSER.DAT): Reads OpenSaveMRU and LastVisitedMRU keys
+- gpo(['SOFTWARE', 'NTUSER.DAT']): list all GPOs applied on this system
+- kb(SOFTWARE): get all KB update installation status
+```
+
+
+This blog post will attempt to show how we organized our environment, and how we overcame the various issues faced during development.
 
 ## Basic organization
 
@@ -166,7 +213,7 @@ command in a nix-shell instance on the host, note down the contents of the
 the remote machine. Because the Nix store paths are the same, you end up
 in the same environment as if you ran `nix-shell` on the remote machine.
 
-We're using the following script:
+We're using the [following script](https://github.com/airbus-cert/nix-forensics/blob/main/export-shell.sh):
 
 ```bash
 cat <<EOF | ssh $to -- "cat > $REMOTE_SCRIPT_PATH"
