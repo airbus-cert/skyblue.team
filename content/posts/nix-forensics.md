@@ -34,7 +34,7 @@ Change was needed! For years, we have explored many options:
 - Using ansible recipes to become declarative.
 - Packer+Ansible to build Vmware/Qemu images
 
-But all these initiatives failed, mainly for the main reasons: They were relying on the "intelligence" of the package manager, which can be good enough if all tools are available as Debian package (which is unrealistic). And forget about doing any modification (patch or feature) or you will become a full time distribution maintainer.
+But all these initiatives failed, mainly for the same reasons: They all rely on the "intelligence" of the package manager, which can be good enough if all tools are available as Debian package (which is unrealistic). And forget about doing any modification (patch or feature) or you will become a full time distribution maintainer.
 
 ## Nix, it is not a cult
 
@@ -45,9 +45,9 @@ in their distro's repositories. Nix, in a nutshell, is a [package
 manager](https://nix.dev/manual/nix/2.22/introduction) whose build files
 are written in a [functional language](https://nix.dev/tutorials/nix-language).
 
-[nixpkgs](https://github.com/NixOS/nixpkgs) is the [biggest packages collection available](https://repology.org/repositories/statistics/total), despite being barely known. Nix is available on all platforms: Linux, Mac, Windows. When a tool is available, it runs natively on the host: There is no CPU emulation, no cygwin adaptation, no abstraction layer such as wine, etc. Of course, it works only with tools which support the platform!
+[nixpkgs](https://github.com/NixOS/nixpkgs) is the [biggest packages collection available](https://repology.org/repositories/statistics/total), despite being barely known. Nix is available on all platforms: Linux, Mac, Windows. When a tool is available, it runs natively on the host: There is no CPU emulation, no cygwin adaptation, no abstraction layer such as wine, etc. Of course, it works only with softwares supporting the platform in the first place!
 
-Installing Nix is not a one-way process: It will work independantly from your system, only operating on files in `/nix` and nothing else, it will not mess in any way with your regular operating system. So there is no risk trying it!
+Installing Nix is not a one-way process: It will work independantly from your system, only operating in `/nix` and nothing else, it will not mess in any way with your regular operating system. So there is no risk trying it!
 
 As a result, we worked on a solution using Nix to automatically setup all the
 tools we were used to in an isolated environment (using
