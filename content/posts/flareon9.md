@@ -66,7 +66,7 @@ Let's run the executable through [Detect-it-Easy](https://github.com/horsicq/Det
 
 ![](/images/flareon9/2/2.png)
 
-Well, a 32 bit GUI app compiled with MSVC. Nothing too original just yet. Let's open it in IDA. We can quickly find the function responsible for handling window messages: 
+Well, a 32 bit GUI app compiled with MSVC. Nothing too original just yet. Let's open it in IDA. We can quickly find the function responsible for handling window messages:
 
 ![](/images/flareon9/2/3.png)
 
@@ -261,7 +261,7 @@ And it loops over the 35 bytes of the static array.
 
 Ok, we have to find an x86 opcode, with a one-byte size that can be called without crashing the program. The only one is the `RET` instruction, coded `0xC3`.
 
-Every byte from the static array added with user input must be equal to `0xC3` : 
+Every byte from the static array added with user input must be equal to `0xC3` :
 
 ```cpp
 v5[i] + Str[i] == 0xc3
@@ -274,7 +274,7 @@ static = [0x50,0x5e,0x5e,0xA3,0x4F,0x5B,0x51,0x5E,0x5E,0x97,0xA3,0x80,0x90,0xA3,
 print("".join([chr(0xc3 - x) for x in static]))
 ```
 
-And magic happens: 
+And magic happens:
 
 ![](/images/flareon9/4/2.png)
 
@@ -419,7 +419,7 @@ This function dynamically loads functions from obfuscated names. The function po
 - `CreateNamedPipeA`
 - `ConnectNamedPipe`
 
-So by searching cross-references to these global variables, we found where the pipe methods are used. 
+So by searching cross-references to these global variables, we found where the pipe methods are used.
 
 ![](/images/flareon9/6/3.png)
 
@@ -551,7 +551,7 @@ We also observed the same modification on `MathRandom::RefillCache` function.
 These modifications set a static feed for the `Math.random` function, this is why the script above becomes predictable!
 
 The last modified function is `Literal::ToBooleanIsTrue`. Modifications change the way the javascript engine interprets a different kind of object in an `if` expression.
-This is why the script made the following test at the very beginning: 
+This is why the script made the following test at the very beginning:
 
 ```js
 if (1n) {
@@ -996,7 +996,7 @@ Of course, running it directly from a console didn't do anything.
 
 First we had to create our own encrypted file with a known clear text so we could try to decrypt it, and `flareon.exe` only encrypted files ending by `.EncryptMe`:
 
-- *./test/TryMe.txt.EncryptMe*: 
+- *./test/TryMe.txt.EncryptMe*:
   ```
   ABC
   ```
@@ -1027,7 +1027,7 @@ Then, back to the main, the program created the *.Encrypted* file, and executed 
 ![](/images/flareon9/9/6.png)
 
 Here comes the fun part:
-1. It generated a random number `encryptme` on 32 bytes and stored it in a 2 * 16 bytes array 
+1. It generated a random number `encryptme` on 32 bytes and stored it in a 2 * 16 bytes array
 2. Then, it generated a  random number `nonce` on 12 bytes and stored 4 * 0 bytes + the random 12 bytes in a 9 * 16 bytes array
 3. After that, it encrypted `clear` to `encrypted` in Salsa20 and wrote it in the file
 4. To finish, it encrypted the first 32 random bytes in RSA with the previously generated private key `d` as exponent, and the previously generated `n` as modulus
@@ -1148,7 +1148,7 @@ We could have analyzed the assembly to reverse the whole application, but we dec
 
 ![](/images/flareon9/10/10.png)
 
-And if we entered more *"a"*, the output would remane the same. But we added another character:
+And if we entered more *"a"*, the output would rename the same. But we added another character:
 
 ![](/images/flareon9/10/11.png)
 
