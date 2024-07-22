@@ -28,13 +28,15 @@ maintain local builds of lesser-known applications. This led to a "works on my
 machine" mentality which made it more difficult to switch computers or
 temporarily deport our analysis environment to remote machines.
 
-Change was needed! For years, we have explored many options:
+For years, we have tried many options:
 - A [Dockerfile](https://github.com/nbareil/docker-forensics) but working inside a Docker container is painful when you need to handle FUSE mount points. And describing a 100% reproducible environment in a Dockerfile is a challenge in the long term.
 - A magic script executing git/virtualenv/go/rust install, "procedural style".
 - Using ansible recipes to become declarative.
 - Packer+Ansible to build Vmware/Qemu images
 
 But all these initiatives failed, mainly for the same reasons: They all rely on the "intelligence" of the package manager, which can be good enough if all tools are available as Debian package (which is unrealistic). And forget about doing any modification (patch or feature) or you will become a full time distribution maintainer.
+
+So, time to Level-up !
 
 ## Nix, it is not a cult
 
