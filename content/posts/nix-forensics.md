@@ -45,9 +45,9 @@ in their distro's repositories. Nix, in a nutshell, is a [package
 manager](https://nix.dev/manual/nix/2.22/introduction) whose build files
 are written in a [functional language](https://nix.dev/tutorials/nix-language).
 
-[nixpkgs](https://github.com/NixOS/nixpkgs) is the [biggest packages collection available](https://repology.org/repositories/statistics/total), despite being barely known. Nix is available on all platforms: Linux, Mac, Windows. When a tool is available, it runs natively on the host: There is no CPU emulation, no cygwin adaptation, no abstraction layer such as wine, etc. Of course, it works only with softwares supporting the platform in the first place!
+[nixpkgs](https://github.com/NixOS/nixpkgs) is the [biggest packages collection available](https://repology.org/repositories/statistics/total), despite being barely known. Nix is available on all platforms: Linux, Mac, Windows. When a tool is available, it runs natively on the host: There is no CPU emulation, no cygwin adaptation, no abstraction layer such as wine, etc. Of course, it works only with software supporting the platform in the first place!
 
-Installing Nix is not a one-way process: It will work independantly from your system, only operating in `/nix` and nothing else, it will not mess in any way with your regular operating system. So there is no risk trying it!
+Installing Nix is not a one-way process: It will work independently from your system, only operating in `/nix` and nothing else, it will not mess in any way with your regular operating system. So there is no risk trying it!
 
 As a result, we worked on a solution using Nix to automatically setup all the
 tools we were used to in an isolated environment (using
@@ -88,7 +88,7 @@ This blog post will attempt to show how we organized our environment, and how we
 
 ## Basic organization
 
-The environment is developped in its own Git repository, composed mostly
+The environment is developed in its own Git repository, composed mostly
 of Nix files. A `default.nix` file references most of our custom
 derivations (stored in a `pkgs/` directory), and a `shell.nix` file uses
 these derivations to build a shell containing all the tools we want.
