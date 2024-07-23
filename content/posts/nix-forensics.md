@@ -66,7 +66,7 @@ https://github.com/airbus-cert/nix-forensics
 
 To use it, it is as simple as:
 
-1. [Install Nix using DeterminateSystem installer](https://github.com/DeterminateSystems/nix-installer?tab=readme-ov-file#the-determinate-nix-installer)
+1. [Install Nix using the Determinate Systems installer](https://github.com/DeterminateSystems/nix-installer?tab=readme-ov-file#the-determinate-nix-installer)
 1. Clone our [repository](https://github.com/airbus-cert/nix-forensics
 )
 1. Enter the directory, launch `nix-shell`, wait a bit for the first time
