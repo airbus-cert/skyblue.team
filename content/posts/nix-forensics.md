@@ -36,7 +36,7 @@ For years, we have tried many options:
 
 But all these initiatives failed, mainly for the same reasons: They all rely on the "intelligence" of the package manager, which can be good enough if all tools are available as Debian package (which is unrealistic). And forget about doing any modification (patch or feature) or you will become a full time distribution maintainer.
 
-So, time to Level-up !
+So, time to level up!
 
 ## Nix, it is not a cult
 
