@@ -26,7 +26,7 @@ all the tools in our toolbox: this means battling with Python versions, relying
 on package maintainers to keep packages up to date, and sometimes having to
 maintain local builds of lesser-known applications. This led to a "works on my
 machine" mentality which made it more difficult to switch computers or
-temporarily deport our analysis environment to remote machines.
+temporarily move our analysis environment to remote machines.
 
 For years, we have tried many options:
 - A [Dockerfile](https://github.com/nbareil/docker-forensics) but working inside a Docker container is painful when you need to handle FUSE mount points. And describing a 100% reproducible environment in a Dockerfile is a challenge in the long term.
