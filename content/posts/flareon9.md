@@ -1148,7 +1148,7 @@ We could have analyzed the assembly to reverse the whole application, but we dec
 
 ![](/images/flareon9/10/10.png)
 
-And if we entered more *"a"*, the output would rename the same. But we added another character:
+And if we entered more *"a"*, the output would remain the same. But we added another character:
 
 ![](/images/flareon9/10/11.png)
 
