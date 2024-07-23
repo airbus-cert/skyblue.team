@@ -2,7 +2,7 @@
 title: "Using Nix to setup a reproducible forensics environment"
 date: 2024-06-18
 Summary: >
-      The blog post explains the use of Nix to create a reproducible forensics analysis environment, addressing the inefficiencies of traditional methods like Docker and Ansible. It highlights the challenges of maintaining consistent setups across different machines and analysts. Nix offers a solution by providing precise dependency management and environment reproducibility. The post guides on using Nix to set up and transfer environments efficiently, ensuring consistency and reliability in forensic analysis workflows.
+      How we use Nix to create a reproducible forensics analysis environment, and how it differs from more traditional methods, such as Docker or manual package installation. We will highlight the challenges of maintaining consistent setups across different machines and analysts, and how we used Nix to fix that. As a bonus, Nix allows us to transfer our forensics environment to untrusted machines easily.
 ---
 
 
