@@ -72,7 +72,7 @@ To use it, it is as simple as:
 1. Enter the directory, launch `nix-shell`, wait a bit for the first time
 1. Done, all tools are available in your `$PATH`!
 
-```
+```shell
 $ git clone https://github.com/airbus-cert/nix-forensics.git
 $ cd nix-forensics
 $ nix-shell
