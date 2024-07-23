@@ -15,7 +15,7 @@ We published our environment in [nix-forensics](https://github.com/airbus-cert/n
 # Problem statement
 
 - If, tomorrow, you lose your laptop, how long will it take for you to rebuild your whole forensics analysis environment?
-- When two analysts work on the same case, are you sure they are using the same version?
+- When two analysts work on the same case, are you sure they are using the same version of any tool?
 - Do you have the ability to instantiate a beefy EC2 with all your forensics tools ready to use?
 - Are you sure all patches or features you had to your toolbox are known to you and tracked?
 
