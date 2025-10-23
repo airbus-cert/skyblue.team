@@ -3,4 +3,4 @@
 	url = https://github.com/theNewDynamic/gohugo-theme-ananke.git
 [submodule "themes/mini"]
 	path = themes/mini
-	url = https://github.com/dolphinau/hugo-theme-mini.git
+	url = https://github.com/airbus-cert/hugo-theme-mini.git
